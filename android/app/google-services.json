@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "5072219054",
+    "firebase_url": "https://spearker-d3cc4-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "spearker-d3cc4",
+    "storage_bucket": "spearker-d3cc4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5072219054:android:684f50a900d6ff8dc3b63f",
+        "android_client_info": {
+          "package_name": "com.speaker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "5072219054-038lhv60tslcsa5lrhcd0lh95mfufsv5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.speaker",
+            "certificate_hash": "de585967964ed39872e29ef03a5f408ece29c76a"
+          }
+        },
+        {
+          "client_id": "5072219054-1pgf1noprlj6qg37s5719d2b71s0ivj7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXEcltwP-jQGSjdBUKGMlLtTv-BB8omJ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "5072219054-1pgf1noprlj6qg37s5719d2b71s0ivj7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
