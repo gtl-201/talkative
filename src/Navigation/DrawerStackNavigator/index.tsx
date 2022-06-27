@@ -16,6 +16,7 @@ import MessageView from '../../Containers/MessageView';
 import MessageGroup from '../../Containers/MessageGroup';
 import VideoCall from '../../Containers/Call/VideoCall';
 import Practise from '../../Containers/Practise';
+import HowLearn from '../../Containers/HowLearn';
 import AddGroupMember from '../../Containers/AddMemberGroup';
 
 const Stack = createStackNavigator();
@@ -118,6 +119,10 @@ const AppStackNavigator: FC<any> = (props) =>
                     <Stack.Screen
                         name="Practise"
                         component={Practise}
+                    />
+                    <Stack.Screen
+                        name="HowLearn"
+                        component={HowLearn}
                     />
                     <Stack.Screen
                         name="AddGroupMember"

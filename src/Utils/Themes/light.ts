@@ -450,6 +450,13 @@ export const HEADER = {
     TXT: '#5C8AEA',
 };
 
+export const HOWLEARN = {
+    BG: '#ffffff',
+    IC: '#5C8AEA',
+    TXT: '#5C8AEA',
+    ON_SURFACE_VARIANT: '#cccccc',
+};
+
 export const BOTTOM_TABS = {
     BG: '#ffffff',
     BG_ACTIVE: '#5C8AEA',

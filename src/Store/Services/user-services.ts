@@ -10,6 +10,12 @@ interface UserInforAction {
     type: any;
     userInfor: UserInfor;
 }
+interface MoreUserInfor {
+    howKnowWe: string;
+    level: string;
+    whyLearn: string;
+    purpose: string;
+}
 
 interface UploadAvatarAction {
     type?: any;
@@ -67,6 +73,18 @@ async function uploadThumbnail({ path, name }: UploadAvatarAction)
     return res;
 }
 
+function setUserInfo(uInfor: MoreUserInfor)
+{
+    firestore()
+        .collection('Users')
+        .doc(auth().currentUser?.uid)
+        .set(uInfor)
+        .then(() =>
+        {
+            console.log('new added');
+        });
+}
+
 function* setInfor({ userInfor }: UserInforAction)
 {
     firestore()
@@ -87,6 +105,10 @@ function* setInfor({ userInfor }: UserInforAction)
             name: userInfor.name,
             thumbnail: userInfor.thumbnail,
             gender: userInfor.gender,
+            howKnowWe: '',
+            level: '',
+            whyLearn: '',
+            purpose: '',
         })
         .then(() =>
         {
@@ -205,7 +227,7 @@ async function getUidUserOnline()
 {
     return await firestore()
         .collection('OnlineList')
-        .where('id','!=',firebase.auth().currentUser?.uid)
+        .where('id', '!=', firebase.auth().currentUser?.uid)
         .get()
         .then((querySnapshot) =>
         {

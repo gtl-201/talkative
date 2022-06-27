@@ -181,4 +181,10 @@ export default {
     CONFIRM: 'Confirm',
     DESCRIPTION_DELETE_GROUP: 'Do you want to delete group?',
     DESCRIPTION_LEAVE_GROUP: 'Do you want to leave group?',
+    HOW_U_KNOW_WE: 'How you know we?',
+    CONTINUE: 'Continue',
+    LEVEL_ENG: 'What is your current English level ?',
+    WHY_LEARN: 'Why you learn English?',
+    PURPOSE_LEARN: 'What is your purpose when you learn English?',
+    MIN_PER_DAY: 'minutes per day',
 };

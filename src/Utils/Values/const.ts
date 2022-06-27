@@ -135,6 +135,12 @@ export const MENU = [
         name: 'Practise',
     },
     {
+        icon_type: 'MaterialIcons',
+        icon: 'record-voice-over',
+        icon_size: 26,
+        name: 'HowLearn',
+    },
+    {
         icon_type: 'Entypo',
         icon: 'info-with-circle',
         icon_size: 26,

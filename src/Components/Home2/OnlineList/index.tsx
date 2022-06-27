@@ -49,7 +49,7 @@ const SearchBar: FC<Props> = (props) =>
             {
                 return new Promise((res) =>
                 {
-                    UserServices.getUidUserLiteInfor(uidOnline.id).then((message) =>
+                    UserServices.getUidUserLiteInfor(uidOnline?.id).then((message) =>
                     {
                         return res(message);
                     });
@@ -72,17 +72,17 @@ const SearchBar: FC<Props> = (props) =>
 
         return (
             <>
-                {item.item.id !== firebase.auth().currentUser?.uid && (
+                {item.item?.id !== firebase.auth().currentUser?.uid && (
                     <View style={styles.itemContainer}>
                         <View style={styles.LeftContainer}>
                             <Image
                                 style={styles.avatar}
-                                source={item.item.thumbnail ? { uri: item.item.thumbnail } : IMAGE.EMPTY_AVATAR}
+                                source={item.item?.thumbnail ? { uri: item.item?.thumbnail } : IMAGE.EMPTY_AVATAR}
                                 resizeMode={'cover'}
                             />
                             <View style={styles.contentContainer}>
-                                <Text style={styles.name}>{item.item.name ?? '??/'}</Text>
-                                <Text style={styles.info}>{item.item.nickname ?? ''}</Text>
+                                <Text style={styles.name}>{item.item?.name ?? '??/'}</Text>
+                                <Text style={styles.info}>{item.item?.nickname ?? ''}</Text>
                             </View>
                         </View>
 
@@ -93,7 +93,7 @@ const SearchBar: FC<Props> = (props) =>
                                 {
                                     if (onCallPerson)
                                     {
-                                        await stores.set('idAnswer', item.item.id);
+                                        await stores.set('idAnswer', item.item?.id);
                                         // console.log(item.item.id);
 
                                         onCallPerson();
@@ -114,7 +114,7 @@ const SearchBar: FC<Props> = (props) =>
                                 onPress={() =>
                                 {
                                     navigation.navigate('MessageView', {
-                                        conversationObject: [firebase.auth().currentUser.uid, item.item.id],
+                                        conversationObject: [firebase.auth().currentUser.uid, item.item?.id],
                                         data: item.item,
                                     });
                                 }}

@@ -102,7 +102,7 @@ const VideoCall: FC<any> = (props) =>
                     else if (
                         z.get('answer') !== undefined &&
                         z.get('offer') !== undefined &&
-                        (z.data()?.offer.id === firebase.auth().currentUser?.uid || z.data()?.answer.id === firebase.auth().currentUser?.uid)
+                        (z.data()?.offer?.id === firebase.auth().currentUser?.uid || z.data()?.answer?.id === firebase.auth().currentUser?.uid)
                     )
                     {
                         offer = z.data();
@@ -422,8 +422,8 @@ const VideoCall: FC<any> = (props) =>
             {
                 const dataData = data.data();
                 const saveAvaible = {
-                    idCaller: dataData?.offer.id ?? '',
-                    idCallee: dataData?.answer.id ?? '',
+                    idCaller: dataData?.offer?.id ?? '',
+                    idCallee: dataData?.answer?.id ?? '',
                     nameCaller: dataData?.offer.name ?? '',
                     nameCallee: dataData?.answer.name ?? '',
                     start: dataData?.answer.timeStart ?? '',
@@ -436,7 +436,7 @@ const VideoCall: FC<any> = (props) =>
                     .add(saveAvaible)
                     .then((rs) =>
                     {
-                        rs.update({ id: rs.id });
+                        rs.update({ id: rs?.id });
                     });
                 console.log(saveAvaible, 'data to save');
             });

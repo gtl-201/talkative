@@ -180,4 +180,10 @@ export default {
     CONFIRM: 'Xác nhận',
     DESCRIPTION_DELETE_GROUP: 'Bạn muốn xóa nhóm này?',
     DESCRIPTION_LEAVE_GROUP: 'Bạn muốn rời nhóm này?',
+    HOW_U_KNOW_WE: 'Bạn biết tới tớ từ đâu?',
+    CONTINUE: 'Tiếp tục',
+    LEVEL_ENG: 'Trình độ Tiếng Anh của bạn đang ở mức độ nào?',
+    WHY_LEARN: 'Tại sao bạn học Tiếng Anh?',
+    PURPOSE_LEARN: 'Mục tiêu và quyết tâm khi học tiếng anh của bạn như nào?',
+    MIN_PER_DAY: 'phút một ngày',
 };
