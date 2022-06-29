@@ -11,17 +11,19 @@ import EmptyView from '../../BaseComponents/EmptyView';
 import { MMKV } from 'react-native-mmkv';
 import firestore from '@react-native-firebase/firestore';
 import { SIZES } from '../../Utils/Values';
+import auth from '@react-native-firebase/auth';
 
 interface Props {
     color: any;
     language: any;
     navigation: any;
     userInfor: any;
+    onFinish: () => void;
 }
 
 const Howlearn: FC<Props> = (props) =>
 {
-    const { color, language, navigation, userInfor } = props;
+    const { color, language, navigation, userInfor, onFinish } = props;
     const styles = styleScaled(color);
     const [step, setStep] = useState<number>(0);
 
@@ -31,16 +33,16 @@ const Howlearn: FC<Props> = (props) =>
     {
         Animated.timing(animationProcessValue, {
             toValue: step,
-            duration: 500,
+            duration: 300,
             useNativeDriver: false,
         }).start();
         // animationProcessValue.setValue(step);
     }, [step, animationProcessValue]);
-    const w = SIZES.WIDTH_WINDOW - SIZES.WIDTH_WINDOW * 0.08;
+    const w = SIZES.WIDTH_WINDOW * 0.85;
     const animationProcess = {
         width: animationProcessValue.interpolate({
             inputRange: [0, 1] || [1, 2] || [2, 3] || [3, 4],
-            outputRange: [0, w * (1 / 4)] || [w * (1 / 4), w * (2 / 4)] || [w * (2 / 4), w * (3 / 4)] || [w * (3 / 4), w],
+            outputRange: [0, w * (1 / 4)] || [w * (1 / 4), w * (2 / 4)] || [w * (2 / 4), w * (3 / 4)] || [w * (3 / 4), w + 0],
         }),
     };
     const subAnimationProcess = {
@@ -60,19 +62,36 @@ const Howlearn: FC<Props> = (props) =>
     const level = ['LOW', 'MID', 'HIGHT'];
     const whyLearn = ['CULTURE', 'MAKE_FRIENDS_AND_SHARE', 'SHCOOL', 'BRAIN', 'JOB', 'TRAVEL', 'OTHER'];
     const purpose = [
-        { title: 'ez', subTitle: 3 },
-        { title: 'normal', subTitle: 10 },
-        { title: 'mid', subTitle: 20 },
-        { title: 'hard', subTitle: 40 },
-        { title: 'hard core', subTitle: 80 },
+        { title: 'EZ', subTitle: 3 },
+        { title: 'NORMAL', subTitle: 10 },
+        { title: 'MID2', subTitle: 20 },
+        { title: 'HARD', subTitle: 40 },
+        { title: 'HARD CORE', subTitle: 80 },
     ];
 
     return (
         <View style={[styles.container, styles.bgColor]}>
-            <View style={styles.processBar}>
-                <Animated.View style={[styles.percent, animationProcess]}>
-                    <Animated.View style={[styles.subPercent, subAnimationProcess]} />
-                </Animated.View>
+            <View style={{ flexDirection: 'row', width: SIZES.WIDTH_WINDOW, justifyContent: 'space-around' }}>
+                <TouchableOpacity
+                    style={{ width: SIZES.WIDTH_WINDOW * 0.05, height: 20, justifyContent: 'center', alignItems: 'center' }}
+                    onPress={() =>
+                    {
+                        setPass(true);
+                        step !== 0 && setStep(step - 1);
+                    }}
+                >
+                    <Icon
+                        type={'MaterialCommunityIcons'}
+                        name={'image-plus'}
+                        size={moderateScale(22, 0.3)}
+                        color={'red'}
+                    />
+                </TouchableOpacity>
+                <View style={styles.processBar}>
+                    <Animated.View style={[styles.percent, animationProcess]}>
+                        <Animated.View style={[styles.subPercent, subAnimationProcess]} />
+                    </Animated.View>
+                </View>
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollViewContainer}>
@@ -98,7 +117,7 @@ const Howlearn: FC<Props> = (props) =>
                                             resizeMode={'cover'}
                                         />
                                     </View>
-                                    <Text style={styles.content}>{x}</Text>
+                                    <Text style={styles.content}>{language[x]}</Text>
                                 </TouchableOpacity>
                             );
                         })}
@@ -127,7 +146,7 @@ const Howlearn: FC<Props> = (props) =>
                                             resizeMode={'cover'}
                                         />
                                     </View>
-                                    <Text style={styles.content}>{x}</Text>
+                                    <Text style={styles.content}>{language[x]}</Text>
                                 </TouchableOpacity>
                             );
                         })}
@@ -156,7 +175,7 @@ const Howlearn: FC<Props> = (props) =>
                                             resizeMode={'cover'}
                                         />
                                     </View>
-                                    <Text style={styles.content}>{x}</Text>
+                                    <Text style={styles.content}>{language[x]}</Text>
                                 </TouchableOpacity>
                             );
                         })}
@@ -178,13 +197,63 @@ const Howlearn: FC<Props> = (props) =>
                                         setCurrentIndexChoose4(index);
                                     }}
                                 >
-                                    <Text style={styles.content}>{x.title}</Text>
+                                    <Text style={styles.content}>{language[x.title]}</Text>
                                     <Text style={styles.subContent}>
-                                        {x.subTitle} {language.MIN_PER_DAY}
+                                        {language[x.subTitle]} {language.MIN_PER_DAY}
                                     </Text>
                                 </TouchableOpacity>
                             );
                         })}
+                    </View>
+                )}
+
+                {step === 4 && (
+                    <View style={{ width: '100%' }}>
+                        <Text style={[styles.title, { textAlign: 'left', marginBottom: 1 }]}>{language.PUR_WHEN_FINISH}</Text>
+                        <Text style={styles.subTitle}>{language.SUB_PUR_WHEN_FINISH}</Text>
+                        <View style={[styles.cardBox, { justifyContent: 'space-between', flexDirection: 'column', paddingVertical: 0 }]}>
+                            <View style={styles.kh}>
+                                <View>
+                                    <Image
+                                        style={styles.avatar}
+                                        // source={}
+                                        resizeMode={'cover'}
+                                    />
+                                </View>
+                                <View>
+                                    <Text style={styles.content}>{language.CONFIDENT_CONVERSATION}</Text>
+                                    <Text style={styles.subContent2}>{language.SUB_CONFIDENT_CONVERSATION}</Text>
+                                </View>
+                            </View>
+
+                            <View style={styles.kh}>
+                                <View>
+                                    <Image
+                                        style={styles.avatar}
+                                        // source={}
+                                        resizeMode={'cover'}
+                                    />
+                                </View>
+                                <View>
+                                    <Text style={styles.content}>{language.CONFIDENT_CONVERSATION}</Text>
+                                    <Text style={styles.subContent2}>{language.SUB_CONFIDENT_CONVERSATION}</Text>
+                                </View>
+                            </View>
+
+                            <View style={[styles.kh, { borderBottomWidth: 0 }]}>
+                                <View>
+                                    <Image
+                                        style={styles.avatar}
+                                        // source={}
+                                        resizeMode={'cover'}
+                                    />
+                                </View>
+                                <View>
+                                    <Text style={styles.content}>{language.CONFIDENT_CONVERSATION}</Text>
+                                    <Text style={styles.subContent2}>{language.SUB_CONFIDENT_CONVERSATION}</Text>
+                                </View>
+                            </View>
+                        </View>
                     </View>
                 )}
             </ScrollView>
@@ -194,8 +263,23 @@ const Howlearn: FC<Props> = (props) =>
                     disabled={Pass === false ? true : false}
                     onPress={() =>
                     {
-                        setPass(false);
-                        setStep(step + 1);
+                        step >= 3 ? setPass(true) : setPass(false);
+                        step !== 4
+                            ? setStep(step + 1)
+                            : firestore()
+                                .collection('Users')
+                                .doc(auth().currentUser?.uid)
+                                .update({
+                                    howKnowWe: knowFrom[currentIndexChoose1],
+                                    level: level[currentIndexChoose2],
+                                    whyLearn: whyLearn[currentIndexChoose3],
+                                    purpose: purpose[currentIndexChoose4],
+                                    // reverseName: true,
+                                })
+                                .then(() =>
+                                {
+                                    onFinish();
+                                });
                     }}
                 >
                     <Text style={[styles.btnTxt, Pass === false && { color: '#676767' }]}>{language.CONTINUE}</Text>

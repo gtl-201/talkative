@@ -66,12 +66,16 @@ const AppStackNavigator: FC<any> = (props) =>
                 ]}
             >
                 <Stack.Navigator
-                    initialRouteName={'Home'}
+                    initialRouteName={'HowLearn'}
                     screenOptions={{
                         header: () => null,
                         gestureEnabled: false,
                     }}
                 >
+                    <Stack.Screen
+                        name="HowLearn"
+                        component={HowLearn}
+                    />
                     <Stack.Screen
                         name="Home"
                         component={Home}
@@ -120,10 +124,7 @@ const AppStackNavigator: FC<any> = (props) =>
                         name="Practise"
                         component={Practise}
                     />
-                    <Stack.Screen
-                        name="HowLearn"
-                        component={HowLearn}
-                    />
+                    
                     <Stack.Screen
                         name="AddGroupMember"
                         component={AddGroupMember}

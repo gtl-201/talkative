@@ -456,6 +456,7 @@ export const HOWLEARN = {
     IC: '#5C8AEA',
     TXT: '#5C8AEA',
     ON_SURFACE_VARIANT: '#cccccc',
+    SUB_TXT: '#8c8c8c',
 };
 
 export const BOTTOM_TABS = {

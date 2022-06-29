@@ -15,7 +15,7 @@ import VideoCallComponent from '../../Components/Call/VideoCall';
 import VideoCallUtils from '../../Utils/VideoCall';
 // import { event } from "react-native-reanimated";
 import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
-import { firebase } from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 import { moderateScale } from 'react-native-size-matters';
 import Icon from '../../Components/BaseComponents/Icon';
 import InCallManager from 'react-native-incall-manager';
@@ -25,6 +25,7 @@ import SoundRecorder from 'react-native-sound-recorder';
 import SoundPlayer from 'react-native-sound-player';
 import { MMKV } from 'react-native-mmkv';
 import HowLearn from '../../Components/HowLearn/index';
+import { UserServices } from '../../Store/Services/user-services';
 
 // import {AudioRecorder, AudioUtils} from 'react-native-audio';
 
@@ -35,43 +36,55 @@ const VideoCall: FC<any> = (props) =>
     const { userInfor, navigation, setBackgroundScreenDrawer, color, language, route, onCall, onHangup } = props;
     const styles = styleScaled(color);
     const refViewShot: any = useRef();
+    const [showHowLearn, setShowHowLearn] = useState<boolean>(true);
+    useEffect(() =>
+    {
+        async function fetchUserInfor()
+        {
+            const userData = await UserServices.getUidUserInfor(auth().currentUser?.uid ?? '');
+            userData !== undefined &&
+                userData.howKnowWe !== undefined &&
+                userData.level !== undefined &&
+                userData.whyLearn !== undefined &&
+                userData.purpose !== undefined &&
+                setShowHowLearn(false);
+            console.log(userData);
+            
+        }
 
+        fetchUserInfor();
+    }, []);
     return (
         <ViewShot
             ref={refViewShot}
             style={[styles.container, { flex: 1 }]}
             options={{ result: 'base64', quality: 0.5 }}
         >
-            <Header
-                iconLeftType={'MaterialIcons'}
-                iconLeft={'notes'}
-                title={language.Speaker}
-                iconSize={35}
-                shadow={false}
-                iconRightType="FontAwesome"
-                // iconRight={switchIc}
-                headerRight
-                onPressLeft={() => navigation.openDrawer()}
-                // onPressRight={() =>
-                // {
-                //     if (storage.getString('switchIc') === 'toggle-on')
-                //     {
-                //         storage.set('switchIc', 'toggle-off');
-                //         setSwitchIc('toggle-off');
-                //     }
-                //     else
-                //     {
-                //         storage.set('switchIc', 'toggle-on');
-                //         setSwitchIc('toggle-on');
-                //     }
-                // }}
-            />
-            <HowLearn
-                color={color}
-                language={language}
-                navigation={navigation}
-                userInfor={userInfor}
-            />
+            {!showHowLearn
+                ? (
+                        <>
+                            <Header
+                                iconLeftType={'MaterialIcons'}
+                                iconLeft={'notes'}
+                                title={language.Speaker}
+                                iconSize={35}
+                                shadow={false}
+                                iconRightType="FontAwesome"
+                                // iconRight={switchIc}
+                                headerRight
+                                onPressLeft={() => navigation.openDrawer()}
+                            />
+                        </>
+                    )
+                : (
+                        <HowLearn
+                            color={color}
+                            language={language}
+                            navigation={navigation}
+                            userInfor={userInfor}
+                            onFinish={()=>setShowHowLearn(false)}
+                        />
+                    )}
         </ViewShot>
     );
 };

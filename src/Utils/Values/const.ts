@@ -112,6 +112,12 @@ export const MENU = [
     // menu_app
     {
         icon_type: 'MaterialIcons',
+        icon: 'record-voice-over',
+        icon_size: 26,
+        name: 'HowLearn',
+    },
+    {
+        icon_type: 'MaterialIcons',
         icon: 'home',
         icon_size: 24,
         name: 'Home',
@@ -133,12 +139,6 @@ export const MENU = [
         icon: 'record-voice-over',
         icon_size: 26,
         name: 'Practise',
-    },
-    {
-        icon_type: 'MaterialIcons',
-        icon: 'record-voice-over',
-        icon_size: 26,
-        name: 'HowLearn',
     },
     {
         icon_type: 'Entypo',

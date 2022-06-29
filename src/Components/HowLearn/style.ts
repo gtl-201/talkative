@@ -1,7 +1,5 @@
-import { Dimensions } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { SHADOW_2, SHADOW_3, SHADOW_5, SIZES } from '../../Utils/Values';
+import { SHADOW_2, SHADOW_3, SIZES } from '../../Utils/Values';
 
 const styleScaled = (Color: any) =>
 {
@@ -33,6 +31,16 @@ const styleScaled = (Color: any) =>
             width: '100%',
             textAlign: 'center',
         },
+        subTitle: {
+            fontSize: '17@ms0.5',
+            // fontWeight: 'light',
+            color: Color.SUB_TXT,
+            marginBottom: '4@vs',
+            // marginTop: '10@vs',
+            letterSpacing: 1,
+            width: '100%',
+            textAlign: 'left',
+        },
         content: {
             fontSize: '15@ms0.5',
             fontWeight: 'bold',
@@ -42,10 +50,25 @@ const styleScaled = (Color: any) =>
             // width: '70%',
             textAlign: 'left',
         },
-        subContent:{
+        kh: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingVertical: 10,
+            borderBottomWidth: 1,
+        },
+        subContent: {
             fontSize: '15@ms0.5',
             // fontWeight: '1',
             color: Color.TITLE_TXT,
+            // marginBottom: '6@vs',
+            letterSpacing: 1,
+            // width: '70%',
+            textAlign: 'left',
+        },
+        subContent2: {
+            fontSize: '14@ms0.5',
+            // fontWeight: '1',
+            color: Color.SUB_TXT,
             // marginBottom: '6@vs',
             letterSpacing: 1,
             // width: '70%',
@@ -60,7 +83,7 @@ const styleScaled = (Color: any) =>
             textAlign: 'center',
             paddingVertical: 7,
         },
-        disabled:{
+        disabled: {
             // opacity: 0.6,
             backgroundColor: Color.ON_SURFACE_VARIANT,
         },
@@ -91,27 +114,28 @@ const styleScaled = (Color: any) =>
             backgroundColor: Color.BG,
             ...SHADOW_3,
         },
-        cardChoosed:{
+        cardChoosed: {
             backgroundColor: '#bfe6ff',
             borderColor: '#59bfff',
         },
         processBar: {
-            width: '100%',
-            borderRadius: 15,
+            width: SIZES.WIDTH_WINDOW * 0.85,
+            borderRadius: 10,
             height: 20,
             backgroundColor: Color.ON_SURFACE_VARIANT,
             flexDirection: 'row',
             // marginLeft: 20,
+            ...SHADOW_2,
         },
         percent: {
             backgroundColor: '#39e75f',
             height: 20,
             // width: '20%',
-            borderRadius: 15,
+            borderRadius: 10,
             alignItems: 'center',
             ...SHADOW_2,
         },
-        subPercent:{
+        subPercent: {
             backgroundColor: '#ffff',
             height: 7,
             opacity: 0.4,
@@ -122,7 +146,7 @@ const styleScaled = (Color: any) =>
         },
         scrollViewContainer: {
             flex: 1,
-            width: SIZES.WIDTH_WINDOW - (SIZES.WIDTH_WINDOW * 0.08),
+            width: SIZES.WIDTH_WINDOW - SIZES.WIDTH_WINDOW * 0.08,
         },
     });
 };
