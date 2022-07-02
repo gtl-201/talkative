@@ -21,6 +21,13 @@ const styleScaled = (Color: any) =>
             zIndex: 1,
             // marginTop: SIZES.HEIGHT_PADDINGTOP
         },
+        FloatTxt:{
+            // position: 'absolute',
+            width: SIZES.WIDTH_WINDOW * 0.7,
+            alignSelf: 'flex-end',
+            // bottom: 300,
+            marginRight: -(SIZES.WIDTH_WINDOW * 0.08),
+        },
         title: {
             fontSize: '21@ms0.5',
             fontWeight: 'bold',
@@ -40,6 +47,11 @@ const styleScaled = (Color: any) =>
             letterSpacing: 1,
             width: '100%',
             textAlign: 'left',
+        },
+        clickGif: {
+            // width: SIZES.WIDTH_WINDOW * 0.5,
+            // height:
+            // marginLeft: -(SIZES.WIDTH_WINDOW * 0.08),
         },
         content: {
             fontSize: '15@ms0.5',

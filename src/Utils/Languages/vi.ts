@@ -207,4 +207,5 @@ export default {
     JOB: 'Công việc',
     TRAVEL: 'Du lịch',
     HowLearn: 'Home',
+    TEST_YOUR_LEVEL: 'Tớ nghĩ cậu nên làm một bài kiểm tra nhỏ nhỏ để có được những bài học phù hợp nhất'
 };

@@ -19,6 +19,10 @@ export const IMAGE = {
     WORLD_MAP: require('../../Assets/Images/world-map.png'),
 };
 
+export const GIF = {
+    CLICK: require('../../Assets/gif/click.gif'),
+};
+
 export const LOTTIE = {
     INTRO_1: require('../../Assets/Loties/intro-1.json'),
     INTRO_2: require('../../Assets/Loties/intro-2.json'),
