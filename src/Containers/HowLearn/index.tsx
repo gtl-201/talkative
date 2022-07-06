@@ -25,7 +25,8 @@ import SoundRecorder from 'react-native-sound-recorder';
 import SoundPlayer from 'react-native-sound-player';
 import { MMKV } from 'react-native-mmkv';
 import HowLearn from '../../Components/HowLearn/index';
-import { UserServices } from '../../Store/Services/user-services';
+import Gate from '../../Components/HowLearn/Gate/index';
+import { getAllLevel, getAllRound, getQuest, UserServices } from '../../Store/Services/user-services';
 
 // import {AudioRecorder, AudioUtils} from 'react-native-audio';
 
@@ -48,8 +49,7 @@ const VideoCall: FC<any> = (props) =>
                 userData.whyLearn !== undefined &&
                 userData.purpose !== undefined &&
                 setShowHowLearn(false);
-            console.log(userData);
-            
+            // console.log(userData, '??');
         }
 
         fetchUserInfor();
@@ -73,6 +73,13 @@ const VideoCall: FC<any> = (props) =>
                                 // iconRight={switchIc}
                                 headerRight
                                 onPressLeft={() => navigation.openDrawer()}
+                            />
+                            <Gate
+                                color={color}
+                                language={language}
+                                navigation={navigation}
+                                userInfor={userInfor}
+                                onFinish={()=>setShowHowLearn(false)}
                             />
                         </>
                     )

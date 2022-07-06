@@ -6372,6 +6372,11 @@ react-native-animatable@1.3.3, react-native-animatable@^1.3.3:
   dependencies:
     prop-types "^15.7.2"
 
+react-native-circular-progress-indicator@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-circular-progress-indicator/-/react-native-circular-progress-indicator-4.2.0.tgz#db4cbedfac3273298e6cf2e2f22dc1deb97895a5"
+  integrity sha512-EEBmEWzof78CVHr4/fAAamCKoFO5IqShvGvPCIH9HznsMBhAfgbU5C/yRYESWlh7Lzy4wwULiv8vnoSYG5UAjw==
+
 react-native-codegen@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.0.6.tgz#b3173faa879cf71bfade8d030f9c4698388f6909"

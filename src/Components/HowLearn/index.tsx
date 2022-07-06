@@ -55,7 +55,7 @@ const Howlearn: FC<Props> = (props) =>
     {
         showGif &&
             Animated.timing(animationGifValue, {
-                toValue: { x: 0, y: 2 },
+                toValue: { x: -20, y: 2 },
                 duration: 300,
                 useNativeDriver: false,
             }).start();

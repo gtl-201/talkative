@@ -306,6 +306,46 @@ export async function getUserById(id: string)
         });
 }
 
+export async function getAllLevel()
+{
+    return await firestore()
+        .collection('Quest')
+        .get()
+        .then((querySnapshot) =>
+        {
+            const data: any[] = [];
+            const data2 = querySnapshot.docs.map((item) => item.data());
+
+            querySnapshot.forEach((item, index) => data.push({ id: item.id, data: data2[index] }));
+            return data;
+        });
+}
+
+export async function getAllRound(level: string)
+{
+    return await firestore()
+        .collection('Quest')
+        .doc(level)
+        .get()
+        .then((data) =>
+        {
+            return data.data();
+        });
+}
+
+export async function getQuest(level: string, round: string)
+{
+    return await firestore()
+        .collection('Quest')
+        .doc(level)
+        .collection(round)
+        .get()
+        .then((querySnapshot) =>
+        {
+            return querySnapshot.docs.map((item) => item.data());
+        });
+}
+
 export const UserServices = {
     uploadAvatar,
     uploadThumbnail,
@@ -322,4 +362,7 @@ export const UserServices = {
     getUidUserMeetingCallee,
     getUidUserOnline,
     getUidUserLiteInfor,
+    getAllLevel,
+    getAllRound,
+    getQuest,
 };
