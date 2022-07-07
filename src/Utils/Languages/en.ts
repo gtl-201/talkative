@@ -215,4 +215,5 @@ export default {
     HARD_CORE: 'Hard core',
     HowLearn: 'Home',
     TEST_YOUR_LEVEL: 'I think you should do a little test to get the most suitable lessons',
+    RANK: 'Rank',
 };

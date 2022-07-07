@@ -145,6 +145,12 @@ export const MENU = [
         name: 'Practise',
     },
     {
+        icon_type: 'MaterialIcons',
+        icon: 'military-tech',
+        icon_size: 26,
+        name: 'Rank',
+    },
+    {
         icon_type: 'Entypo',
         icon: 'info-with-circle',
         icon_size: 26,

@@ -1,4 +1,9 @@
-import React, { FC, useRef } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { BackHandler, ScrollView } from 'react-native';
+import CountAction from '../../Components/Profile/CountAction';
+import ListCall from '../../Components/Profile/HistoryCall';
+import Infor from '../../Components/Profile/Infor';
+// import ListNewsPost from '../../Components/Profile/ListNewsPost';
 import { bindActionCreators } from 'redux';
 import * as Auths from '../../Store/Actions/auth-actions';
 import { connect } from 'react-redux';
@@ -6,21 +11,31 @@ import { UserInfor } from '../../Models';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import ViewShot from 'react-native-view-shot';
 import * as ControllAppActions from '../../Store/Actions/control-app-actions';
+import { useFocusEffect } from '@react-navigation/native';
 import styleScaled from './style';
-import TTSComponent from '../../Components/Practise/Tts';
+import { UserServices } from '../../Store/Services/user-services';
+import Rank from '../../Components/Rank/rank';
 import Header from '../../Components/BaseComponents/Header';
-interface practiseProp {
-    navigation: DrawerNavigationProp<any, any>;
-    userInfor: UserInfor;
-    setBackgroundScreenDrawer: (image: string) => void;
-    color: object;
-    language: object;
+
+interface ProfileProps {
+  navigation: DrawerNavigationProp<any, any>;
+  userInfor: UserInfor;
+  setBackgroundScreenDrawer: (image: string) => void;
+  color: object;
+  language: object;
 }
 
-const Practises: FC<any> = ({ navigation, userInfor, setBackgroundScreenDrawer, color, language }: practiseProp) =>
+const RankContainer: FC<any> = ({
+    navigation,
+    userInfor,
+    setBackgroundScreenDrawer,
+    color,
+    language,
+}: ProfileProps) =>
 {
     const styles = styleScaled(color);
     const refViewShot = useRef();
+
     return (
         <ViewShot
             ref={refViewShot}
@@ -35,11 +50,10 @@ const Practises: FC<any> = ({ navigation, userInfor, setBackgroundScreenDrawer, 
                 shadow={false}
                 iconRightType="FontAwesome"
                 onPressLeft={() => navigation.openDrawer()}
-                
             />
-            <TTSComponent
+            <Rank
                 color={color}
-                language={language}
+                language={language.PRACTISE}
             />
         </ViewShot>
     );
@@ -59,8 +73,11 @@ function mapDispatchToProps(dispatch: any)
     return {
         setUser: bindActionCreators(Auths.setUser, dispatch),
         setLoading: bindActionCreators(Auths.setLoading, dispatch),
-        setBackgroundScreenDrawer: bindActionCreators(ControllAppActions.setBackgroundScreenDrawer, dispatch),
+        setBackgroundScreenDrawer: bindActionCreators(
+            ControllAppActions.setBackgroundScreenDrawer,
+            dispatch,
+        ),
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Practises);
+export default connect(mapStateToProps, mapDispatchToProps)(RankContainer);

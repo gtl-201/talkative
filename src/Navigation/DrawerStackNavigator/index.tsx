@@ -18,6 +18,7 @@ import VideoCall from '../../Containers/Call/VideoCall';
 import Practise from '../../Containers/Practise';
 import HowLearn from '../../Containers/HowLearn';
 import AddGroupMember from '../../Containers/AddMemberGroup';
+import Rank from '../../Containers/Rank';
 
 const Stack = createStackNavigator();
 
@@ -123,6 +124,11 @@ const AppStackNavigator: FC<any> = (props) =>
                     <Stack.Screen
                         name="Practise"
                         component={Practise}
+                    />
+                    
+                    <Stack.Screen
+                        name="Rank"
+                        component={Rank}
                     />
                     
                     <Stack.Screen

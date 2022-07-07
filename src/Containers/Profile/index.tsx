@@ -14,7 +14,7 @@ import * as ControllAppActions from '../../Store/Actions/control-app-actions';
 import { useFocusEffect } from '@react-navigation/native';
 import styleScaled from './style';
 import { UserServices } from '../../Store/Services/user-services';
-
+import Friends from '../../Components/Profile/Friends';
 interface ProfileProps {
     navigation: DrawerNavigationProp<any, any>;
     userInfor: UserInfor;
@@ -93,7 +93,15 @@ const Profile: FC<any> = ({ navigation, userInfor, setBackgroundScreenDrawer, co
                     getCall={callee.length}
                     language={language}
                 />
-
+                
+                <Friends
+                    color={color}
+                    totalCall={caller.length + callee.length}
+                    makeCall={caller.length}
+                    getCall={callee.length}
+                    language={language}
+                />
+                
                 <ListCall
                     color={color}
                     language={language}
