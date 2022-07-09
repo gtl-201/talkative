@@ -114,7 +114,7 @@ export default {
     POST_ABOUT: 'bài viết về ',
     POST_OF: 'Bài đăng của',
     LOGOUT: 'Đăng xuất',
-    HOME: 'Trang chủ',
+    HOME: 'Gọi điện',
     PROFILE: 'Hồ sơ cá nhân',
     ABOUT: 'Về Speaker',
     SLIDE_1_DES: 'Kết nối với mọi người thông qua nghe và gọi',
@@ -209,4 +209,7 @@ export default {
     HowLearn: 'Home',
     TEST_YOUR_LEVEL: 'Tớ nghĩ cậu nên làm một bài kiểm tra nhỏ nhỏ để có được những bài học phù hợp nhất',
     RANK: 'Xếp hạng',
+    HOWLEARN: 'Học',
+    QUEST: 'Câu Hỏi',
+    LISTCALL: 'Gọi điện',
 };

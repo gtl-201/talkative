@@ -116,13 +116,13 @@ export const MENU = [
     // menu_app
     {
         icon_type: 'MaterialIcons',
-        icon: 'record-voice-over',
+        icon: 'auto-stories',
         icon_size: 26,
         name: 'HowLearn',
     },
     {
         icon_type: 'MaterialIcons',
-        icon: 'home',
+        icon: 'duo',
         icon_size: 24,
         name: 'Home',
     },

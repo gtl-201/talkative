@@ -20,7 +20,7 @@ const style = (Color: any) =>
             width: '100%',
             justifyContent: 'space-between',
             alignItems: 'center',
-            paddingVertical: '6@vs',
+            paddingVertical: '2@vs',
         },
         txtHeader: {
             flex: 1,

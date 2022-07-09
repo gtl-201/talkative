@@ -26,7 +26,7 @@ import SoundPlayer from 'react-native-sound-player';
 import { MMKV } from 'react-native-mmkv';
 import HowLearn from '../../Components/HowLearn/index';
 import Gate from '../../Components/HowLearn/Gate/index';
-import { getAllLevel, getAllRound, getQuest, UserServices } from '../../Store/Services/user-services';
+import { getAllRound, getQuest, UserServices } from '../../Store/Services/user-services';
 
 // import {AudioRecorder, AudioUtils} from 'react-native-audio';
 

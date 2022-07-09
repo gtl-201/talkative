@@ -1,4 +1,3 @@
-import { SHADOW_7 } from './../../../Utils/Values/shadows';
 import { ScaledSheet } from 'react-native-size-matters';
 import { SHADOW_2, SHADOW_3, SIZES } from '../../../Utils/Values';
 
@@ -22,7 +21,7 @@ const styleScaled = (Color: any) =>
             zIndex: 1,
             // marginTop: SIZES.HEIGHT_PADDINGTOP
         },
-        FloatTxt: {
+        FloatTxt:{
             // position: 'absolute',
             width: SIZES.WIDTH_WINDOW * 0.7,
             alignSelf: 'flex-end',
@@ -168,83 +167,6 @@ const styleScaled = (Color: any) =>
         scrollViewContainer: {
             flex: 1,
             width: SIZES.WIDTH_WINDOW - SIZES.WIDTH_WINDOW * 0.08,
-        },
-        txtGate: {
-            fontSize: '15@ms0.5',
-            fontWeight: 'bold',
-            color: Color.TITLE_TXT,
-            // marginBottom: '6@vs',
-            letterSpacing: 1,
-            // width: '70%',
-            textAlign: 'left',
-            textTransform: 'capitalize',
-            // top: 60,
-            // position: 'absolute',
-            zIndex: 10,
-        },
-        txtRound: {
-            fontSize: '14@ms0.4',
-            // fontWeight: ,
-            color: Color.TITLE_TXT,
-            // marginBottom: '6@vs',
-            letterSpacing: 1,
-            // width: '70%',
-            textAlign: 'left',
-            textTransform: 'capitalize',
-        },
-        containerImgRound: {
-            width: SIZES.WIDTH_WINDOW * 0.25 - 5,
-            height: SIZES.WIDTH_WINDOW * 0.25 - 5,
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: (SIZES.WIDTH_WINDOW * 0.25) / 2,
-            overflow: 'hidden',
-            // borderWidth: 5,
-        },
-        imgRound: {
-            width: SIZES.WIDTH_WINDOW * 0.12,
-            height: SIZES.WIDTH_WINDOW * 0.12,
-            position: 'absolute',
-            top: 22,
-            zIndex: 1,
-        },
-        boxLevelContainer: {
-            position: 'absolute',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: SIZES.WIDTH_WINDOW - 20,
-            top: SIZES.WIDTH_WINDOW * 0.25 + 30,
-        },
-        boxLevel: {
-            // position: 'absolute',
-            // top: SIZES.WIDTH_WINDOW * 0.25 + 30,
-            ...SHADOW_7,
-            // left: SIZES.WIDTH_WINDOW / 2 - 110,
-            flexWrap: 'wrap',
-            width: 200,
-            height: 120,
-            borderWidth: 0,
-            backgroundColor: Color.BG,
-            borderRadius: 10,
-            paddingVertical: 8,
-            paddingHorizontal: 7,
-            // zIndex: 999,
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            flexDirection: 'row',
-        },
-        ImgRoundProcess: {
-            width: SIZES.WIDTH_WINDOW * 0.25 - 5,
-            height: SIZES.WIDTH_WINDOW * 0.25 - 5,
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: (SIZES.WIDTH_WINDOW * 0.25) / 2,
-            overflow: 'hidden',
-            borderWidth: 5,
-            borderColor: 'pink',
-            position: 'absolute',
-            zIndex: 10,
-            top: 0,
         },
     });
 };

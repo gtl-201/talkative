@@ -306,7 +306,7 @@ export async function getUserById(id: string)
         });
 }
 
-export async function getAllLevel()
+export async function getAllGate()
 {
     return await firestore()
         .collection('Quest')
@@ -321,11 +321,11 @@ export async function getAllLevel()
         });
 }
 
-export async function getAllRound(level: string)
+export async function getAllRound(gate: string)
 {
     return await firestore()
         .collection('Quest')
-        .doc(level)
+        .doc(gate)
         .get()
         .then((data) =>
         {
@@ -333,12 +333,27 @@ export async function getAllRound(level: string)
         });
 }
 
-export async function getQuest(level: string, round: string)
+export async function getLevel(gate: string, round: string)
 {
     return await firestore()
         .collection('Quest')
-        .doc(level)
+        .doc(gate)
         .collection(round)
+        .get()
+        .then((querySnapshot) =>
+        {
+            return querySnapshot.docs.map((item) => item.id);
+        });
+}
+
+export async function getQuest(gate: string, round: string, level: string)
+{
+    return await firestore()
+        .collection('Quest')
+        .doc(gate)
+        .collection(round)
+        .doc(level)
+        .collection('listQuest')
         .get()
         .then((querySnapshot) =>
         {
@@ -362,7 +377,8 @@ export const UserServices = {
     getUidUserMeetingCallee,
     getUidUserOnline,
     getUidUserLiteInfor,
-    getAllLevel,
+    getAllGate,
     getAllRound,
+    getLevel,
     getQuest,
 };

@@ -1,19 +1,11 @@
-import React, { FC, memo, useEffect, useRef, useState } from 'react';
-import { FlatList, Image, Pressable, ScrollView, Text, View, Animated } from 'react-native';
+import React, { FC, memo, useEffect, useState } from 'react';
+import { Image, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { moderateScale } from 'react-native-size-matters';
-import Icon from '../../BaseComponents/Icon';
 import styleScaled from './style';
-import { IMAGE } from '../../../Utils/Values';
-import { getAllLevel, getAllRound, UserServices } from '../../../Store/Services/user-services';
-import { firebase } from '@react-native-firebase/storage';
-import EmptyView from '../../BaseComponents/EmptyView';
-import { MMKV } from 'react-native-mmkv';
-import firestore from '@react-native-firebase/firestore';
+import { getAllGate, getAllRound, getLevel } from '../../../Store/Services/user-services';
 import { SIZES } from '../../../Utils/Values';
-import auth from '@react-native-firebase/auth';
-import Svg, { ClipPath, Defs, Image as Img2, LinearGradient, Path, Stop } from 'react-native-svg';
 import CircularProgress from 'react-native-circular-progress-indicator';
+import { NoFlickerImage } from '../../../Components/NoFlickerImg/no-flicker-image';
 
 interface Props {
     color: any;
@@ -29,29 +21,30 @@ const Gate: FC<Props> = (props) =>
     const styles = styleScaled(color);
     // let allGate: any[] = [];
     const [allGate, setAllGate] = useState<any[]>([]);
+    const [levelShow, setLevelShow] = useState<any[]>([]);
+    const showLevel: any[] = [];
+
     const getRound = (Gate: any[]) =>
     {
+        console.log('+=========================================+');
         const dataR = Gate.map(async (x) =>
         {
-            // const dataRound: any = await getAllRound(x.id);
-            // const data: any = x.data;
-            // console.log(dataRound.collection, '?');
-            // console.log(x, '???');
-            // console.log({ gate: x.id, round: x.data.collection, img: x.data.img }, '!!!!');
-            // console.log(x.data.collection,'?');
             const dataRound: any[] = [];
+            const showLevelTmp: any[] = [];
             x.data.collection &&
-                x.data.collection.map((x: any) =>
+                x.data.collection.map(async (y: any) =>
                 {
-                    dataRound.push({ id: x.slice(0, x.indexOf('++')), img: x.slice(x.indexOf('++'), x.length).replace('++', '') });
+                    dataRound.push({ id: y.name, img: y.img, level: x.data.listLevel });
+                    showLevelTmp.push(false);
                 });
+            showLevel.push({ gate: showLevelTmp });
+            // console.log(showLevel);
+            setLevelShow(showLevel);
             return Promise.resolve({ gate: x.id, round: dataRound, img: x.data.img });
         });
 
         Promise.all(dataR).then((x) =>
         {
-            // console.log(x, '++');
-
             setAllGate(x);
         });
     };
@@ -59,18 +52,17 @@ const Gate: FC<Props> = (props) =>
     {
         const quearyData = async () =>
         {
-            const tmpAllGate: any[] = await getAllLevel();
+            const tmpAllGate: any[] = await getAllGate();
             getRound(tmpAllGate);
-            // allGate.push(tmp);
-            // setAllGate(tmpAllGate);
-            // console.log(allGate, '?');
+            // console.log(allGate, '__');
         };
         quearyData();
     }, []);
 
     const RenderGate = () =>
     {
-        // console.log(allGate);
+        // console.log(allGate[0].round);
+        // console.log(levelShow, '...');
 
         return (
             <>
@@ -78,6 +70,7 @@ const Gate: FC<Props> = (props) =>
                 {
                     return (
                         <>
+                            {/* RENDER GATE */}
                             {x.img !== undefined
                                 ? (
                                         <View style={{ marginTop: 10, marginBottom: 5, justifyContent: 'center', alignItems: 'center' }}>
@@ -91,32 +84,67 @@ const Gate: FC<Props> = (props) =>
                                 : (
                                         <Text key={x.gate}>{x.gate}</Text>
                                     )}
+                            {/* {console.log(x, '!!')} */}
+                            {/* RENDER ROUND */}
                             {x.round &&
                                 x.round.map((dataRound: any, index2: number) => (
-                                    <TouchableOpacity
+                                    <View
                                         key={dataRound.url}
-                                        // disabled={true}
-                                        style={{ marginVertical: 10, justifyContent: 'center', alignItems: 'center' }}
+                                        style={{ position: 'relative', width: '100%' }}
                                     >
-                                        <CircularProgress
-                                            value={60}
-                                            radius={(SIZES.WIDTH_WINDOW * 0.25) / 2}
-                                            progressValueColor={'#fff0'}
-                                            duration={0}
-                                            // activeStrokeColor={'#'}
-                                            // inActiveStrokeColor={'#5C8AEA'}
-                                            titleColor={'#fff0'}
-                                            subtitleColor={'#fff0'}
-                                            inActiveStrokeOpacity={0.5}
-                                            inActiveStrokeWidth={18}
-                                            activeStrokeWidth={18}
-                                        />
-                                        <Image
-                                            source={{ uri: dataRound.img }}
-                                            style={styles.imgRound}
-                                        />
-                                        <Text style={styles.txtRound}>{dataRound.id}</Text>
-                                    </TouchableOpacity>
+                                        {dataRound.level !== undefined && (
+                                            <View style={[styles.boxLevelContainer, !levelShow[index].gate[index2] && { display: 'none' }]}>
+                                                <View style={[styles.boxLevel, !levelShow[index].gate[index2] && { display: 'none' }]}>
+                                                    {/* <Text>{dataLevel}</Text> */}
+                                                    {dataRound.level.map((dataLevel: string) =>
+                                                    {
+                                                        return (
+                                                            <TouchableOpacity
+                                                                key={dataLevel}
+                                                                onPress={() =>
+                                                                {
+                                                                    navigation.navigate('Quest', { gate: x.gate, round: dataRound.id, level: dataLevel });
+                                                                }}
+                                                            >
+                                                                <Text>{dataLevel}</Text>
+                                                            </TouchableOpacity>
+                                                        );
+                                                    })}
+                                                </View>
+                                            </View>
+                                        )}
+                                        <TouchableOpacity
+                                            // disabled={true}
+                                            style={{ marginVertical: 10, justifyContent: 'center', alignItems: 'center', zIndex: 10 }}
+                                            onPress={() =>
+                                            {
+                                                const tmpShowLevel = [...levelShow];
+                                                tmpShowLevel[index].gate[index2] = !levelShow[index].gate[index2];
+                                                console.log(tmpShowLevel);
+                                                setLevelShow(tmpShowLevel);
+                                                // navigation.navigate('Quest', { gate: x.gate, round: dataRound.id, level: '1' });
+                                            }}
+                                        >
+                                            <CircularProgress
+                                                value={60}
+                                                radius={(SIZES.WIDTH_WINDOW * 0.25) / 2}
+                                                progressValueColor={'#fff0'}
+                                                duration={0}
+                                                // activeStrokeColor={'#'}
+                                                // inActiveStrokeColor={'#5C8AEA'}
+                                                titleColor={'#fff0'}
+                                                subtitleColor={'#fff0'}
+                                                inActiveStrokeOpacity={0.5}
+                                                inActiveStrokeWidth={18}
+                                                activeStrokeWidth={18}
+                                            />
+                                            <Image
+                                                source={{ uri: dataRound.img }}
+                                                style={styles.imgRound}
+                                            />
+                                            <Text style={styles.txtRound}>{dataRound.id}</Text>
+                                        </TouchableOpacity>
+                                    </View>
                                 ))}
                         </>
                     );

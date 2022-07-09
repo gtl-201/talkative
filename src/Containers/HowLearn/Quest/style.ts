@@ -1,5 +1,5 @@
 import { ScaledSheet } from 'react-native-size-matters';
-import { SHADOW_2, SHADOW_3, SIZES } from '../../Utils/Values';
+import { SHADOW_2, SHADOW_3, SIZES } from '../../../Utils/Values';
 
 const styleScaled = (Color: any) =>
 {
