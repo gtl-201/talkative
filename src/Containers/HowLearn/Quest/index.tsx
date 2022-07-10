@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import * as ControlAppActions from '../../../Store/Actions/control-app-actions';
 import styleScaled from './style';
 // Component
-import Header from '../../../Components/BaseComponents/Header';
+// import Header from '../../../Components/BaseComponents/Header';
 import Quest2 from '../../../Components/HowLearn/Quest/index';
 
 const Quest: FC<any> = (props) =>
@@ -21,7 +21,7 @@ const Quest: FC<any> = (props) =>
             style={[styles.container, { flex: 1 }]}
             options={{ result: 'base64', quality: 0.5 }}
         >
-            <Header title={language.QUEST} />
+            {/* <Header title={language.QUEST} /> */}
             <Quest2
                 color={color}
                 language={language}

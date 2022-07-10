@@ -129,207 +129,209 @@ const Howlearn: FC<Props> = (props) =>
                     </Animated.View>
                 </View>
             </View>
-            {!showGif ? (
-                <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-                    {step === 0 && (
-                        <View style={{ width: '100%' }}>
-                            <Text style={styles.title}>{language.HOW_U_KNOW_WE}</Text>
-                            {knowFrom.map((x, index) =>
-                            {
-                                return (
-                                    <TouchableOpacity
-                                        key={index}
-                                        style={[styles.cardBox, index === currentIndexChoose1 && styles.cardChoosed]}
-                                        onPress={() =>
-                                        {
-                                            setPass(true);
-                                            setCurrentIndexChoose1(index);
-                                        }}
-                                    >
-                                        <View>
-                                            <Image
-                                                style={styles.avatar}
-                                                // source={}
-                                                resizeMode={'cover'}
-                                            />
-                                        </View>
-                                        <Text style={styles.content}>{language[x]}</Text>
-                                    </TouchableOpacity>
-                                );
-                            })}
-                        </View>
-                    )}
-
-                    {step === 1 && (
-                        <View style={{ width: '100%' }}>
-                            <Text style={styles.title}>{language.LEVEL_ENG}</Text>
-                            {level.map((x, index) =>
-                            {
-                                return (
-                                    <TouchableOpacity
-                                        key={index}
-                                        style={[styles.cardBox, index === currentIndexChoose2 && styles.cardChoosed]}
-                                        onPress={() =>
-                                        {
-                                            setPass(true);
-                                            setCurrentIndexChoose2(index);
-                                        }}
-                                    >
-                                        <View>
-                                            <Image
-                                                style={styles.avatar}
-                                                // source={}
-                                                resizeMode={'cover'}
-                                            />
-                                        </View>
-                                        <Text style={styles.content}>{language[x]}</Text>
-                                    </TouchableOpacity>
-                                );
-                            })}
-                        </View>
-                    )}
-
-                    {step === 2 && (
-                        <View style={{ width: '100%' }}>
-                            <Text style={styles.title}>{language.WHY_LEARN}</Text>
-                            {whyLearn.map((x, index) =>
-                            {
-                                return (
-                                    <TouchableOpacity
-                                        key={index}
-                                        style={[styles.cardBox, index === currentIndexChoose3 && styles.cardChoosed]}
-                                        onPress={() =>
-                                        {
-                                            setPass(true);
-                                            setCurrentIndexChoose3(index);
-                                        }}
-                                    >
-                                        <View>
-                                            <Image
-                                                style={styles.avatar}
-                                                // source={}
-                                                resizeMode={'cover'}
-                                            />
-                                        </View>
-                                        <Text style={styles.content}>{language[x]}</Text>
-                                    </TouchableOpacity>
-                                );
-                            })}
-                        </View>
-                    )}
-
-                    {step === 3 && (
-                        <View style={{ width: '100%' }}>
-                            <Text style={styles.title}>{language.PURPOSE_LEARN}</Text>
-                            {purpose.map((x, index) =>
-                            {
-                                return (
-                                    <TouchableOpacity
-                                        key={index}
-                                        style={[styles.cardBox, { justifyContent: 'space-between', flexDirection: 'row' }, index === currentIndexChoose4 && styles.cardChoosed]}
-                                        onPress={() =>
-                                        {
-                                            setPass(true);
-                                            setCurrentIndexChoose4(index);
-                                        }}
-                                    >
-                                        <Text style={styles.content}>{language[x.title]}</Text>
-                                        <Text style={styles.subContent}>
-                                            {language[x.subTitle]} {language.MIN_PER_DAY}
-                                        </Text>
-                                    </TouchableOpacity>
-                                );
-                            })}
-                        </View>
-                    )}
-
-                    {step === 4 && (
-                        <View style={{ width: '100%' }}>
-                            <Text style={[styles.title, { textAlign: 'left', marginBottom: 1 }]}>{language.PUR_WHEN_FINISH}</Text>
-                            <Text style={styles.subTitle}>{language.SUB_PUR_WHEN_FINISH}</Text>
-                            <View
-                                style={[
-                                    styles.cardBox,
+            {!showGif
+                ? (
+                        <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+                            {step === 0 && (
+                                <View style={{ width: '100%' }}>
+                                    <Text style={styles.title}>{language.HOW_U_KNOW_WE}</Text>
+                                    {knowFrom.map((x, index) =>
                                     {
-                                        justifyContent: 'space-between',
-                                        flexDirection: 'column',
-                                        paddingVertical: 0,
+                                        return (
+                                            <TouchableOpacity
+                                                key={index + x}
+                                                style={[styles.cardBox, index === currentIndexChoose1 && styles.cardChoosed]}
+                                                onPress={() =>
+                                                {
+                                                    setPass(true);
+                                                    setCurrentIndexChoose1(index);
+                                                }}
+                                            >
+                                                <View>
+                                                    <Image
+                                                        style={styles.avatar}
+                                                        // source={}
+                                                        resizeMode={'cover'}
+                                                    />
+                                                </View>
+                                                <Text style={styles.content}>{language[x]}</Text>
+                                            </TouchableOpacity>
+                                        );
+                                    })}
+                                </View>
+                            )}
+
+                            {step === 1 && (
+                                <View style={{ width: '100%' }}>
+                                    <Text style={styles.title}>{language.LEVEL_ENG}</Text>
+                                    {level.map((x, index) =>
+                                    {
+                                        return (
+                                            <TouchableOpacity
+                                                key={index + x}
+                                                style={[styles.cardBox, index === currentIndexChoose2 && styles.cardChoosed]}
+                                                onPress={() =>
+                                                {
+                                                    setPass(true);
+                                                    setCurrentIndexChoose2(index);
+                                                }}
+                                            >
+                                                <View>
+                                                    <Image
+                                                        style={styles.avatar}
+                                                        // source={}
+                                                        resizeMode={'cover'}
+                                                    />
+                                                </View>
+                                                <Text style={styles.content}>{language[x]}</Text>
+                                            </TouchableOpacity>
+                                        );
+                                    })}
+                                </View>
+                            )}
+
+                            {step === 2 && (
+                                <View style={{ width: '100%' }}>
+                                    <Text style={styles.title}>{language.WHY_LEARN}</Text>
+                                    {whyLearn.map((x, index) =>
+                                    {
+                                        return (
+                                            <TouchableOpacity
+                                                key={index + x}
+                                                style={[styles.cardBox, index === currentIndexChoose3 && styles.cardChoosed]}
+                                                onPress={() =>
+                                                {
+                                                    setPass(true);
+                                                    setCurrentIndexChoose3(index);
+                                                }}
+                                            >
+                                                <View>
+                                                    <Image
+                                                        style={styles.avatar}
+                                                        // source={}
+                                                        resizeMode={'cover'}
+                                                    />
+                                                </View>
+                                                <Text style={styles.content}>{language[x]}</Text>
+                                            </TouchableOpacity>
+                                        );
+                                    })}
+                                </View>
+                            )}
+
+                            {step === 3 && (
+                                <View style={{ width: '100%' }}>
+                                    <Text style={styles.title}>{language.PURPOSE_LEARN}</Text>
+                                    {purpose.map((x, index) =>
+                                    {
+                                        return (
+                                            <TouchableOpacity
+                                                key={index + x.title}
+                                                style={[styles.cardBox, { justifyContent: 'space-between', flexDirection: 'row' }, index === currentIndexChoose4 && styles.cardChoosed]}
+                                                onPress={() =>
+                                                {
+                                                    setPass(true);
+                                                    setCurrentIndexChoose4(index);
+                                                }}
+                                            >
+                                                <Text style={styles.content}>{language[x.title]}</Text>
+                                                <Text style={styles.subContent}>
+                                                    {language[x.subTitle]} {language.MIN_PER_DAY}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        );
+                                    })}
+                                </View>
+                            )}
+
+                            {step === 4 && (
+                                <View style={{ width: '100%' }}>
+                                    <Text style={[styles.title, { textAlign: 'left', marginBottom: 1 }]}>{language.PUR_WHEN_FINISH}</Text>
+                                    <Text style={styles.subTitle}>{language.SUB_PUR_WHEN_FINISH}</Text>
+                                    <View
+                                        style={[
+                                            styles.cardBox,
+                                            {
+                                                justifyContent: 'space-between',
+                                                flexDirection: 'column',
+                                                paddingVertical: 0,
+                                            },
+                                        ]}
+                                    >
+                                        <View style={styles.kh}>
+                                            <View>
+                                                <Image
+                                                    style={styles.avatar}
+                                                    // source={}
+                                                    resizeMode={'cover'}
+                                                />
+                                            </View>
+                                            <View>
+                                                <Text style={styles.content}>{language.CONFIDENT_CONVERSATION}</Text>
+                                                <Text style={styles.subContent2}>{language.SUB_CONFIDENT_CONVERSATION}</Text>
+                                            </View>
+                                        </View>
+
+                                        <View style={styles.kh}>
+                                            <View>
+                                                <Image
+                                                    style={styles.avatar}
+                                                    // source={}
+                                                    resizeMode={'cover'}
+                                                />
+                                            </View>
+                                            <View>
+                                                <Text style={styles.content}>{language.CONFIDENT_CONVERSATION}</Text>
+                                                <Text style={styles.subContent2}>{language.SUB_CONFIDENT_CONVERSATION}</Text>
+                                            </View>
+                                        </View>
+
+                                        <View style={[styles.kh, { borderBottomWidth: 0 }]}>
+                                            <View>
+                                                <Image
+                                                    style={styles.avatar}
+                                                    // source={}
+                                                    resizeMode={'cover'}
+                                                />
+                                            </View>
+                                            <View>
+                                                <Text style={styles.content}>{language.CONFIDENT_CONVERSATION}</Text>
+                                                <Text style={styles.subContent2}>{language.SUB_CONFIDENT_CONVERSATION}</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                </View>
+                            )}
+                        </ScrollView>
+                    )
+                : (
+                        <View style={{ flex: 1, width: SIZES.WIDTH_WINDOW * 0.92, justifyContent: 'flex-end' }}>
+                            <Animated.View
+                                style={[
+                                    styles.FloatTxt,
+                                    {
+                                        translateX: animationTxtValue,
                                     },
                                 ]}
                             >
-                                <View style={styles.kh}>
-                                    <View>
-                                        <Image
-                                            style={styles.avatar}
-                                            // source={}
-                                            resizeMode={'cover'}
-                                        />
-                                    </View>
-                                    <View>
-                                        <Text style={styles.content}>{language.CONFIDENT_CONVERSATION}</Text>
-                                        <Text style={styles.subContent2}>{language.SUB_CONFIDENT_CONVERSATION}</Text>
-                                    </View>
-                                </View>
-
-                                <View style={styles.kh}>
-                                    <View>
-                                        <Image
-                                            style={styles.avatar}
-                                            // source={}
-                                            resizeMode={'cover'}
-                                        />
-                                    </View>
-                                    <View>
-                                        <Text style={styles.content}>{language.CONFIDENT_CONVERSATION}</Text>
-                                        <Text style={styles.subContent2}>{language.SUB_CONFIDENT_CONVERSATION}</Text>
-                                    </View>
-                                </View>
-
-                                <View style={[styles.kh, { borderBottomWidth: 0 }]}>
-                                    <View>
-                                        <Image
-                                            style={styles.avatar}
-                                            // source={}
-                                            resizeMode={'cover'}
-                                        />
-                                    </View>
-                                    <View>
-                                        <Text style={styles.content}>{language.CONFIDENT_CONVERSATION}</Text>
-                                        <Text style={styles.subContent2}>{language.SUB_CONFIDENT_CONVERSATION}</Text>
-                                    </View>
-                                </View>
-                            </View>
+                                <Text style={[styles.title, { textAlign: 'left' }]}>{language.TEST_YOUR_LEVEL}</Text>
+                            </Animated.View>
+                            <Animated.View
+                                style={{
+                                    translateX: animationGifValue.x,
+                                    translateY: animationGifValue.y,
+                                }}
+                            >
+                                <Image
+                                    style={[styles.clickGif]}
+                                    source={require('../../Assets/gif/click.gif')}
+                                    // resizeMode={'cover'}
+                                    width={200}
+                                    height={300}
+                                />
+                            </Animated.View>
                         </View>
                     )}
-                </ScrollView>
-            ) : (
-                <View style={{ flex: 1, width: SIZES.WIDTH_WINDOW * 0.92, justifyContent: 'flex-end' }}>
-                    <Animated.View
-                        style={[
-                            styles.FloatTxt,
-                            {
-                                translateX: animationTxtValue,
-                            },
-                        ]}
-                    >
-                        <Text style={[styles.title, { textAlign: 'left' }]}>{language.TEST_YOUR_LEVEL}</Text>
-                    </Animated.View>
-                    <Animated.View
-                        style={{
-                            translateX: animationGifValue.x,
-                            translateY: animationGifValue.y,
-                        }}
-                    >
-                        <Image
-                            style={[styles.clickGif]}
-                            source={require('../../Assets/gif/click.gif')}
-                            // resizeMode={'cover'}
-                            width={200}
-                            height={300}
-                        />
-                    </Animated.View>
-                </View>
-            )}
 
             <View style={styles.containerBtnNext}>
                 <TouchableOpacity

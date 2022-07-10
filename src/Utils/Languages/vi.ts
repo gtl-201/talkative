@@ -212,4 +212,11 @@ export default {
     HOWLEARN: 'Học',
     QUEST: 'Câu Hỏi',
     LISTCALL: 'Gọi điện',
+    HOWTOTALK: 'Làm thế nào để nói',
+    WRONG_ANSWER: 'Không chính xác',
+    ANSWR_IS: 'Câu trả lời:',
+    RIGHT_ANSWER: 'zià zia, chuẩn ròi mai fen ❤️‍🔥',
+    END_GAME: 'END GAME ROÀI',
+    RIGHT: 'Đúng:',
+    TRANSLATETHIS: 'Dịch câu bên dưới',
 };

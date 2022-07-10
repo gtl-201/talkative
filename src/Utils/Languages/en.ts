@@ -218,4 +218,11 @@ export default {
     RANK: 'Rank',
     QUEST: 'Quest',
     LISTCALL: 'Call',
+    HOWTOTALK: 'How to talk',
+    WRONG_ANSWER: 'You\'are wrong',
+    ANSWR_IS: 'The answer is:',
+    RIGHT_ANSWER: 'Yeh, that right ❤️‍🔥',
+    END_GAME: 'END GAME',
+    RIGHT: 'Right',
+    TRANSLATETHIS: 'Translate this sentence',
 };

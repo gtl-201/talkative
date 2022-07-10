@@ -1,3 +1,4 @@
+import { SHADOW_7, SHADOW_5, SHADOW_0, SHADOW_1 } from './../../../Utils/Values/shadows';
 import { ScaledSheet } from 'react-native-size-matters';
 import { SHADOW_2, SHADOW_3, SIZES } from '../../../Utils/Values';
 
@@ -6,11 +7,13 @@ const styleScaled = (Color: any) =>
     return ScaledSheet.create({
         bgColor: {
             backgroundColor: Color.BG,
+            // backgroundColor: 'pink',
             flex: 1,
         },
         container: {
             // flexDirection: "row",
             // justifyContent: "space-between",
+            flex: 1,
             alignItems: 'center',
             width: '100%',
             paddingVertical: '8@ms',
@@ -19,9 +22,10 @@ const styleScaled = (Color: any) =>
             // ...SHADOW_3,
             alignSelf: 'center',
             zIndex: 1,
-            // marginTop: SIZES.HEIGHT_PADDINGTOP
+            marginTop: (SIZES.HEIGHT_STATUSBAR ?? 0) + 10,
+            position: 'relative',
         },
-        FloatTxt:{
+        FloatTxt: {
             // position: 'absolute',
             width: SIZES.WIDTH_WINDOW * 0.7,
             alignSelf: 'flex-end',
@@ -37,14 +41,14 @@ const styleScaled = (Color: any) =>
             ...SHADOW_2,
         },
         title: {
-            fontSize: '21@ms0.5',
+            fontSize: '20@ms0.5',
             fontWeight: 'bold',
             color: Color.TITLE_TXT,
             marginBottom: '4@vs',
             marginTop: '10@vs',
             letterSpacing: 1,
             width: '100%',
-            textAlign: 'center',
+            // textAlign: 'center',
         },
         subTitle: {
             fontSize: '17@ms0.5',
@@ -55,6 +59,17 @@ const styleScaled = (Color: any) =>
             letterSpacing: 1,
             width: '100%',
             textAlign: 'left',
+        },
+        subTitle2: {
+            fontSize: '17@ms0.5',
+            // fontWeight: 'light',
+            color: Color.TITLE_TXT,
+            marginBottom: 1.5,
+            // marginTop: '10@vs',
+            letterSpacing: 1,
+            width: '100%',
+            textAlign: 'center',
+            textTransform: 'capitalize',
         },
         clickGif: {
             // width: SIZES.WIDTH_WINDOW * 0.5,
@@ -115,6 +130,16 @@ const styleScaled = (Color: any) =>
             justifyContent: 'center',
             // alignItems: 'center',
         },
+        containerBtnNext2: {
+            width: SIZES.WIDTH_WINDOW,
+            paddingVertical: 10,
+            borderTopWidth: 2,
+            borderTopColor: Color.ON_SURFACE_VARIANT,
+            // justifyContent: 'center',
+            // alignItems: 'center',
+            position: 'absolute',
+            bottom: 0,
+        },
         btnNext: {
             width: '95%',
             backgroundColor: '#39e75f',
@@ -124,7 +149,7 @@ const styleScaled = (Color: any) =>
             // marginBottom: -5,
         },
         cardBox: {
-            width: '100%',
+            width: SIZES.WIDTH_WINDOW - 25,
             borderWidth: 2,
             borderColor: Color.ON_SURFACE_VARIANT,
             marginVertical: 10,
@@ -132,11 +157,41 @@ const styleScaled = (Color: any) =>
             paddingHorizontal: 10,
             borderRadius: 10,
             backgroundColor: Color.BG,
-            ...SHADOW_3,
+            ...SHADOW_1,
+            alignItems: 'center',
+        },
+        cardBox2: {
+            // width: SIZES.WIDTH_WINDOW - 25,
+            borderWidth: 2,
+            borderColor: Color.ON_SURFACE_VARIANT,
+            marginVertical: 10,
+            paddingVertical: 12,
+            paddingHorizontal: 10,
+            borderRadius: 10,
+            backgroundColor: Color.BG,
+            ...SHADOW_1,
+            alignItems: 'center',
+            marginHorizontal: 4,
+        },
+        cardBoxResult: {
+            width: SIZES.WIDTH_WINDOW - 25,
+            // borderWidth: 2,
+            borderColor: Color.ON_SURFACE_VARIANT,
+            marginVertical: 10,
+            paddingVertical: 5,
+            paddingHorizontal: 10,
+            borderRadius: 10,
+            backgroundColor: Color.BG,
+            ...SHADOW_5,
+            alignItems: 'center',
         },
         cardChoosed: {
             backgroundColor: '#bfe6ff',
             borderColor: '#59bfff',
+        },
+        cardChoosed2: {
+            backgroundColor: '#e2e2e2',
+            borderColor: '#b2b2b2',
         },
         processBar: {
             width: SIZES.WIDTH_WINDOW * 0.85,
@@ -168,6 +223,12 @@ const styleScaled = (Color: any) =>
             flex: 1,
             width: SIZES.WIDTH_WINDOW - SIZES.WIDTH_WINDOW * 0.08,
         },
+        SpeakerIc:
+        {
+            backgroundColor: '#59bfff',
+            borderRadius: 10,
+            padding: 5,
+        }
     });
 };
 export default styleScaled;

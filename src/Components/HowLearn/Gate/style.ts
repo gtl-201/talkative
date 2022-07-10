@@ -19,7 +19,7 @@ const styleScaled = (Color: any) =>
             // borderRadius: "40@ms",
             // ...SHADOW_3,
             alignSelf: 'center',
-            zIndex: 1,
+            // zIndex: 1,
             // marginTop: SIZES.HEIGHT_PADDINGTOP
         },
         FloatTxt: {
@@ -180,7 +180,7 @@ const styleScaled = (Color: any) =>
             textTransform: 'capitalize',
             // top: 60,
             // position: 'absolute',
-            zIndex: 10,
+            // zIndex: 10,
         },
         txtRound: {
             fontSize: '14@ms0.4',
@@ -206,14 +206,15 @@ const styleScaled = (Color: any) =>
             height: SIZES.WIDTH_WINDOW * 0.12,
             position: 'absolute',
             top: 22,
-            zIndex: 1,
+            // zIndex: 1,
         },
         boxLevelContainer: {
             position: 'absolute',
             alignItems: 'center',
             justifyContent: 'center',
-            width: SIZES.WIDTH_WINDOW - 20,
+            width: SIZES.WIDTH_WINDOW ,
             top: SIZES.WIDTH_WINDOW * 0.25 + 30,
+            zIndex: 10,
         },
         boxLevel: {
             // position: 'absolute',
@@ -228,7 +229,8 @@ const styleScaled = (Color: any) =>
             borderRadius: 10,
             paddingVertical: 8,
             paddingHorizontal: 7,
-            // zIndex: 999,
+            zIndex: 10,
+
             justifyContent: 'space-around',
             alignItems: 'center',
             flexDirection: 'row',
@@ -243,7 +245,7 @@ const styleScaled = (Color: any) =>
             borderWidth: 5,
             borderColor: 'pink',
             position: 'absolute',
-            zIndex: 10,
+            // zIndex: 10,
             top: 0,
         },
     });
