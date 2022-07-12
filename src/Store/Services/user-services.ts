@@ -305,6 +305,28 @@ export async function getUserById(id: string)
             return x.data();
         });
 }
+export async function getAllUsers()
+{
+    return await firestore()
+        .collection('Users')
+        .get()
+        .then((querySnapshot) =>
+        {
+            return querySnapshot.docs.map((item) => item.data());
+        });
+}
+
+export async function getUsersById(id: string)
+{
+    return await firestore()
+        .collection('Users')
+        .doc(id)
+        .get()
+        .then((x) =>
+        {
+            return x.data();
+        });
+}
 
 export async function getAllGate()
 {
@@ -358,6 +380,117 @@ export async function getQuest(gate: string, round: string, level: string)
         .then((querySnapshot) =>
         {
             return querySnapshot.docs.map((item) => item.data());
+        });
+}
+export async function sendRequestFriends(id: string)
+{
+    return await firestore()
+        .collection('Users')
+        .doc(auth().currentUser?.uid)
+        .update({ requestSent: [id] })
+        .then(async() =>
+        {
+            return await firestore()
+                .collection('Users')
+                .doc(id)
+                .update({ request: [{ id: auth().currentUser?.uid,name: auth().currentUser?.displayName }] })
+                .then(() =>
+                {
+                    console.log('sendRequestFriends success!');
+                    return true;
+                });
+        });
+}
+export async function acceptRequestFriends(id: string,name: string,arrayRequest: any,arrayRequestSent: any)
+{
+    return await firestore()
+        .collection('Users')
+        .doc(id)
+        .update({ requestSent: arrayRequestSent })
+        .then(async() =>
+        {
+            return await firestore()
+                .collection('Users')
+                .doc(auth().currentUser?.uid)
+                .update({ request: arrayRequest })
+                .then(async() =>
+                {
+                    return await firestore()
+                        .collection('Users')
+                        .doc(auth().currentUser?.uid)
+                        .update({ friends: [{ id: id,name: name }] })
+                        .then(async() =>
+                        {
+                            return await firestore()
+                                .collection('Users')
+                                .doc(id)
+                                .update({ friends: [{ id: auth().currentUser?.uid,name: auth().currentUser?.displayName }] })
+                                .then(() =>
+                                {
+                                    console.log('acceptRequestFriends success!');
+                                    return true;
+                                });
+                        });
+                
+                });
+        });
+    
+}
+export async function cancelRequestFriends(id: string,arrayRequest: any,arrayRequestSent: any)
+{
+    return await firestore()
+        .collection('Users')
+        .doc(id)
+        .update({ request: arrayRequest })
+        .then(async() =>
+        {
+            return await firestore()
+                .collection('Users')
+                .doc(auth().currentUser?.uid)
+                .update({ requestSent: arrayRequestSent })
+                .then(() =>
+                {
+                    console.log('cancelRequestFriends success!');
+                    return true;
+                });
+        });
+}
+export async function removeRequestFriends(id: string,arrayRequest: any,arrayRequestSent: any)
+{
+    return await firestore()
+        .collection('Users')
+        .doc(id)
+        .update({ requestSent: arrayRequestSent })
+        .then(async() =>
+        {
+            return await firestore()
+                .collection('Users')
+                .doc(auth().currentUser?.uid)
+                .update({ request: arrayRequest })
+                .then(() =>
+                {
+                    console.log('removeRequestFriends success!');
+                    return true;
+                });
+        });
+}
+export async function cancelFriends(id: string,myFriends: any,yourFriends: any)
+{
+    return await firestore()
+        .collection('Users')
+        .doc(auth().currentUser?.uid)
+        .update({ friends: myFriends })
+        .then(async() =>
+        {
+            return await firestore()
+                .collection('Users')
+                .doc(id)
+                .update({ friends: yourFriends })
+                .then(() =>
+                {
+                    console.log('cancelFriends success!');
+                    return true;
+                });
         });
 }
 

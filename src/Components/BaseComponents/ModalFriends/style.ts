@@ -116,6 +116,15 @@ const style = (Color: any) =>
             justifyContent: 'center',
             alignItems: 'center',
         },
+        btn5: {
+            width: '100%',
+            height: 35,
+            backgroundColor: '#c1c1c180',
+            borderRadius: 5,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
         viewBtn2: {
             flexDirection: 'row',
             width: '100%',
