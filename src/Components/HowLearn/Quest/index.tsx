@@ -83,12 +83,13 @@ const Quest: FC<Props> = (props) =>
     // GET DATA END
 
     // ANIMATION START
+    // ANIMATION PROCESSBAR
     const animationProcessValue = useRef(new Animated.Value(0)).current;
     useEffect(() =>
     {
         Animated.timing(animationProcessValue, {
             toValue: step,
-            duration: 300,
+            duration: 500,
             useNativeDriver: false,
         }).start();
     }, [step, animationProcessValue]);
@@ -124,6 +125,48 @@ const Quest: FC<Props> = (props) =>
             outputRange: [0, !resultTrue ? 210 : 180],
         }),
     };
+    // ANIMATION FLOATING SHOOT
+    const shootAniationValue = useRef(new Animated.Value(0)).current;
+    useEffect(() =>
+    {
+        Animated.timing(shootAniationValue, {
+            toValue: 1,
+            duration: 600,
+            useNativeDriver: false,
+        }).start(() =>
+        {
+            shootAniationValue.setValue(0);
+        });
+    }, [shootAniationValue, step]);
+    const shootAnimationSize = {
+        width: shootAniationValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 40],
+        }),
+        height: shootAniationValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 40],
+        }),
+        opacity: shootAniationValue.interpolate({
+            inputRange: [0, 0.6, 1],
+            outputRange: [0, 1, 0],
+        }),
+    };
+    const shootAnimationSize2 = {
+        width: shootAniationValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 30],
+        }),
+        height: shootAniationValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 30],
+        }),
+        opacity: shootAniationValue.interpolate({
+            inputRange: [0, 0.6, 1],
+            outputRange: [0, 1, 0],
+        }),
+    };
+
     // ANIMATION END
 
     // QUEST TYPE 1 START
@@ -318,8 +361,6 @@ const Quest: FC<Props> = (props) =>
                     }}
                     onPress={() =>
                     {
-                        // setPreStep(step);
-                        // step !== 0 && setStep(step - 1);
                         navigation.goBack();
                     }}
                 >
@@ -334,6 +375,11 @@ const Quest: FC<Props> = (props) =>
                     <Animated.View style={[styles.percent, animationProcess]}>
                         <Animated.View style={[styles.subPercent, subAnimationProcess]} />
                     </Animated.View>
+                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                        <Animated.View style={[shootAnimationSize, { marginLeft: -20, borderRadius: 30, backgroundColor: '#45f248' }]}>
+                            <Animated.View style={[shootAnimationSize2, { borderRadius: 30, backgroundColor: '#45f248' }]} />
+                        </Animated.View>
+                    </View>
                 </View>
             </View>
             {/* END PROCESSBAR */}
@@ -351,32 +397,38 @@ const Quest: FC<Props> = (props) =>
                                 if (step < dataQuest.length && choosedListItem.length > 0)
                                 {
                                     const choosedString = choosedListItem.map((x) => x.data).join(' ');
-                                    if (choosedString === dataQuest[step].rightVi || choosedString === dataQuest[step].rightEn)
+                                    if (
+                                        choosedString.toLowerCase() === dataQuest[step].rightVi.toLowerCase() ||
+                                        choosedString.toLowerCase === dataQuest[step].rightEn.toLowerCase()
+                                    )
                                     {
                                         console.log(choosedString);
                                         setResultTrue(true);
                                         setShowBottomResult(true);
-                                        rightAndWrong.push({ status: true, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
+                                        rightAndWrong.push({ status: true, noun: dataQuest[step].noun ?? null, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
                                     }
                                     else
                                     {
                                         setResultTrue(false);
                                         setShowBottomResult(true);
-                                        rightAndWrong.push({ status: false, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
+                                        rightAndWrong.push({ status: false, noun: dataQuest[step].noun ?? null, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
                                     }
                                 }
-                                else if (step < dataQuest.length && (choosedItem === dataQuest[step].rightEn || choosedItem === dataQuest[step].rightVi))
+                                else if (
+                                    step < dataQuest.length &&
+                                    (choosedItem.toLowerCase() === dataQuest[step].rightEn.toLowerCase() || choosedItem.toLowerCase() === dataQuest[step].rightVi.toLowerCase())
+                                )
                                 {
                                     setResultTrue(true);
                                     setShowBottomResult(true);
 
-                                    rightAndWrong.push({ status: true, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
+                                    rightAndWrong.push({ status: true, noun: dataQuest[step].noun ?? null, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
                                 }
                                 else
                                 {
                                     setResultTrue(false);
                                     setShowBottomResult(true);
-                                    rightAndWrong.push({ status: false, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
+                                    rightAndWrong.push({ status: false, noun: dataQuest[step].noun ?? null, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
                                 }
                             }}
                         >
@@ -457,7 +509,6 @@ const Quest: FC<Props> = (props) =>
                                     {
                                         setPreStep(step);
                                         setStep((prev) => prev + 1);
-                                        // console.log(rightAndWrong, ':))))))))))))))');
                                         setShowLastResult(true);
                                         console.log(rightAndWrong);
                                     }
@@ -499,6 +550,8 @@ const Quest: FC<Props> = (props) =>
                                             >
                                                 <Text style={[styles.subTitle2, { color: '#f01d2c' }]}>{item.en}</Text>
                                             </TouchableOpacity>
+                                            {item.noun && <Text style={[styles.subTitle2, { textTransform: 'lowercase' }]}>😭{item.noun}😭</Text>}
+
                                             <TouchableOpacity
                                                 onPress={() =>
                                                 {

@@ -61,7 +61,7 @@ const styleScaled = (Color: any) =>
             textAlign: 'left',
         },
         subTitle2: {
-            fontSize: '17@ms0.5',
+            fontSize: '18@ms0.5',
             // fontWeight: 'light',
             color: Color.TITLE_TXT,
             marginBottom: 1.5,

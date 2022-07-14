@@ -1,16 +1,75 @@
-## Structure of Firestore DB
+```json
+{
+   "User":{
+      "userId":{
+         "idUser":"str",
+         "create_ts":"timeStamp",
+         "dob":"number",
+         "firstName":"str",
+         "lastName":"str",
+         "name":"str",
+         "reverseName":"bool",
+         "nickName":"str",
+         "phoneNumber":"str",
+         "gender":"str",
+         "friends":"arr",
+         "request":"arr",
+         "requestSent":"arr",
+         "howKnowWe":"str",
+         "whyLearn":"str",
+         "purpose":"arr"
+      }
+   },
+   "onlineList":{
+      "idUser":"str"
+   },
+   "archievments":{
+      "gate":{
+         "round":{
+            "level":{
+               "process":"int"
+            }
+         }
+      }
+   },
+   "gate":{
+      "round":{
+         "level":{
+            "listQuest":{
+               "eachQuest":{
+                  "noun":"str",
+                  "rightEn":"str",
+                  "rightVi":"str",
+                  "type":"int"
+               }
+            }
+         }
+      }
+   },
+   "meet":{
+      "history":{
+         "id":{
+            "idCaller":"str",
+            "idCallee":"str",
+            "start":"int",
+            "end":"int",
+            "id":"str"
+         }
+      },
+      "currentMeet":{
+         "uId":{
+            "answer":{
+               "uId":"str",
+               "configForStream":"any"
+            },
+            "offer":{
+               "uId":"str",
+               "configForStream":"any"
+            },
+            "isRand":"bool"
+         }
+      }
+   }
+}
+```
 
-    .
-    ├── Feedbacks
-    ├── Posts
-    ├── Statistics
-    ├── UserLites
-    └── Users
-
-## Structure of Storage
-
-    .
-    └── images
-        ├── avatars
-        ├── thumbnails
-        └── posts
