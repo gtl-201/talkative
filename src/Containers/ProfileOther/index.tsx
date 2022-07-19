@@ -12,6 +12,7 @@ import ViewShot from 'react-native-view-shot';
 import * as ControllAppActions from '../../Store/Actions/control-app-actions';
 import { UserServices } from '../../Store/Services/user-services';
 import styleScaled from './style';
+import Friends from '../../Components/ProfileOther/Friends';
 
 interface ProfileOtherProps {
     navigation: DrawerNavigationProp<any, any>;
@@ -86,7 +87,12 @@ const ProfileOther: FC<any> = (props: ProfileOtherProps) =>
                 getCall={callee.length}
                 language={language}
             />
-
+            <Friends
+                color={color}
+                language={language}
+                userId={route.params.userId}
+                userName={route.params.userName}
+            />
             <ListNewsPost
                 color={color}
                 navigation={props.navigation}

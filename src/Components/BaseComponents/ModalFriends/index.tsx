@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React, {
     forwardRef,
     memo,
@@ -19,9 +20,19 @@ import {
 import Icon from '../Icon';
 import { connect } from 'react-redux';
 import { firebase } from '@react-native-firebase/auth';
-import { acceptRequestFriends, cancelFriends, cancelRequestFriends, getAllUsers,getUsersById, removeRequestFriends, sendRequestFriends } from '../../../Store/Services/user-services';
+import {
+    acceptRequestFriends,
+    cancelFriends,
+    cancelRequestFriends,
+    getAllUsers,
+    getUsersById,
+    removeRequestFriends,
+    sendRequestFriends,
+} from '../../../Store/Services/user-services';
+import FastImage from 'react-native-fast-image';
+import { useNavigation } from '@react-navigation/native';
 
-const ModalFriends = forwardRef(({ url, color }, ref) =>
+const ModalFriends = forwardRef(({ url, color,count }, ref) =>
 {
     const styles = styleScaled(color);
     const [visible, setVisible] = useState(false);
@@ -34,14 +45,31 @@ const ModalFriends = forwardRef(({ url, color }, ref) =>
     async function getAllData()
     {
         const dataUsers = await getAllUsers();
-        const dataUser: any = await getUsersById(`${firebase.auth().currentUser?.uid}`);
-        setDataCall(dataUser.request[0] === '' && dataUser.request.length === 1 ? [] : dataUser.request);
-        setDataListFriends(dataUser.friends[0] === '' && dataUser.friends.length === 1 ? [] : dataUser.friends);
-        setDataSent(dataUser.requestSent[0] === '' && dataUser.requestSent.length === 1 ? [] : dataUser.requestSent);
+        const dataUser: any = await getUsersById(
+            `${firebase.auth().currentUser?.uid}`,
+        );
+        setDataCall(
+            dataUser.request[0] === '' && dataUser.request.length === 1
+                ? []
+                : dataUser.request,
+        );
+        setDataListFriends(
+            dataUser.friends[0] === '' && dataUser.friends.length === 1
+                ? []
+                : dataUser.friends,
+        );
+        setDataSent(
+            dataUser.requestSent[0] === '' && dataUser.requestSent.length === 1
+                ? []
+                : dataUser.requestSent,
+        );
 
         const userList = [
             ...dataUsers.filter(
-                (item) => item.id !== firebase.auth().currentUser?.uid && !dataUser.friends.find((x)=>x.id === item.id) && !dataUser.request.find((x)=>x.id === item.id),
+                (item) =>
+                    item.id !== firebase.auth().currentUser?.uid &&
+          !dataUser.friends.find((x) => x.id === item.id) &&
+          !dataUser.request.find((x) => x.id === item.id),
             ),
         ];
         setData(userList);
@@ -49,10 +77,9 @@ const ModalFriends = forwardRef(({ url, color }, ref) =>
     useEffect(() =>
     {
         getAllData();
-    }, []);
+    }, [count]);
 
-
-    const handleSendRequest = async(id) =>
+    const handleSendRequest = async (id) =>
     {
         const res = await sendRequestFriends(id);
         if (res)
@@ -60,14 +87,20 @@ const ModalFriends = forwardRef(({ url, color }, ref) =>
             getAllData();
         }
     };
-    const handleCancelRequest = async(id,type) =>
+    const handleCancelRequest = async (id, type) =>
     {
         if (type === 'cancel')
         {
             const rs = await getUsersById(id);
-            const arrayRequestSent = dataSent.filter((x: any)=>x !== id);
-            const arrayRequest = rs?.request.filter((x: any) => x.id !== firebase.auth().currentUser?.uid);
-            const res = await cancelRequestFriends(id,arrayRequest,arrayRequestSent);
+            const arrayRequestSent = dataSent.filter((x: any) => x !== id);
+            const arrayRequest = rs?.request.filter(
+        (x: any) => x.id !== firebase.auth().currentUser?.uid
+      );
+            const res = await cancelRequestFriends(
+                id,
+                arrayRequest,
+                arrayRequestSent,
+            );
             if (res)
             {
                 getAllData();
@@ -79,34 +112,49 @@ const ModalFriends = forwardRef(({ url, color }, ref) =>
             setData(array);
         }
     };
-    const handleAcceptRequest = async(item) =>
+    const handleAcceptRequest = async (item) =>
     {
         const rs = await getUsersById(item.id);
-        const arrayRequestSent = rs?.requestSent.filter((x: any) => x !== firebase.auth().currentUser?.uid);
-        const arrayRequest = dataCall.filter((x: any)=>x.id !== item.id);
-        const res = await acceptRequestFriends(item.id,item.name,arrayRequest,arrayRequestSent);
+        const arrayRequestSent = rs?.requestSent.filter(
+      (x: any) => x !== firebase.auth().currentUser?.uid
+    );
+        const arrayRequest = dataCall.filter((x: any) => x.id !== item.id);
+        const res = await acceptRequestFriends(
+            item.id,
+            item.name,
+            arrayRequest,
+            arrayRequestSent,
+        );
         if (res)
         {
             getAllData();
         }
     };
-    const handleRemoveRequest = async(item) =>
+    const handleRemoveRequest = async (item) =>
     {
         const rs = await getUsersById(item.id);
-        const arrayRequestSent = dataCall.filter((x: any)=>x.id !== item.id);
-        const arrayRequest = rs?.requestSent.filter((x: any) => x !== firebase.auth().currentUser?.uid);
-        const res = await removeRequestFriends(item.id,arrayRequest,arrayRequestSent);
+        const arrayRequestSent = dataCall.filter((x: any) => x.id !== item.id);
+        const arrayRequest = rs?.requestSent.filter(
+      (x: any) => x !== firebase.auth().currentUser?.uid
+    );
+        const res = await removeRequestFriends(
+            item.id,
+            arrayRequest,
+            arrayRequestSent,
+        );
         if (res)
         {
             getAllData();
         }
     };
-    const handleCancelFriends = async(item) =>
+    const handleCancelFriends = async (item) =>
     {
         const rs = await getUsersById(item.id);
-        const yourFriends = rs?.friends.filter((x: any) => x.id !== firebase.auth().currentUser?.uid);
-        const myFriends = dataListFriends.filter((x: any)=>x.id !== item.id);
-        const res = await cancelFriends(item.id,myFriends,yourFriends);
+        const yourFriends = rs?.friends.filter(
+      (x: any) => x.id !== firebase.auth().currentUser?.uid
+    );
+        const myFriends = dataListFriends.filter((x: any) => x.id !== item.id);
+        const res = await cancelFriends(item.id, myFriends, yourFriends);
         if (res)
         {
             getAllData();
@@ -124,16 +172,42 @@ const ModalFriends = forwardRef(({ url, color }, ref) =>
     }));
 
     const close = useCallback(() => setVisible(false), []);
+    const navigation = useNavigation();
+
+    const openProfile = (userId,userName) =>
+    {
+        close();
+        navigation.navigate('ProfileOther', { userId,userName });
+    };
+
     const listFriends = () =>
     {
         return dataListFriends.map((item, index) => (
             <TouchableOpacity
                 key={index}
                 activeOpacity={0.7}
+                onPress={() =>openProfile(item.id,item.name)}
             >
                 <View style={styles.row}>
                     <View style={{ width: '25%' }}>
-                        <View style={styles.avatar} />
+                        {item?.thumbnail
+                            ? (
+                                    <FastImage
+                                        style={{
+                                            height: 70,
+                                            width: 70,
+                                            borderRadius: 99,
+                                            borderWidth: 0.1,
+                                            overflow: 'hidden',
+                                        }}
+                                        source={{
+                                            uri: item?.thumbnail,
+                                        }}
+                                    />
+                                )
+                            : (
+                                    <View style={styles.avatar} />
+                                )}
                     </View>
                     <View style={{ marginLeft: 10, width: '75%' }}>
                         <View style={{ height: '40%' }}>
@@ -147,7 +221,7 @@ const ModalFriends = forwardRef(({ url, color }, ref) =>
                         <View style={styles.viewBtn2}>
                             <TouchableOpacity
                                 style={styles.btn5}
-                                onPress={() =>handleCancelFriends(item)}
+                                onPress={() => handleCancelFriends(item)}
                             >
                                 <Text style={styles.textBtn3}>Hủy kết bạn</Text>
                             </TouchableOpacity>
@@ -163,10 +237,28 @@ const ModalFriends = forwardRef(({ url, color }, ref) =>
             <TouchableOpacity
                 key={index}
                 activeOpacity={0.7}
+                onPress={() =>openProfile(item.id,item.name)}
             >
                 <View style={styles.row}>
                     <View style={{ width: '25%' }}>
-                        <View style={styles.avatar} />
+                        {item?.thumbnail
+                            ? (
+                                    <FastImage
+                                        style={{
+                                            height: 70,
+                                            width: 70,
+                                            borderRadius: 99,
+                                            borderWidth: 0.1,
+                                            overflow: 'hidden',
+                                        }}
+                                        source={{
+                                            uri: item?.thumbnail,
+                                        }}
+                                    />
+                                )
+                            : (
+                                    <View style={styles.avatar} />
+                                )}
                     </View>
                     <View style={{ marginLeft: 10, width: '75%' }}>
                         <View style={{ height: '40%' }}>
@@ -180,11 +272,14 @@ const ModalFriends = forwardRef(({ url, color }, ref) =>
                         <View style={styles.viewBtn2}>
                             <TouchableOpacity
                                 style={styles.btn4}
-                                onPress={()=>handleAcceptRequest(item)}
+                                onPress={() => handleAcceptRequest(item)}
                             >
                                 <Text style={styles.textBtn2}>Chấp nhận</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.btn3} onPress={() => handleRemoveRequest(item)}>
+                            <TouchableOpacity
+                                style={styles.btn3}
+                                onPress={() => handleRemoveRequest(item)}
+                            >
                                 <Text style={styles.textBtn3}>Xóa</Text>
                             </TouchableOpacity>
                         </View>
@@ -199,10 +294,28 @@ const ModalFriends = forwardRef(({ url, color }, ref) =>
             <TouchableOpacity
                 key={index}
                 activeOpacity={0.7}
+                onPress={() =>openProfile(item.id,item.name)}
             >
                 <View style={styles.row}>
                     <View style={{ width: '25%' }}>
-                        <View style={styles.avatar} />
+                        {item?.thumbnail
+                            ? (
+                                    <FastImage
+                                        style={{
+                                            height: 70,
+                                            width: 70,
+                                            borderRadius: 99,
+                                            borderWidth: 0.1,
+                                            overflow: 'hidden',
+                                        }}
+                                        source={{
+                                            uri: item?.thumbnail,
+                                        }}
+                                    />
+                                )
+                            : (
+                                    <View style={styles.avatar} />
+                                )}
                     </View>
                     <View style={{ marginLeft: 10, width: '75%' }}>
                         <View style={{ height: '40%' }}>
@@ -216,16 +329,25 @@ const ModalFriends = forwardRef(({ url, color }, ref) =>
                         <View style={styles.viewBtn2}>
                             <TouchableOpacity
                                 style={styles.btn4}
-                                disabled={dataSent.find((x)=>x === item.id) ? true : false}
-                                onPress={()=>handleSendRequest(item.id)}
+                                disabled={dataSent.find((x) => x === item.id) ? true : false}
+                                onPress={() => handleSendRequest(item.id)}
                             >
-                                <Text style={styles.textBtn2}>{dataSent.find((x)=>x === item.id) ? 'Đã gửi' : 'Thêm bạn'}</Text>
+                                <Text style={styles.textBtn2}>
+                                    {dataSent.find((x) => x === item.id) ? 'Đã gửi' : 'Thêm bạn'}
+                                </Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={styles.btn3}
-                                onPress={() => handleCancelRequest(item.id,dataSent.find((x)=>x === item.id) ? 'cancel' : 'remove')}
+                                onPress={() =>
+                                    handleCancelRequest(
+                                        item.id,
+                                        dataSent.find((x) => x === item.id) ? 'cancel' : 'remove',
+                                    )
+                                }
                             >
-                                <Text style={styles.textBtn3}>{dataSent.find((x)=>x === item.id) ? 'Hủy bỏ' : 'Gỡ'}</Text>
+                                <Text style={styles.textBtn3}>
+                                    {dataSent.find((x) => x === item.id) ? 'Hủy bỏ' : 'Gỡ'}
+                                </Text>
                             </TouchableOpacity>
                         </View>
                     </View>
