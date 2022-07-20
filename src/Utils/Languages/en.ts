@@ -225,4 +225,5 @@ export default {
     END_GAME: 'END GAME',
     RIGHT: 'Right',
     TRANSLATETHIS: 'Translate this sentence',
+    WOWYOURESOTALEN: "It's great you don't miss any word",
 };

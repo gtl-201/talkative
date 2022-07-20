@@ -219,4 +219,5 @@ export default {
     END_GAME: 'END GAME ROÀI',
     RIGHT: 'Đúng:',
     TRANSLATETHIS: 'Dịch câu bên dưới',
+    WOWYOURESOTALEN: 'Thật tuyệt vời bạn không sai một từ nào',
 };

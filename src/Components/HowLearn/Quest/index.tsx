@@ -4,7 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { moderateScale } from 'react-native-size-matters';
 import Icon from '../../BaseComponents/Icon';
 import styleScaled from './style';
-import { getQuest } from '../../../Store/Services/user-services';
+import { getAchievements, getQuest, updateArchivement } from '../../../Store/Services/user-services';
 import { SIZES } from '../../../Utils/Values';
 // import { useNavigation } from '@react-navigation/native';
 import Tts from 'react-native-tts';
@@ -42,7 +42,7 @@ const Quest: FC<Props> = (props) =>
 
     useEffect(() =>
     {
-        Tts.setDefaultVoice('com.apple.ttsbundle.Moira-compac');
+        Tts.setDefaultVoice('com.apple.ttsbundle.siri_male_en-US_compact');
         // console.log(gate, round, '?????');
         const getAllQuest = async () =>
         {
@@ -166,7 +166,6 @@ const Quest: FC<Props> = (props) =>
             outputRange: [0, 1, 0],
         }),
     };
-
     // ANIMATION END
 
     // QUEST TYPE 1 START
@@ -216,6 +215,8 @@ const Quest: FC<Props> = (props) =>
         );
     };
     // QUEST TYPE 1 END
+
+    // QUEST TYPE 2 START
     const shuffle = (array: any[]) =>
     {
         let currentIndex = array.length;
@@ -252,7 +253,7 @@ const Quest: FC<Props> = (props) =>
                     return e.trim().length > 0;
                 })
                 : '';
-        console.log(questRen.flat(), '?');
+        // console.log(questRen.flat(), '?');
         setQuestRen(shuffle(questRen.flat()));
     };
 
@@ -302,7 +303,7 @@ const Quest: FC<Props> = (props) =>
                                             {
                                                 const tmpData: any[] = [...choosedListItem.filter((x) => x.data !== dataChoosed.data)];
                                                 setChoosedListItem(tmpData);
-                                                console.log(tmpData);
+                                                // console.log(tmpData);
                                             }}
                                         >
                                             <Text style={[styles.content]}>{dataChoosed.data}</Text>
@@ -325,9 +326,9 @@ const Quest: FC<Props> = (props) =>
                                             const tmp: any[] = [...choosedListItem];
                                             tmp.push({ data: data, index: index });
                                             setChoosedListItem(tmp);
-                                            console.log(choosedListItem);
+                                            // console.log(choosedListItem);
 
-                                            console.log(tmp);
+                                            // console.log(tmp);
                                         }}
                                     >
                                         <Text style={[styles.content, tmpData && tmpData.length > 0 && tmpData[0].data === data && { opacity: 0 }]}>{data}</Text>
@@ -340,6 +341,25 @@ const Quest: FC<Props> = (props) =>
             </View>
         );
     };
+    // QUEST TYPE 2 END
+
+    // UPDATE PROCESS WHEN FINISH ALL START
+    const reSetArchivement = async (percent: number) =>
+    {
+        const tmpAllArchivements: any = await getAchievements();
+        tmpAllArchivements[0][gate][round][0] = percent;
+
+        // console.log(tmpAllArchivements[0][gate][round][parseInt(level) - 1], '+++++++++++');
+        // console.log(tmpAllArchivements[0][gate], '+++++++++++');
+        console.log(tmpAllArchivements[0]);
+
+        await updateArchivement(tmpAllArchivements[0]);
+        // console.log(tmpAllArchivements, '+++++++++++');
+
+        // console.log(percent);
+    };
+
+    // UPDATE PROCESS WHEN FINISH ALL END
 
     return (
         <View style={[styles.container, styles.bgColor]}>
@@ -402,7 +422,7 @@ const Quest: FC<Props> = (props) =>
                                         choosedString.toLowerCase === dataQuest[step].rightEn.toLowerCase()
                                     )
                                     {
-                                        console.log(choosedString);
+                                        // console.log(choosedString);
                                         setResultTrue(true);
                                         setShowBottomResult(true);
                                         rightAndWrong.push({ status: true, noun: dataQuest[step].noun ?? null, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
@@ -496,7 +516,7 @@ const Quest: FC<Props> = (props) =>
                                 {
                                     if (step < dataQuest.length - 1)
                                     {
-                                        console.log(step);
+                                        // console.log(step);
                                         setChoosedItem(':::');
                                         setPreStep(step);
                                         setStep((prev) => prev + 1);
@@ -510,7 +530,9 @@ const Quest: FC<Props> = (props) =>
                                         setPreStep(step);
                                         setStep((prev) => prev + 1);
                                         setShowLastResult(true);
-                                        console.log(rightAndWrong);
+                                        reSetArchivement((rightAndWrong.filter((x) => x.status !== false).length / rightAndWrong.length) * 100);
+                                        // console.log(rightAndWrong);
+                                        // console.log(level, round, gate, '::::::::::::::::');
                                     }
                                 }}
                             >
@@ -521,7 +543,9 @@ const Quest: FC<Props> = (props) =>
                     {/* END BUTTON RESULT */}
                 </>
             ) : (
+                // START FINAL RESULT
                 <View style={{ width: SIZES.WIDTH_WINDOW, flex: 1, alignItems: 'center' }}>
+                    {/* <View style={{ flex: 1 }}> */}
                     <Text style={[styles.title, { textAlign: 'center', color: '#47b881', marginBottom: 0 }]}>{language.END_GAME}</Text>
                     <Text style={[styles.title, { textAlign: 'center', color: '#f01d2c', marginTop: 0, marginBottom: 0 }]}>
                         {(rightAndWrong.filter((x) => x.status !== false).length / rightAndWrong.length) * 100}%
@@ -529,46 +553,54 @@ const Quest: FC<Props> = (props) =>
                     <Text style={[styles.subTitle2, { textAlign: 'center', marginTop: 0, marginBottom: 0 }]}>
                         {language.RIGHT}: {rightAndWrong.filter((x) => x.status !== false).length}/{rightAndWrong.length}
                     </Text>
-
+                    {/* </View> */}
+                    {rightAndWrong.filter((x) => x.status === false).length !== 0 && (
+                        <View>
+                            <Text>{language.WOWYOURESOTALEN}</Text>
+                        </View>
+                    )}
                     <FlatList
                         data={rightAndWrong}
                         keyExtractor={({ item, index }) => index}
                         renderItem={({ item, index }) =>
                         {
-                            console.log(item);
+                            // console.log(item);
 
                             return (
                                 <>
                                     {item.status === false && (
-                                        <View style={[styles.cardBoxResult]}>
-                                            <TouchableOpacity
-                                                onPress={() =>
-                                                {
-                                                    Tts.setDefaultLanguage('en-IE');
-                                                    Tts.speak(item.en);
-                                                }}
-                                            >
-                                                <Text style={[styles.subTitle2, { color: '#f01d2c' }]}>{item.en}</Text>
-                                            </TouchableOpacity>
-                                            {item.noun && <Text style={[styles.subTitle2, { textTransform: 'lowercase' }]}>😭{item.noun}😭</Text>}
+                                        <View style={{ width: SIZES.WIDTH_WINDOW, justifyContent: 'center', alignItems: 'center' }}>
+                                            <View style={[styles.cardBoxResult]}>
+                                                <TouchableOpacity
+                                                    onPress={() =>
+                                                    {
+                                                        Tts.setDefaultLanguage('en-IE');
+                                                        Tts.speak(item.en);
+                                                    }}
+                                                >
+                                                    <Text style={[styles.subTitle2, { color: '#f01d2c' }]}>{item.en}</Text>
+                                                </TouchableOpacity>
+                                                {item.noun && <Text style={[styles.subTitle2, { textTransform: 'lowercase' }]}>😭{item.noun}😭</Text>}
 
-                                            <TouchableOpacity
-                                                onPress={() =>
-                                                {
-                                                    Tts.setDefaultLanguage('vi-VN');
-                                                    Tts.speak(item.vi);
-                                                }}
-                                            >
-                                                <Text style={[styles.subTitle2, { color: '#47b881', textTransform: 'lowercase' }]}>{item.vi}</Text>
-                                            </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    onPress={() =>
+                                                    {
+                                                        Tts.setDefaultLanguage('vi-VN');
+                                                        Tts.speak(item.vi);
+                                                    }}
+                                                >
+                                                    <Text style={[styles.subTitle2, { color: '#47b881', textTransform: 'lowercase' }]}>{item.vi}</Text>
+                                                </TouchableOpacity>
+                                            </View>
                                         </View>
                                     )}
                                 </>
                             );
                         }}
-                        contentContainerStyle={{ flex: 1 }}
+                        // contentContainerStyle={{ flex: 1, marginHorizontal: 5 }}
                     />
                 </View>
+                // END FINAL RESULT
             )}
         </View>
     );

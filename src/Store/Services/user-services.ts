@@ -361,6 +361,31 @@ export async function getQuest(gate: string, round: string, level: string)
         });
 }
 
+export async function getAchievements()
+{
+    return await firestore()
+        .collection('achievements')
+        .get()
+        .then((querySnapshot) =>
+        {
+            return querySnapshot.docs.map((item) => item.data());
+        });
+}
+
+export async function updateArchivement(field?: any)
+{
+    // console.log(field, '99999');
+    
+    return await firestore()
+        .collection('achievements')
+        .doc(auth().currentUser?.uid)
+        .update(field ?? undefined)
+        .then(() =>
+        {
+            console.log('Archivments updated!');
+        });
+}
+
 export const UserServices = {
     uploadAvatar,
     uploadThumbnail,
