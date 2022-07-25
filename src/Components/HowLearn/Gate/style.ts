@@ -14,11 +14,24 @@ const styleScaled = (Color: any) =>
             // justifyContent: "space-between",
             alignItems: 'center',
             width: '100%',
+            // paddingVertical: '8@ms',
+            // paddingHorizontal: '12@ms',
+            // borderRadius: "40@ms",
+            // ...SHADOW_3,
+            alignSelf: 'center',
+            // zIndex: 1,
+            // marginTop: SIZES.HEIGHT_PADDINGTOP
+        },
+        viewScroll: {
+            // flexDirection: "row",
+            // justifyContent: "space-between",
+            // alignItems: 'center',
+            width: '100%',
             paddingVertical: '8@ms',
             paddingHorizontal: '12@ms',
             // borderRadius: "40@ms",
             // ...SHADOW_3,
-            alignSelf: 'center',
+            // alignSelf: 'center',
             // zIndex: 1,
             // marginTop: SIZES.HEIGHT_PADDINGTOP
         },
@@ -204,9 +217,9 @@ const styleScaled = (Color: any) =>
         imgRound: {
             width: SIZES.WIDTH_WINDOW * 0.12,
             height: SIZES.WIDTH_WINDOW * 0.12,
-            position: 'absolute',
-            top: 22,
-            // zIndex: 1,
+            // position: 'absolute',
+            // top: 22,
+            zIndex: 0,
         },
         boxLevelContainer: {
             position: 'absolute',
