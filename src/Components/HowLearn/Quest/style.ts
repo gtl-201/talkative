@@ -50,6 +50,18 @@ const styleScaled = (Color: any) =>
             width: '100%',
             // textAlign: 'center',
         },
+        titleUpper: {
+            fontSize: '20@ms0.5',
+            fontWeight: 'bold',
+            color: '#39e75f',
+            marginBottom: '4@vs',
+            marginTop: '10@vs',
+            letterSpacing: 1,
+            width: SIZES.WIDTH_WINDOW * 0.9,
+            textTransform: 'uppercase',
+            flexWrap: 'wrap',
+            textAlign: 'center',
+        },
         subTitle: {
             fontSize: '17@ms0.5',
             // fontWeight: 'light',
@@ -223,12 +235,11 @@ const styleScaled = (Color: any) =>
             flex: 1,
             width: SIZES.WIDTH_WINDOW - SIZES.WIDTH_WINDOW * 0.08,
         },
-        SpeakerIc:
-        {
+        SpeakerIc: {
             backgroundColor: '#59bfff',
             borderRadius: 10,
             padding: 5,
-        }
+        },
     });
 };
 export default styleScaled;

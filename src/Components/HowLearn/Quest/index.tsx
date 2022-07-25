@@ -1,5 +1,5 @@
 import React, { FC, memo, useEffect, useRef, useState } from 'react';
-import { FlatList, Text, View, Animated } from 'react-native';
+import { FlatList, Text, View, Animated, Image, ImageBackground } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { moderateScale } from 'react-native-size-matters';
 import Icon from '../../BaseComponents/Icon';
@@ -80,6 +80,13 @@ const Quest: FC<Props> = (props) =>
             setListRightVi(allRightVi.flat());
             setDataQuest(allQuest);
         };
+        SoundPlayer.loadUrl(
+            'https://firebasestorage.googleapis.com/v0/b/spearker-d3cc4.appspot.com/o/audio%2Fquest%2Fcorrect.mp3?alt=media&token=516f372c-8f0f-49ec-8d06-24d62dfa022b',
+        );
+        SoundPlayer.loadUrl(
+            'https://firebasestorage.googleapis.com/v0/b/spearker-d3cc4.appspot.com/o/audio%2Fquest%2Fwrong.mp3?alt=media&token=aca29f96-5935-4cee-97c4-dacb8ebb4038',
+        );
+
         getAllQuest();
     }, []);
     // GET DATA END
@@ -118,7 +125,13 @@ const Quest: FC<Props> = (props) =>
                 toValue: 1,
                 duration: 200,
                 useNativeDriver: false,
-            }).start();
+            }).start(() =>
+            {
+                if (showBottomResult)
+                {
+                    resultTrue ? ring(true) : ring(false);
+                }
+            });
         }
     }, [showBottomResult, animationBottomResultValue]);
     const bottomResultAnimation = {
@@ -178,10 +191,10 @@ const Quest: FC<Props> = (props) =>
         {
             right === true
                 ? SoundPlayer.playUrl(
-                    'https://firebasestorage.googleapis.com/v0/b/spearker-d3cc4.appspot.com/o/audio%2FringCall%2FwaittingCall1.mp3?alt=media&token=ece0fa1f-0768-48bb-9190-14820c189c16',
+                    'https://firebasestorage.googleapis.com/v0/b/spearker-d3cc4.appspot.com/o/audio%2Fquest%2Fcorrect.mp3?alt=media&token=cc755513-a417-4bf9-b975-3e5f2b1bdf33',
                 )
                 : SoundPlayer.playUrl(
-                    'https://firebasestorage.googleapis.com/v0/b/spearker-d3cc4.appspot.com/o/audio%2FringCall%2FwaittingCall1.mp3?alt=media&token=ece0fa1f-0768-48bb-9190-14820c189c16',
+                    'https://firebasestorage.googleapis.com/v0/b/spearker-d3cc4.appspot.com/o/audio%2Fquest%2Fwrong.mp3?alt=media&token=d79e75a4-b702-4875-809d-36a38743e09a',
                 );
         }
         catch (error)
@@ -427,212 +440,214 @@ const Quest: FC<Props> = (props) =>
                 </View>
             </View>
             {/* END PROCESSBAR */}
-            {!showLastResult
-                ? (
-                        <>
-                            {dataQuest && dataQuest[step] && dataQuest[step].rightVi && dataQuest[step].rightEn && dataQuest[step].type === 1 ? <Rendetype1 /> : <Rendetype2 />}
+            {!showLastResult ? (
+                <>
+                    {dataQuest && dataQuest[step] && dataQuest[step].rightVi && dataQuest[step].rightEn && dataQuest[step].type === 1 ? <Rendetype1 /> : <Rendetype2 />}
 
-                            {/* START BUTTON CHECK */}
-                            <View style={styles.containerBtnNext}>
+                    {/* START BUTTON CHECK */}
+                    <View style={styles.containerBtnNext}>
+                        <TouchableOpacity
+                            style={[styles.btnNext, choosedItem === ':::' && choosedListItem.length === 0 && styles.disabled, !resultTrue && { backgroundColor: '#ff3333' }]}
+                            disabled={choosedItem === ':::' && choosedListItem.length === 0 ? true : false}
+                            onPress={() =>
+                            {
+                                if (step < dataQuest.length && choosedListItem.length > 0)
+                                {
+                                    const choosedString = choosedListItem.map((x) => x.data).join(' ');
+                                    if (
+                                        choosedString.toLowerCase() === dataQuest[step].rightVi.toLowerCase() ||
+                                        choosedString.toLowerCase === dataQuest[step].rightEn.toLowerCase()
+                                    )
+                                    {
+                                        // console.log(choosedString);
+                                        setResultTrue(true);
+                                        setShowBottomResult(true);
+                                        rightAndWrong.push({ status: true, noun: dataQuest[step].noun ?? null, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
+                                    }
+                                    else
+                                    {
+                                        setResultTrue(false);
+                                        setShowBottomResult(true);
+                                        rightAndWrong.push({ status: false, noun: dataQuest[step].noun ?? null, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
+                                    }
+                                }
+                                else if (
+                                    step < dataQuest.length &&
+                                    (choosedItem.toLowerCase() === dataQuest[step].rightEn.toLowerCase() || choosedItem.toLowerCase() === dataQuest[step].rightVi.toLowerCase())
+                                )
+                                {
+                                    setResultTrue(true);
+                                    setShowBottomResult(true);
+                                    rightAndWrong.push({ status: true, noun: dataQuest[step].noun ?? null, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
+                                }
+                                else
+                                {
+                                    setResultTrue(false);
+                                    setShowBottomResult(true);
+                                    rightAndWrong.push({ status: false, noun: dataQuest[step].noun ?? null, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
+                                }
+                            }}
+                        >
+                            <Text style={[styles.btnTxt, choosedItem === ':::' && choosedListItem.length === 0 && { color: '#676767' }]}>{language.CONTINUE}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {/* END BUTTON CHECK */}
+
+                    {/* START BUTTON RESULT */}
+                    {showBottomResult && (
+                        <Animated.View
+                            style={[
+                                styles.containerBtnNext2,
+                                bottomResultAnimation,
+                                { borderTopWidth: 0 },
+                                !resultTrue ? { backgroundColor: '#ffcdd2' } : { backgroundColor: '#abf7b1' },
+                            ]}
+                        >
+                            <View style={{ paddingHorizontal: 10, paddingTop: 0, paddingBottom: 20 }}>
+                                <Text style={[styles.title, !resultTrue ? { color: '#d60000' } : { color: '#008631' }]}>
+                                    {!resultTrue ? language.WRONG_ANSWER : language.RIGHT_ANSWER}
+                                </Text>
+                                {!resultTrue && <Text style={[styles.subTitle, !resultTrue ? { color: '#d60000' } : { color: '#008631' }]}>{language.ANSWR_IS}</Text>}
                                 <TouchableOpacity
-                                    style={[styles.btnNext, choosedItem === ':::' && choosedListItem.length === 0 && styles.disabled, !resultTrue && { backgroundColor: '#ff3333' }]}
-                                    disabled={choosedItem === ':::' && choosedListItem.length === 0 ? true : false}
+                                    style={{ flexDirection: 'row' }}
                                     onPress={() =>
                                     {
-                                        if (step < dataQuest.length && choosedListItem.length > 0)
-                                        {
-                                            const choosedString = choosedListItem.map((x) => x.data).join(' ');
-                                            if (
-                                                choosedString.toLowerCase() === dataQuest[step].rightVi.toLowerCase() ||
-                                                choosedString.toLowerCase === dataQuest[step].rightEn.toLowerCase()
-                                            )
-                                            {
-                                                // console.log(choosedString);
-                                                setResultTrue(true);
-                                                ring(true);
-                                                setShowBottomResult(true);
-                                                rightAndWrong.push({ status: true, noun: dataQuest[step].noun ?? null, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
-                                            }
-                                            else
-                                            {
-                                                setResultTrue(false);
-                                                ring(false);
-                                                setShowBottomResult(true);
-                                                rightAndWrong.push({ status: false, noun: dataQuest[step].noun ?? null, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
-                                            }
-                                        }
-                                        else if (
-                                            step < dataQuest.length &&
-                                            (choosedItem.toLowerCase() === dataQuest[step].rightEn.toLowerCase() || choosedItem.toLowerCase() === dataQuest[step].rightVi.toLowerCase())
-                                        )
-                                        {
-                                            setResultTrue(true);
-                                            ring(true);
-                                            setShowBottomResult(true);
-
-                                            rightAndWrong.push({ status: true, noun: dataQuest[step].noun ?? null, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
-                                        }
-                                        else
-                                        {
-                                            setResultTrue(false);
-                                            ring(false);
-                                            setShowBottomResult(true);
-                                            rightAndWrong.push({ status: false, noun: dataQuest[step].noun ?? null, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
-                                        }
+                                        Tts.setDefaultLanguage('en-IE');
+                                        Tts.speak(dataQuest[step].rightEn);
                                     }}
                                 >
-                                    <Text style={[styles.btnTxt, choosedItem === ':::' && choosedListItem.length === 0 && { color: '#676767' }]}>{language.CONTINUE}</Text>
+                                    <Icon
+                                        type={'MaterialIcons'}
+                                        name={'volume-up'}
+                                        size={moderateScale(23, 0.3)}
+                                        color={!resultTrue ? '#d60000' : '#008631'}
+                                    />
+                                    <Text style={[styles.content, { marginLeft: 4, fontSize: 15 }, !resultTrue ? { color: '#d60000' } : { color: '#008631' }]}>
+                                        {'En: ' + dataQuest[step].rightEn}
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={{ flexDirection: 'row' }}
+                                    onPress={() =>
+                                    {
+                                        Tts.setDefaultLanguage('vi-VN');
+                                        Tts.speak(dataQuest[step].rightVi);
+                                    }}
+                                >
+                                    <Icon
+                                        type={'MaterialIcons'}
+                                        name={'volume-up'}
+                                        size={moderateScale(23, 0.3)}
+                                        color={!resultTrue ? '#d60000' : '#008631'}
+                                    />
+                                    <Text style={[styles.content, { marginLeft: 4, fontSize: 15 }, !resultTrue ? { color: '#d60000' } : { color: '#008631' }]}>
+                                        {'Vi: ' + dataQuest[step].rightVi}
+                                    </Text>
                                 </TouchableOpacity>
                             </View>
-                            {/* END BUTTON CHECK */}
-
-                            {/* START BUTTON RESULT */}
-                            {showBottomResult && (
-                                <Animated.View
-                                    style={[
-                                        styles.containerBtnNext2,
-                                        bottomResultAnimation,
-                                        { borderTopWidth: 0 },
-                                        !resultTrue ? { backgroundColor: '#ffcdd2' } : { backgroundColor: '#abf7b1' },
-                                    ]}
-                                >
-                                    <View style={{ paddingHorizontal: 10, paddingTop: 0, paddingBottom: 20 }}>
-                                        <Text style={[styles.title, !resultTrue ? { color: '#d60000' } : { color: '#008631' }]}>
-                                            {!resultTrue ? language.WRONG_ANSWER : language.RIGHT_ANSWER}
-                                        </Text>
-                                        {!resultTrue && <Text style={[styles.subTitle, !resultTrue ? { color: '#d60000' } : { color: '#008631' }]}>{language.ANSWR_IS}</Text>}
-                                        <TouchableOpacity
-                                            style={{ flexDirection: 'row' }}
-                                            onPress={() =>
-                                            {
-                                                Tts.setDefaultLanguage('en-IE');
-                                                Tts.speak(dataQuest[step].rightEn);
-                                            }}
-                                        >
-                                            <Icon
-                                                type={'MaterialIcons'}
-                                                name={'volume-up'}
-                                                size={moderateScale(23, 0.3)}
-                                                color={!resultTrue ? '#d60000' : '#008631'}
-                                            />
-                                            <Text style={[styles.content, { marginLeft: 4, fontSize: 15 }, !resultTrue ? { color: '#d60000' } : { color: '#008631' }]}>
-                                                {'En: ' + dataQuest[step].rightEn}
-                                            </Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            style={{ flexDirection: 'row' }}
-                                            onPress={() =>
-                                            {
-                                                Tts.setDefaultLanguage('vi-VN');
-                                                Tts.speak(dataQuest[step].rightVi);
-                                            }}
-                                        >
-                                            <Icon
-                                                type={'MaterialIcons'}
-                                                name={'volume-up'}
-                                                size={moderateScale(23, 0.3)}
-                                                color={!resultTrue ? '#d60000' : '#008631'}
-                                            />
-                                            <Text style={[styles.content, { marginLeft: 4, fontSize: 15 }, !resultTrue ? { color: '#d60000' } : { color: '#008631' }]}>
-                                                {'Vi: ' + dataQuest[step].rightVi}
-                                            </Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                    <TouchableOpacity
-                                        style={[styles.btnNext, !resultTrue && { backgroundColor: '#ff3333' }]}
-                                        disabled={choosedItem === ':::' && choosedListItem.length === 0 ? true : false}
-                                        onPress={() =>
-                                        {
-                                            if (step < dataQuest.length - 1)
-                                            {
-                                                // console.log(step);
-                                                setChoosedItem(':::');
-                                                setPreStep(step);
-                                                setStep((prev) => prev + 1);
-                                                setResultTrue(true);
-                                                ring(true);
-                                                setShowBottomResult(false);
-                                                setChoosedListItem([]);
-                                                animationBottomResultValue.setValue(0);
-                                            }
-                                            else
-                                            {
-                                                setPreStep(step);
-                                                setStep((prev) => prev + 1);
-                                                setShowLastResult(true);
-                                                reSetArchivement((rightAndWrong.filter((x) => x.status !== false).length / rightAndWrong.length) * 100);
-                                                // console.log(rightAndWrong);
-                                                // console.log(level, round, gate, '::::::::::::::::');
-                                            }
-                                        }}
-                                    >
-                                        <Text style={[styles.btnTxt]}>{language.CONTINUE}</Text>
-                                    </TouchableOpacity>
-                                </Animated.View>
-                            )}
-                            {/* END BUTTON RESULT */}
-                        </>
-                    )
-                : (
-                        // START FINAL RESULT
-                        <View style={{ width: SIZES.WIDTH_WINDOW, flex: 1, alignItems: 'center' }}>
-                            {/* <View style={{ flex: 1 }}> */}
-                            <Text style={[styles.title, { textAlign: 'center', color: '#47b881', marginBottom: 0 }]}>{language.END_GAME}</Text>
-                            <Text style={[styles.title, { textAlign: 'center', color: '#f01d2c', marginTop: 0, marginBottom: 0 }]}>
-                                {(rightAndWrong.filter((x) => x.status !== false).length / rightAndWrong.length) * 100}%
-                            </Text>
-                            <Text style={[styles.subTitle2, { textAlign: 'center', marginTop: 0, marginBottom: 0 }]}>
-                                {language.RIGHT}: {rightAndWrong.filter((x) => x.status !== false).length}/{rightAndWrong.length}
-                            </Text>
-                            {/* </View> */}
-                            {rightAndWrong.filter((x) => x.status === false).length !== 0 && (
-                                <View>
-                                    <Text>{language.WOWYOURESOTALEN}</Text>
-                                </View>
-                            )}
-                            <FlatList
-                                data={rightAndWrong}
-                                keyExtractor={({ item, index }) => index}
-                                renderItem={({ item, index }) =>
+                            <TouchableOpacity
+                                style={[styles.btnNext, !resultTrue && { backgroundColor: '#ff3333' }]}
+                                disabled={choosedItem === ':::' && choosedListItem.length === 0 ? true : false}
+                                onPress={() =>
                                 {
-                                    // console.log(item);
-
-                                    return (
-                                        <>
-                                            {item.status === false && (
-                                                <View style={{ width: SIZES.WIDTH_WINDOW, justifyContent: 'center', alignItems: 'center' }}>
-                                                    <View style={[styles.cardBoxResult]}>
-                                                        <TouchableOpacity
-                                                            onPress={() =>
-                                                            {
-                                                                Tts.setDefaultLanguage('en-IE');
-                                                                Tts.speak(item.en);
-                                                            }}
-                                                        >
-                                                            <Text style={[styles.subTitle2, { color: '#f01d2c' }]}>{item.en}</Text>
-                                                        </TouchableOpacity>
-                                                        {item.noun && <Text style={[styles.subTitle2, { textTransform: 'lowercase' }]}>😭{item.noun}😭</Text>}
-
-                                                        <TouchableOpacity
-                                                            onPress={() =>
-                                                            {
-                                                                Tts.setDefaultLanguage('vi-VN');
-                                                                Tts.speak(item.vi);
-                                                            }}
-                                                        >
-                                                            <Text style={[styles.subTitle2, { color: '#47b881', textTransform: 'lowercase' }]}>{item.vi}</Text>
-                                                        </TouchableOpacity>
-                                                    </View>
-                                                </View>
-                                            )}
-                                        </>
-                                    );
+                                    if (step < dataQuest.length - 1)
+                                    {
+                                        // console.log(step);
+                                        setChoosedItem(':::');
+                                        setPreStep(step);
+                                        setStep((prev) => prev + 1);
+                                        setResultTrue(true);
+                                        setShowBottomResult(false);
+                                        setChoosedListItem([]);
+                                        animationBottomResultValue.setValue(0);
+                                    }
+                                    else
+                                    {
+                                        setPreStep(step);
+                                        setStep((prev) => prev + 1);
+                                        setShowLastResult(true);
+                                        reSetArchivement(Math.round((rightAndWrong.filter((x) => x.status !== false).length / rightAndWrong.length) * 100));
+                                        // console.log(rightAndWrong);
+                                        // console.log(level, round, gate, '::::::::::::::::');
+                                    }
                                 }}
-                                // contentContainerStyle={{ flex: 1, marginHorizontal: 5 }}
+                            >
+                                <Text style={[styles.btnTxt]}>{language.CONTINUE}</Text>
+                            </TouchableOpacity>
+                        </Animated.View>
+                    )}
+                    {/* END BUTTON RESULT */}
+                </>
+            ) : (
+                // START FINAL RESULT
+                <ImageBackground
+                    source={require('../../../Assets/gif/giphy.gif')}
+                    style={{ width: SIZES.WIDTH_WINDOW, flex: 1, alignItems: 'center', marginTop: -50, paddingTop: 50, marginBottom: -10 }}
+                >
+                    {/* <View style={{ flex: 1 }}> */}
+                    <Text style={[styles.title, { textAlign: 'center', color: '#47b881', marginBottom: 0 }]}>{language.END_GAME}</Text>
+                    <Text style={[styles.title, { textAlign: 'center', color: '#f01d2c', marginTop: 0, marginBottom: 0 }]}>
+                        {Math.round((rightAndWrong.filter((x) => x.status !== false).length / rightAndWrong.length) * 100)}%
+                    </Text>
+                    <Text style={[styles.subTitle2, { textAlign: 'center', marginTop: 0, marginBottom: 0 }]}>
+                        {language.RIGHT}: {rightAndWrong.filter((x) => x.status !== false).length}/{rightAndWrong.length}
+                    </Text>
+                    {/* </View> */}
+                    {rightAndWrong.filter((x) => x.status === false).length !== 0 && (
+                        <View style={{ flex: 1, position: 'relative', width: SIZES.WIDTH_WINDOW * 0.9, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={styles.titleUpper}>{language.WOWYOURESOTALEN}</Text>
+                            <Image
+                                style={{ marginLeft: -SIZES.WIDTH_WINDOW * 0.1, position: 'absolute', left: 0, bottom: -10 }}
+                                source={require('../../../Assets/gif/click.gif')}
+                                // resizeMode={'cover'}
+                                width={200}
+                                height={300}
                             />
                         </View>
-                        // END FINAL RESULT
                     )}
+                    {/* <FlatList
+                        data={rightAndWrong}
+                        keyExtractor={({ item, index }) => index}
+                        renderItem={({ item, index }) =>
+                        {
+                            // console.log(item);
+
+                            return (
+                                <>
+                                    {item.status === false && (
+                                        <View style={{ width: SIZES.WIDTH_WINDOW, justifyContent: 'center', alignItems: 'center' }}>
+                                            <View style={[styles.cardBoxResult]}>
+                                                <TouchableOpacity
+                                                    onPress={() =>
+                                                    {
+                                                        Tts.setDefaultLanguage('en-IE');
+                                                        Tts.speak(item.en);
+                                                    }}
+                                                >
+                                                    <Text style={[styles.subTitle2, { color: '#f01d2c' }]}>{item.en}</Text>
+                                                </TouchableOpacity>
+                                                {item.noun && <Text style={[styles.subTitle2, { textTransform: 'lowercase' }]}>😭{item.noun}😭</Text>}
+
+                                                <TouchableOpacity
+                                                    onPress={() =>
+                                                    {
+                                                        Tts.setDefaultLanguage('vi-VN');
+                                                        Tts.speak(item.vi);
+                                                    }}
+                                                >
+                                                    <Text style={[styles.subTitle2, { color: '#47b881', textTransform: 'lowercase' }]}>{item.vi}</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    )}
+                                </>
+                            );
+                        }}
+                        // contentContainerStyle={{ flex: 1, marginHorizontal: 5 }}
+                    /> */}
+                </ImageBackground>
+                // END FINAL RESULT
+            )}
         </View>
     );
 };

@@ -120,7 +120,6 @@ const Gate: FC<Props> = (props) =>
                                                         style={{ alignItems: 'center', justifyContent: 'center' }}
                                                         onPress={() =>
                                                         {
-                                                            // console.log('hello');
                                                             navigation.navigate('Quest', { gate: item.gate, round: dataRound.id, level: dataLevel });
                                                         }}
                                                     >
@@ -146,7 +145,6 @@ const Gate: FC<Props> = (props) =>
                                         tmpShowLevel[index].gate[index2] = !levelShow[index].gate[index2];
                                         // console.log(tmpShowLevel);
                                         setLevelShow(tmpShowLevel);
-                                        // navigation.navigate('Quest', { gate: x.gate, round: dataRound.id, level: '1' });
                                     }}
                                 >
                                     <CircularProgress
