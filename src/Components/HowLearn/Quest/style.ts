@@ -240,6 +240,16 @@ const styleScaled = (Color: any) =>
             borderRadius: 10,
             padding: 5,
         },
+        button: {
+            width: '38@ms1',
+            height: '38@ms1',
+            borderRadius: '25@ms1',
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'absolute',
+            top: 20,
+            left: -10,
+        },
     });
 };
 export default styleScaled;

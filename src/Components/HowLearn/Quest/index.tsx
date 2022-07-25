@@ -1,7 +1,7 @@
 import React, { FC, memo, useEffect, useRef, useState } from 'react';
-import { FlatList, Text, View, Animated, Image, ImageBackground } from 'react-native';
+import { FlatList, Text, View, Animated, Image, ImageBackground, Pressable } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { moderateScale } from 'react-native-size-matters';
+import { moderateScale, scale } from 'react-native-size-matters';
 import Icon from '../../BaseComponents/Icon';
 import styleScaled from './style';
 import { getAchievements, getQuest, updateArchivement } from '../../../Store/Services/user-services';
@@ -589,12 +589,24 @@ const Quest: FC<Props> = (props) =>
                     <Text style={[styles.title, { textAlign: 'center', color: '#f01d2c', marginTop: 0, marginBottom: 0 }]}>
                         {Math.round((rightAndWrong.filter((x) => x.status !== false).length / rightAndWrong.length) * 100)}%
                     </Text>
-                    <Text style={[styles.subTitle2, { textAlign: 'center', marginTop: 0, marginBottom: 0 }]}>
+                    <Text style={[styles.subTitle2, { color: 'white', textAlign: 'center', marginTop: 0, marginBottom: 0 }]}>
                         {language.RIGHT}: {rightAndWrong.filter((x) => x.status !== false).length}/{rightAndWrong.length}
                     </Text>
                     {/* </View> */}
-                    {rightAndWrong.filter((x) => x.status === false).length !== 0 && (
-                        <View style={{ flex: 1, position: 'relative', width: SIZES.WIDTH_WINDOW * 0.9, justifyContent: 'center', alignItems: 'center' }}>
+                    {rightAndWrong.filter((x) => x.status === false).length === 0 && (
+                        <>
+                            <Pressable
+                                style={[styles.button, { marginLeft: scale(8) }]}
+                                onPress={() => navigation.goBack()}
+                            >
+                                <Icon
+                                    type={'MaterialIcons'}
+                                    name={'arrow-back'}
+                                    size={moderateScale(28, 0.3)}
+                                    color={'white'}
+                                />
+                            </Pressable>
+                            {/* <View style={{ flex: 1, position: 'relative', width: SIZES.WIDTH_WINDOW * 0.9, justifyContent: 'center', alignItems: 'center' }}> */}
                             <Text style={styles.titleUpper}>{language.WOWYOURESOTALEN}</Text>
                             <Image
                                 style={{ marginLeft: -SIZES.WIDTH_WINDOW * 0.1, position: 'absolute', left: 0, bottom: -10 }}
@@ -603,9 +615,10 @@ const Quest: FC<Props> = (props) =>
                                 width={200}
                                 height={300}
                             />
-                        </View>
+                            {/* </View> */}
+                        </>
                     )}
-                    {/* <FlatList
+                    <FlatList
                         data={rightAndWrong}
                         keyExtractor={({ item, index }) => index}
                         renderItem={({ item, index }) =>
@@ -644,7 +657,7 @@ const Quest: FC<Props> = (props) =>
                             );
                         }}
                         // contentContainerStyle={{ flex: 1, marginHorizontal: 5 }}
-                    /> */}
+                    />
                 </ImageBackground>
                 // END FINAL RESULT
             )}
