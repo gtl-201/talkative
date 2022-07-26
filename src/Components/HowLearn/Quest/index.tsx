@@ -186,21 +186,21 @@ const Quest: FC<Props> = (props) =>
     // RING START
     const ring = (right: boolean) =>
     {
-        SoundPlayer.stop();
-        try
-        {
-            right === true
-                ? SoundPlayer.playUrl(
-                    'https://firebasestorage.googleapis.com/v0/b/spearker-d3cc4.appspot.com/o/audio%2Fquest%2Fcorrect.mp3?alt=media&token=cc755513-a417-4bf9-b975-3e5f2b1bdf33',
-                )
-                : SoundPlayer.playUrl(
-                    'https://firebasestorage.googleapis.com/v0/b/spearker-d3cc4.appspot.com/o/audio%2Fquest%2Fwrong.mp3?alt=media&token=d79e75a4-b702-4875-809d-36a38743e09a',
-                );
-        }
-        catch (error)
-        {
-            console.log(error);
-        }
+        // SoundPlayer.stop();
+        // try
+        // {
+        //     right === true
+        //         ? SoundPlayer.playUrl(
+        //             'https://firebasestorage.googleapis.com/v0/b/spearker-d3cc4.appspot.com/o/audio%2Fquest%2Fcorrect.mp3?alt=media&token=cc755513-a417-4bf9-b975-3e5f2b1bdf33',
+        //         )
+        //         : SoundPlayer.playUrl(
+        //             'https://firebasestorage.googleapis.com/v0/b/spearker-d3cc4.appspot.com/o/audio%2Fquest%2Fwrong.mp3?alt=media&token=d79e75a4-b702-4875-809d-36a38743e09a',
+        //         );
+        // }
+        // catch (error)
+        // {
+        //     console.log(error);
+        // }
     };
 
     // RING END
@@ -593,19 +593,19 @@ const Quest: FC<Props> = (props) =>
                         {language.RIGHT}: {rightAndWrong.filter((x) => x.status !== false).length}/{rightAndWrong.length}
                     </Text>
                     {/* </View> */}
+                    <Pressable
+                        style={[styles.button, { marginLeft: scale(8) }]}
+                        onPress={() => navigation.goBack()}
+                    >
+                        <Icon
+                            type={'MaterialIcons'}
+                            name={'arrow-back'}
+                            size={moderateScale(28, 0.3)}
+                            color={'white'}
+                        />
+                    </Pressable>
                     {rightAndWrong.filter((x) => x.status === false).length === 0 && (
                         <>
-                            <Pressable
-                                style={[styles.button, { marginLeft: scale(8) }]}
-                                onPress={() => navigation.goBack()}
-                            >
-                                <Icon
-                                    type={'MaterialIcons'}
-                                    name={'arrow-back'}
-                                    size={moderateScale(28, 0.3)}
-                                    color={'white'}
-                                />
-                            </Pressable>
                             {/* <View style={{ flex: 1, position: 'relative', width: SIZES.WIDTH_WINDOW * 0.9, justifyContent: 'center', alignItems: 'center' }}> */}
                             <Text style={styles.titleUpper}>{language.WOWYOURESOTALEN}</Text>
                             <Image

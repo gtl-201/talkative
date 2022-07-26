@@ -23,11 +23,11 @@ const Gate: FC<Props> = (props) =>
     const [allGate, setAllGate] = useState<any[]>([]);
     const [levelShow, setLevelShow] = useState<any[]>([]);
     const showLevel: any[] = [];
-    console.log('-------',allGate);
+    // console.log('-------', allGate);
 
     const getRound = (Gate: any[], process: any[]) =>
     {
-        console.log('+=========================================+');
+        // console.log('+=========================================+');
         const dataR = Gate.map(async (x) =>
         {
             const dataRound: any[] = [];
@@ -50,21 +50,22 @@ const Gate: FC<Props> = (props) =>
 
         Promise.all(dataR).then((x) =>
         {
-            console.log(x);
+            // console.log(x);
 
             setAllGate(x.reverse());
         });
     };
+    const quearyData = async () =>
+    {
+        const tmpAllGate: any[] = await getAllGate();
+        const tmpAllArchivements: any = await getAchievements();
+        getRound(tmpAllGate, tmpAllArchivements);
+    };
     useEffect(() =>
     {
-        const quearyData = async () =>
-        {
-            const tmpAllGate: any[] = await getAllGate();
-            const tmpAllArchivements: any = await getAchievements();
-            getRound(tmpAllGate, tmpAllArchivements);
-        };
         quearyData();
     }, []);
+    const [isRefresh, setIsRefresh] = useState(false);
 
     const RenderGate = (item: any, index: number) =>
     {
@@ -73,7 +74,7 @@ const Gate: FC<Props> = (props) =>
         return (
             <>
                 {/* RENDER GATE */}
-                
+
                 {/* RENDER ROUND */}
                 {item.round &&
                     item.round.map((dataRound: any, index2: number) =>
@@ -86,11 +87,11 @@ const Gate: FC<Props> = (props) =>
                         return (
                             <View
                                 key={dataRound.url}
-                                style={{ position: 'relative', width: '100%',paddingBottom: index === 0 ? 130 : 0 }}
+                                style={{ position: 'relative', width: '100%', paddingBottom: index === 0 ? 130 : 0 }}
                             >
                                 {dataRound !== undefined && dataRound.level !== undefined && (
-                                    <View style={[styles.boxLevelContainer, !levelShow[index].gate[index2] && { display: 'none' }]}>
-                                        <View style={[styles.boxLevel, !levelShow[index].gate[index2] && { display: 'none' }]}>
+                                    <View style={[styles.boxLevelContainer, levelShow[index] && !levelShow[index].gate[index2] && { display: 'none' }]}>
+                                        <View style={[styles.boxLevel, levelShow[index] && !levelShow[index].gate[index2] && { display: 'none' }]}>
                                             {/* <Text>{dataLevel}</Text> */}
 
                                             {dataRound.level.map((dataLevel: string) =>
@@ -123,13 +124,13 @@ const Gate: FC<Props> = (props) =>
                                 )}
                                 <View style={{ marginVertical: 10, justifyContent: 'center', alignItems: 'center' }}>
                                     <TouchableOpacity
-                                    // disabled={true}
+                                        // disabled={true}
                                         style={{ justifyContent: 'center', alignItems: 'center' }}
                                         onPress={() =>
                                         {
                                             const tmpShowLevel = [...levelShow];
                                             tmpShowLevel[index].gate[index2] = !levelShow[index].gate[index2];
-                                            console.log(tmpShowLevel);
+                                            // console.log(tmpShowLevel);
                                             setLevelShow(tmpShowLevel);
                                         }}
                                     >
@@ -148,26 +149,20 @@ const Gate: FC<Props> = (props) =>
                                         />
                                         <Text style={styles.txtRound}>{dataRound.id}</Text>
                                     </TouchableOpacity>
-                                    <View
-                                        style={{ position: 'absolute',
-                                            top: 22,zIndex: 99 }}
-                                        
-                                    >
-                                        <TouchableOpacity 
-                                        onPress={() =>
-                                        {
-                                            const tmpShowLevel = [...levelShow];
-                                            tmpShowLevel[index].gate[index2] = !levelShow[index].gate[index2];
-                                            console.log(tmpShowLevel);
-                                            setLevelShow(tmpShowLevel);
-                                        }}
+                                    <View style={{ position: 'absolute', top: 22, zIndex: 99 }}>
+                                        <TouchableOpacity
+                                            onPress={() =>
+                                            {
+                                                const tmpShowLevel = [...levelShow];
+                                                tmpShowLevel[index].gate[index2] = !levelShow[index].gate[index2];
+                                                // console.log(tmpShowLevel);
+                                                setLevelShow(tmpShowLevel);
+                                            }}
                                         >
-
                                             <Image
                                                 source={{ uri: dataRound.img }}
                                                 style={styles.imgRound}
                                             />
-                                    
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -201,7 +196,14 @@ const Gate: FC<Props> = (props) =>
                     keyExtractor={({ item, index }) => index}
                     renderItem={({ item, index }) => RenderGate(item, index)}
                     // contentContainerStyle={{ flex: 1, width: SIZES.WIDTH_WINDOW }}
-                    style={{ flex: 1, width: SIZES.WIDTH_WINDOW ,flexDirection: 'column-reverse' }}
+                    style={{ flex: 1, width: SIZES.WIDTH_WINDOW, flexDirection: 'column-reverse' }}
+                    refreshing={isRefresh}
+                    onRefresh={()=>{
+                        setIsRefresh(true);
+                        quearyData();
+                        setIsRefresh(false);
+                    }}
+                    // onEnd
                     inverted
                 />
             </ScrollView>
