@@ -1,5 +1,5 @@
 import React, { FC, memo, useEffect, useState } from 'react';
-import { Image, Text, View, FlatList } from 'react-native';
+import { Image, Text, View, FlatList, RefreshControl } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import styleScaled from './style';
 import { getAchievements, getAllGate, getAllRound, getLevel, updateArchivement } from '../../../Store/Services/user-services';
@@ -67,6 +67,12 @@ const Gate: FC<Props> = (props) =>
     }, []);
     const [isRefresh, setIsRefresh] = useState(false);
 
+    const onRefresh = () =>
+    {
+        setIsRefresh(true);
+        quearyData();
+        setIsRefresh(false);
+    };
     const RenderGate = (item: any, index: number) =>
     {
         // console.log(allGate[0].round);
@@ -190,7 +196,13 @@ const Gate: FC<Props> = (props) =>
     };
     return (
         <View style={[styles.container, styles.bgColor]}>
-            <ScrollView>
+            <ScrollView refreshControl={(
+                <RefreshControl
+                    refreshing={isRefresh}
+                    onRefresh={onRefresh}
+                />
+            )}
+            >
                 <FlatList
                     data={allGate}
                     keyExtractor={({ item, index }) => index}
@@ -198,11 +210,6 @@ const Gate: FC<Props> = (props) =>
                     // contentContainerStyle={{ flex: 1, width: SIZES.WIDTH_WINDOW }}
                     style={{ flex: 1, width: SIZES.WIDTH_WINDOW, flexDirection: 'column-reverse' }}
                     refreshing={isRefresh}
-                    onRefresh={()=>{
-                        setIsRefresh(true);
-                        quearyData();
-                        setIsRefresh(false);
-                    }}
                     // onEnd
                     inverted
                 />
