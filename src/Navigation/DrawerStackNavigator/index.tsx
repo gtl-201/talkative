@@ -20,6 +20,7 @@ import HowLearn from '../../Containers/HowLearn';
 import AddGroupMember from '../../Containers/AddMemberGroup';
 import Rank from '../../Containers/Rank';
 import Quest from '../../Containers/HowLearn/Quest';
+import Learn from '../../Containers/HowLearn/Learn';
 
 const Stack = createStackNavigator();
 
@@ -139,6 +140,10 @@ const AppStackNavigator: FC<any> = (props) =>
                     <Stack.Screen
                         name="Quest"
                         component={Quest}
+                    />
+                    <Stack.Screen
+                        name="Learn"
+                        component={Learn}
                     />
                 </Stack.Navigator>
             </Animated.View>

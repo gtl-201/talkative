@@ -225,7 +225,7 @@ const styleScaled = (Color: any) =>
             position: 'absolute',
             alignItems: 'center',
             justifyContent: 'center',
-            width: SIZES.WIDTH_WINDOW ,
+            width: SIZES.WIDTH_WINDOW,
             top: SIZES.WIDTH_WINDOW * 0.25 + 30,
             zIndex: 10,
         },
@@ -235,7 +235,7 @@ const styleScaled = (Color: any) =>
             ...SHADOW_7,
             // left: SIZES.WIDTH_WINDOW / 2 - 110,
             flexWrap: 'wrap',
-            width: 200,
+            width: 240,
             height: 120,
             borderWidth: 0,
             backgroundColor: Color.BG,
@@ -260,6 +260,15 @@ const styleScaled = (Color: any) =>
             position: 'absolute',
             // zIndex: 10,
             top: 0,
+        },
+        learnBtn: {
+            backgroundColor: Color.IC,
+            paddingHorizontal: 5,
+            paddingVertical: 2,
+            borderRadius: 5,
+            marginTop: 10,
+            ...SHADOW_2,
+            // marginTop: 5,
         },
     });
 };

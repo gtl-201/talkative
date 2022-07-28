@@ -220,4 +220,5 @@ export default {
     RIGHT: 'Đúng:',
     TRANSLATETHIS: 'Dịch câu bên dưới',
     WOWYOURESOTALEN: 'Thật tuyệt vời bạn không sai một từ nào',
+    LEARN: 'Học',
 };

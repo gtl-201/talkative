@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import * as ControlAppActions from '../../../Store/Actions/control-app-actions';
 import styleScaled from './style';
 // Component
-// import Header from '../../../Components/BaseComponents/Header';
+import Header from '../../../Components/BaseComponents/Header';
 import Learn2 from '../../../Components/HowLearn/Learn/index';
 
 const Learn: FC<any> = (props) =>
@@ -21,7 +21,7 @@ const Learn: FC<any> = (props) =>
             style={[styles.container, { flex: 1 }]}
             options={{ result: 'base64', quality: 0.5 }}
         >
-            {/* <Header title={language.QUEST} /> */}
+            <Header title={language.LEARN} />
             <Learn2
                 color={color}
                 language={language}

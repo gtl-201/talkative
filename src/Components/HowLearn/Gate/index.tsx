@@ -3,9 +3,12 @@ import { Image, Text, View, FlatList, RefreshControl } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import styleScaled from './style';
 import { getAchievements, getAllGate, getAllRound, getLevel, updateArchivement } from '../../../Store/Services/user-services';
-import { SIZES } from '../../../Utils/Values';
+import { SHADOW_1, SIZES } from '../../../Utils/Values';
 import CircularProgress from 'react-native-circular-progress-indicator';
+import Icon from '../../BaseComponents/Icon';
+
 import { NoFlickerImage } from '../../../Components/NoFlickerImg/no-flicker-image';
+import { moderateScale } from 'react-native-size-matters';
 
 interface Props {
     color: any;
@@ -107,22 +110,41 @@ const Gate: FC<Props> = (props) =>
                                                 // console.log(tmpProcessEachLevel);
 
                                                 return (
-                                                    <TouchableOpacity
+                                                    <View
                                                         key={dataLevel}
-                                                        style={{ alignItems: 'center', justifyContent: 'center' }}
-                                                        onPress={() =>
-                                                        {
-                                                            navigation.navigate('Quest', { gate: item.gate, round: dataRound.id, level: dataLevel });
-                                                        }}
+                                                        style={{ flexDirection: 'column', flex: 1, alignItems: 'center', justifyContent: 'space-around' }}
                                                     >
-                                                        <Image
-                                                            width={20}
-                                                            height={20}
-                                                            style={{ width: 40, height: 40 }}
-                                                            source={require('../../../Assets/Images/Ic/crownGray.png')}
-                                                        />
-                                                        <Text>{tmpProcessEachLevel}%</Text>
-                                                    </TouchableOpacity>
+                                                        <TouchableOpacity
+                                                            style={{ alignItems: 'center', justifyContent: 'center' }}
+                                                            onPress={() =>
+                                                            {
+                                                                navigation.navigate('Quest', { gate: item.gate, round: dataRound.id, level: dataLevel });
+                                                            }}
+                                                        >
+                                                            {/* <Image
+                                                                width={20}
+                                                                height={20}
+                                                                style={{ width: 40, height: 40 }}
+                                                                source={require('../../../Assets/Images/Ic/crownGray.png')}
+                                                            /> */}
+                                                            <Icon
+                                                                type={'MaterialIcons'}
+                                                                name={'emoji-events'}
+                                                                size={moderateScale(40)}
+                                                                color={tmpProcessEachLevel < 60 ? '#bebebe' : '#f1c500'}
+                                                            />
+                                                            <Text style={{color: color.TITLE_TXT}}>{tmpProcessEachLevel}%</Text>
+                                                        </TouchableOpacity>
+                                                        <TouchableOpacity
+                                                            style={styles.learnBtn}
+                                                            onPress={() =>
+                                                            {
+                                                                navigation.navigate('Learn', { gate: item.gate, round: dataRound.id, level: dataLevel });
+                                                            }}
+                                                        >
+                                                            <Text style={{ color: 'white' }}>{language.LEARN}</Text>
+                                                        </TouchableOpacity>
+                                                    </View>
                                                 );
                                             })}
                                         </View>
@@ -210,8 +232,14 @@ const Gate: FC<Props> = (props) =>
                     // contentContainerStyle={{ flex: 1, width: SIZES.WIDTH_WINDOW }}
                     style={{ flex: 1, width: SIZES.WIDTH_WINDOW, flexDirection: 'column-reverse' }}
                     refreshing={isRefresh}
-                    // onEnd
                     inverted
+                    // onEnd
+                    onRefresh={() =>
+                    {
+                        setIsRefresh(true);
+                        quearyData();
+                        setIsRefresh(false);
+                    }}
                 />
             </ScrollView>
             {/* <RenderGate /> */}
