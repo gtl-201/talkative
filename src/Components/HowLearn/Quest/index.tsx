@@ -384,7 +384,7 @@ const Quest: FC<Props> = (props) =>
     const reSetArchivement = async (percent: number) =>
     {
         const tmpAllArchivements: any = await getAchievements();
-        tmpAllArchivements[0][gate][round][0] = percent;
+        tmpAllArchivements[0][gate][round][level && parseInt(level) > 0 ? parseInt(level) - 1 : 0] = percent;
 
         // console.log(tmpAllArchivements[0][gate][round][parseInt(level) - 1], '+++++++++++');
         // console.log(tmpAllArchivements[0][gate], '+++++++++++');
