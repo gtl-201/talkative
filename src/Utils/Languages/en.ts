@@ -230,4 +230,5 @@ export default {
     TABTOLISTEN: 'Tab to listten',
     CHOOSEWHATYOUHEAR: 'Choose what you hear',
     ENTERWHATYOUHEAR: 'Enter what you hear',
+    DASHBOARD: 'Dashboard',
 };

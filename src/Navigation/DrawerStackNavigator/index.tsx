@@ -21,6 +21,7 @@ import AddGroupMember from '../../Containers/AddMemberGroup';
 import Rank from '../../Containers/Rank';
 import Quest from '../../Containers/HowLearn/Quest';
 import Learn from '../../Containers/HowLearn/Learn';
+import Dashboard from '../../Containers/Dashboard';
 
 const Stack = createStackNavigator();
 
@@ -144,6 +145,10 @@ const AppStackNavigator: FC<any> = (props) =>
                     <Stack.Screen
                         name="Learn"
                         component={Learn}
+                    />
+                    <Stack.Screen
+                        name="Dashboard"
+                        component={Dashboard}
                     />
                 </Stack.Navigator>
             </Animated.View>

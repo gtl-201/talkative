@@ -223,10 +223,11 @@ const styleScaled = (Color: any) =>
         },
         boxLevelContainer: {
             position: 'absolute',
-            alignItems: 'center',
-            justifyContent: 'center',
+            // alignItems: 'center',
+            // justifyContent: 'center',
             width: SIZES.WIDTH_WINDOW,
             top: SIZES.WIDTH_WINDOW * 0.25 + 30,
+            left: -70,
             zIndex: 10,
         },
         boxLevel: {

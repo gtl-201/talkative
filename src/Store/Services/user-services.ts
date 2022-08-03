@@ -504,6 +504,16 @@ export async function getAchievements()
             return querySnapshot.docs.map((item) => item.data());
         });
 }
+export async function getRank()
+{
+    return await firestore()
+        .collection('achievements')
+        .get()
+        .then((querySnapshot) =>
+        {
+            return querySnapshot.docs.map((item) =>({ data: item.data(),id: item.id }));
+        });
+}
 
 export async function updateArchivement(field?: any)
 {

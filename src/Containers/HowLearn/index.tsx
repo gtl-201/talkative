@@ -69,10 +69,11 @@ const VideoCall: FC<any> = (props) =>
                                 title={language.Speaker}
                                 iconSize={35}
                                 shadow={false}
-                                iconRightType="FontAwesome"
-                                // iconRight={switchIc}
-                                headerRight
+                                iconRightType="MaterialIcons"
+                                iconRight={'dashboard'}
+                                // headerRight
                                 onPressLeft={() => navigation.openDrawer()}
+                                onPressRight={()=>navigation.navigate('Dashboard', {})}
                             />
                             <Gate
                                 color={color}

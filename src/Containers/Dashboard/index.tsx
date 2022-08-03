@@ -14,8 +14,8 @@ import * as ControllAppActions from '../../Store/Actions/control-app-actions';
 import { useFocusEffect } from '@react-navigation/native';
 import styleScaled from './style';
 import { UserServices } from '../../Store/Services/user-services';
-import Rank from '../../Components/Rank/rank';
-// import Rank from '../../Components/Dashboard/dashboard';
+// import Rank from '../../Components/Rank/rank';
+import Rank from '../../Components/Dashboard/dashboard';
 import Header from '../../Components/BaseComponents/Header';
 
 interface ProfileProps {
@@ -26,7 +26,7 @@ interface ProfileProps {
   language: object;
 }
 
-const RankContainer: FC<any> = ({
+const DashboardC: FC<any> = ({
     navigation,
     userInfor,
     setBackgroundScreenDrawer,
@@ -44,13 +44,13 @@ const RankContainer: FC<any> = ({
             options={{ result: 'base64', quality: 0.5 }}
         >
             <Header
-                iconLeftType={'MaterialIcons'}
-                iconLeft={'notes'}
-                title={language.RANK}
+                iconLeftType={'Feather'}
+                iconLeft={'arrow-left'}
+                title={language.DASHBOARD}
                 iconSize={35}
                 shadow={false}
                 iconRightType="FontAwesome"
-                onPressLeft={() => navigation.openDrawer()}
+                onPressLeft={() => navigation.goBack()}
             />
             <Rank
                 color={color}
@@ -81,4 +81,4 @@ function mapDispatchToProps(dispatch: any)
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RankContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardC);

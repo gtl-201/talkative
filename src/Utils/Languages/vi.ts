@@ -224,4 +224,5 @@ export default {
     TABTOLISTEN: 'Chạm để nghe',
     CHOOSEWHATYOUHEAR: 'Chọn từ bạn nghe được',
     ENTERWHATYOUHEAR: 'Nhập từ bạn nghe được',
+    DASHBOARD: 'Thống kê',
 };

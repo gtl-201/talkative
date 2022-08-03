@@ -38,7 +38,7 @@ const Gate: FC<Props> = (props) =>
             x.data.collection &&
                 x.data.collection.map(async (y: any) =>
                 {
-                    dataRound.push({ id: y.name, img: y.img, level: x.data.listLevel });
+                    dataRound.push({ id: y.name, img: y.img, level: x.data.listLevel[y.name] });
                     showLevelTmp.push(false);
                 });
             showLevel.push({ gate: showLevelTmp });
@@ -86,7 +86,15 @@ const Gate: FC<Props> = (props) =>
                 {/* RENDER GATE */}
 
                 {/* RENDER ROUND */}
-                {item.round &&
+                <View style={{
+                    width: '100%',
+                    flexDirection: 'row',
+                    paddingHorizontal: '20%',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-evenly',
+                }}
+                >
+                    {item.round &&
                     item.round.map((dataRound: any, index2: number) =>
                     {
                         // console.log(dataRound.level, '!!!!!!!!!!!!!!!!!');
@@ -104,7 +112,7 @@ const Gate: FC<Props> = (props) =>
                         return (
                             <View
                                 key={dataRound.url}
-                                style={{ position: 'relative', width: '100%', paddingBottom: index === 0 ? 130 : 0 }}
+                                style={{ position: 'relative', paddingBottom: index === 0 ? 130 : 0 }}
                             >
                                 {dataRound !== undefined && dataRound.level !== undefined && (
                                     <View style={[styles.boxLevelContainer, levelShow[index] && !levelShow[index].gate[index2] && { display: 'none' }]}>
@@ -137,31 +145,32 @@ const Gate: FC<Props> = (props) =>
                                                                 style={{ width: 40, height: 40 }}
                                                                 source={require('../../../Assets/Images/Ic/crownGray.png')}
                                                             /> */}
-                                                                <Icon
-                                                                    type={'MaterialIcons'}
-                                                                    name={'emoji-events'}
-                                                                    size={moderateScale(40)}
-                                                                    color={tmpProcessEachLevel < 60 ? '#bebebe' : '#f1c500'}
-                                                                />
-                                                                <Text style={{ color: color.TITLE_TXT }}>{tmpProcessEachLevel}%</Text>
-                                                            </TouchableOpacity>
-                                                            <TouchableOpacity
-                                                                style={styles.learnBtn}
-                                                                onPress={() =>
-                                                                {
-                                                                    navigation.navigate('Learn', { gate: item.gate, round: dataRound.id, level: String(key) });
-                                                                }}
-                                                            >
-                                                                <Text style={{ color: 'white' }}>{language.LEARN}</Text>
-                                                            </TouchableOpacity>
-                                                        </View>
-                                                    );
-                                                })}
-                                            {/* NOTE NOTE NOTE NOTE HERE */}
+                                                            <Icon
+                                                                type={'MaterialIcons'}
+                                                                name={'emoji-events'}
+                                                                size={moderateScale(40)}
+                                                                color={tmpProcessEachLevel < 60 ? '#bebebe' : '#f1c500'}
+                                                            />
+                                                            <Text style={{ color: color.TITLE_TXT }}>{tmpProcessEachLevel}%</Text>
+                                                        </TouchableOpacity>
+                                                        <TouchableOpacity
+                                                            style={styles.learnBtn}
+                                                            onPress={() =>
+                                                            {
+                                                                navigation.navigate('Learn', { gate: item.gate, round: dataRound.id, level: dataLevel });
+                                                            }}
+                                                        >
+                                                            <Text style={{ color: 'white' }}>{language.LEARN}</Text>
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                );
+                                            })}
                                         </View>
                                     </View>
                                 )}
-                                <View style={{ marginVertical: 10, justifyContent: 'center', alignItems: 'center' }}>
+                                <View style={{ marginVertical: 10, justifyContent: 'center', alignItems: 'center',
+                                }}
+                                >
                                     <TouchableOpacity
                                         // disabled={true}
                                         style={{ justifyContent: 'center', alignItems: 'center' }}
@@ -174,7 +183,7 @@ const Gate: FC<Props> = (props) =>
                                         }}
                                     >
                                         <CircularProgress
-                                            value={tmpTotalProcessNumber / dataRound.level.length}
+                                            value={tmpTotalProcessNumber / 4}
                                             radius={(SIZES.WIDTH_WINDOW * 0.25) / 2}
                                             progressValueColor={'#fff0'}
                                             duration={500}
@@ -188,7 +197,7 @@ const Gate: FC<Props> = (props) =>
                                         />
                                         <Text style={styles.txtRound}>{dataRound.id}</Text>
                                     </TouchableOpacity>
-                                    <View style={{ position: 'absolute', top: 22, zIndex: 99 }}>
+                                    <View style={{ position: 'absolute', top: 25, zIndex: 0 }}>
                                         <TouchableOpacity
                                             onPress={() =>
                                             {
@@ -208,6 +217,7 @@ const Gate: FC<Props> = (props) =>
                             </View>
                         );
                     })}
+                </View>
                 {item != undefined && item.img !== undefined
                     ? (
                             <View
@@ -241,16 +251,16 @@ const Gate: FC<Props> = (props) =>
                     keyExtractor={({ item, index }) => index}
                     renderItem={({ item, index }) => RenderGate(item, index)}
                     // contentContainerStyle={{ flex: 1, width: SIZES.WIDTH_WINDOW }}
-                    style={{ flex: 1, width: SIZES.WIDTH_WINDOW, flexDirection: 'column-reverse' }}
-                    refreshing={isRefresh}
+                    style={{ flex: 1,width: SIZES.WIDTH_WINDOW,flexDirection: 'column-reverse' }}
+                    // refreshing={isRefresh}
                     inverted
                     // onEnd
-                    onRefresh={() =>
-                    {
-                        setIsRefresh(true);
-                        quearyData();
-                        setIsRefresh(false);
-                    }}
+                    // onRefresh={() =>
+                    // {
+                    //     setIsRefresh(true);
+                    //     quearyData();
+                    //     setIsRefresh(false);
+                    // }}
                 />
             </ScrollView>
             {/* <RenderGate /> */}
