@@ -44,8 +44,8 @@ const Gate: FC<Props> = (props) =>
             showLevel.push({ gate: showLevelTmp });
             // console.log(dataRound, '__');
             const tmpId = dataRound[0].id;
-
-            // console.log(process[0][x.id][tmpId], '++');
+            console.log(dataRound[0], '____');
+            Object.keys(dataRound[0].level).map((key) => {});
 
             setLevelShow(showLevel);
             return Promise.resolve({ gate: x.id, round: dataRound, img: x.data.img, process: process[0][x.id][tmpId] });
@@ -80,6 +80,7 @@ const Gate: FC<Props> = (props) =>
     {
         // console.log(allGate[0].round);
         // console.log(levelShow, '...');
+
         return (
             <>
                 {/* RENDER GATE */}
@@ -88,10 +89,17 @@ const Gate: FC<Props> = (props) =>
                 {item.round &&
                     item.round.map((dataRound: any, index2: number) =>
                     {
-                        // console.log(dataRound.level.length, item.process);
+                        // console.log(dataRound.level, '!!!!!!!!!!!!!!!!!');
                         let tmpTotalProcessNumber: any = 0;
-                        item.process && item.process.map((x: string) => (tmpTotalProcessNumber += parseInt(x)));
+                        item.process &&
+                            item.process.map((x: string) =>
+                            {
+                                tmpTotalProcessNumber += parseInt(x);
+                            });
+                        console.log(tmpTotalProcessNumber);
+
                         // console.log(tmpTotalProcessNumber, ':::');
+                        // console.log('++', item, '++');
 
                         return (
                             <View
@@ -102,51 +110,54 @@ const Gate: FC<Props> = (props) =>
                                     <View style={[styles.boxLevelContainer, levelShow[index] && !levelShow[index].gate[index2] && { display: 'none' }]}>
                                         <View style={[styles.boxLevel, levelShow[index] && !levelShow[index].gate[index2] && { display: 'none' }]}>
                                             {/* <Text>{dataLevel}</Text> */}
+                                            {dataRound &&
+                                                dataRound.level &&
+                                                Object.keys(dataRound.level).map((key) =>
+                                                {
+                                                    // console.log(String(key), dataRound.level[key]);
+                                                    let tmpProcessEachLevel: any = 0;
+                                                    item.process ? (tmpProcessEachLevel = item.process[parseInt(key) - 1] ? item.process[parseInt(key) - 1] : 0) : 0;
+                                                    // console.log(tmpProcessEachLevel, '>>>>>>>>>>>>>');
 
-                                            {dataRound.level.map((dataLevel: string) =>
-                                            {
-                                                let tmpProcessEachLevel: any = 0;
-                                                item.process ? (tmpProcessEachLevel = item.process[parseInt(dataLevel) - 1] ? item.process[parseInt(dataLevel) - 1] : 0) : 0;
-                                                // console.log(tmpProcessEachLevel);
-
-                                                return (
-                                                    <View
-                                                        key={dataLevel}
-                                                        style={{ flexDirection: 'column', flex: 1, alignItems: 'center', justifyContent: 'space-around' }}
-                                                    >
-                                                        <TouchableOpacity
-                                                            style={{ alignItems: 'center', justifyContent: 'center' }}
-                                                            onPress={() =>
-                                                            {
-                                                                navigation.navigate('Quest', { gate: item.gate, round: dataRound.id, level: dataLevel });
-                                                            }}
+                                                    return (
+                                                        <View
+                                                            key={key}
+                                                            style={{ flexDirection: 'column', flex: 1, alignItems: 'center', justifyContent: 'space-around' }}
                                                         >
-                                                            {/* <Image
+                                                            <TouchableOpacity
+                                                                style={{ alignItems: 'center', justifyContent: 'center' }}
+                                                                onPress={() =>
+                                                                {
+                                                                    navigation.navigate('Quest', { gate: item.gate, round: dataRound.id, level: String(key) });
+                                                                }}
+                                                            >
+                                                                {/* <Image
                                                                 width={20}
                                                                 height={20}
                                                                 style={{ width: 40, height: 40 }}
                                                                 source={require('../../../Assets/Images/Ic/crownGray.png')}
                                                             /> */}
-                                                            <Icon
-                                                                type={'MaterialIcons'}
-                                                                name={'emoji-events'}
-                                                                size={moderateScale(40)}
-                                                                color={tmpProcessEachLevel < 60 ? '#bebebe' : '#f1c500'}
-                                                            />
-                                                            <Text style={{color: color.TITLE_TXT}}>{tmpProcessEachLevel}%</Text>
-                                                        </TouchableOpacity>
-                                                        <TouchableOpacity
-                                                            style={styles.learnBtn}
-                                                            onPress={() =>
-                                                            {
-                                                                navigation.navigate('Learn', { gate: item.gate, round: dataRound.id, level: dataLevel });
-                                                            }}
-                                                        >
-                                                            <Text style={{ color: 'white' }}>{language.LEARN}</Text>
-                                                        </TouchableOpacity>
-                                                    </View>
-                                                );
-                                            })}
+                                                                <Icon
+                                                                    type={'MaterialIcons'}
+                                                                    name={'emoji-events'}
+                                                                    size={moderateScale(40)}
+                                                                    color={tmpProcessEachLevel < 60 ? '#bebebe' : '#f1c500'}
+                                                                />
+                                                                <Text style={{ color: color.TITLE_TXT }}>{tmpProcessEachLevel}%</Text>
+                                                            </TouchableOpacity>
+                                                            <TouchableOpacity
+                                                                style={styles.learnBtn}
+                                                                onPress={() =>
+                                                                {
+                                                                    navigation.navigate('Learn', { gate: item.gate, round: dataRound.id, level: String(key) });
+                                                                }}
+                                                            >
+                                                                <Text style={{ color: 'white' }}>{language.LEARN}</Text>
+                                                            </TouchableOpacity>
+                                                        </View>
+                                                    );
+                                                })}
+                                            {/* NOTE NOTE NOTE NOTE HERE */}
                                         </View>
                                     </View>
                                 )}

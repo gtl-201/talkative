@@ -221,4 +221,7 @@ export default {
     TRANSLATETHIS: 'Dịch câu bên dưới',
     WOWYOURESOTALEN: 'Thật tuyệt vời bạn không sai một từ nào',
     LEARN: 'Học',
+    TABTOLISTEN: 'Chạm để nghe',
+    CHOOSEWHATYOUHEAR: 'Chọn từ bạn nghe được',
+    ENTERWHATYOUHEAR: 'Nhập từ bạn nghe được',
 };

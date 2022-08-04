@@ -1,15 +1,16 @@
 import React, { FC, memo, useEffect, useRef, useState } from 'react';
-import { FlatList, Text, View, Animated, Image, ImageBackground, Pressable } from 'react-native';
+import { FlatList, Text, View, Animated, Image, ImageBackground, Pressable, TextInput } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { moderateScale, scale } from 'react-native-size-matters';
 import Icon from '../../BaseComponents/Icon';
 import styleScaled from './style';
 import { getAchievements, getQuest, updateArchivement } from '../../../Store/Services/user-services';
-import { SIZES } from '../../../Utils/Values';
+import { SHADOW_3, SHADOW_5, SIZES } from '../../../Utils/Values';
 // import { useNavigation } from '@react-navigation/native';
 import Tts from 'react-native-tts';
 
 import SoundPlayer from 'react-native-sound-player';
+import TxtInput from './txtInput';
 
 interface Props {
     color: any;
@@ -212,12 +213,26 @@ const Quest: FC<Props> = (props) =>
         {
             return x !== (dataQuest.length > 0 ? dataQuest[step].rightEn : '');
         });
-        // console.log(allWrongEn, '?');
 
         const questRen = allWrongEn.sort(() => Math.random() - Math.random()).slice(0, 4);
         questRen[Math.floor(Math.random() * 4)] = dataQuest.length > 0 ? dataQuest[step].rightEn : '';
-        // console.log(questRen, '?');
         setQuestRen(questRen);
+
+        // const allWrongEn: any = [];
+        // dataQuest.map((x: any, index) =>
+        // {
+        //     if (x.rightEn !== (dataQuest.length > 0 ? dataQuest[step].rightEn : ''))
+        //     {
+        //         if (x.type === 1)
+        //         {
+        //             allWrongEn.push({ en: x.rightEn, vi: x.rightVi });
+        //         }
+        //     }
+        // });
+
+        // const questRen: any = allWrongEn.sort(() => Math.random() - Math.random()).slice(0, 4);
+        // questRen[Math.floor(Math.random() * 4)] = dataQuest.length > 0 ? { en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi } : '';
+        // setQuestRen(questRen);
     };
 
     useEffect(() =>
@@ -225,30 +240,106 @@ const Quest: FC<Props> = (props) =>
         dataQuest && dataQuest[step] && dataQuest[step].type === 1 && renAnsType1();
     }, [dataQuest, step]);
 
+    const [typeShow, setTypeShow] = useState<number>(Math.random() * 2);
+    let txtAns: any = '';
     const Rendetype1 = () =>
     {
         return (
-            <View style={{ flex: 1 }}>
-                {dataQuest && dataQuest[step] && (
-                    <>
-                        <Text style={[styles.title, { marginTop: SIZES.HEIGHT_STATUSBAR }]}>{language.HOWTOTALK + ' "' + dataQuest[step].rightVi + '"?'} </Text>
-                        <View style={{ flex: 1, justifyContent: 'center' }}>
-                            {questRen.map((data, index) => (
+            <>
+                <View style={{ flex: 1, alignItems: 'center' }}>
+                    <TouchableOpacity
+                        style={{ marginTop: 10, justifyContent: 'center', alignItems: 'center' }}
+                        onPress={() =>
+                        {
+                            Tts.setDefaultLanguage('en-IE');
+                            Tts.speak(dataQuest[step].rightEn);
+                        }}
+                    >
+                        <Text style={[styles.title]}>{language.TABTOLISTEN}</Text>
+                        <View style={{ backgroundColor: color.IC, width: 50, height: 50, justifyContent: 'center', alignItems: 'center', borderRadius: 5, ...SHADOW_5 }}>
+                            <Icon
+                                type={'MaterialIcons'}
+                                name={'volume-up'}
+                                size={moderateScale(40)}
+                                color={'white'}
+                            />
+                        </View>
+                    </TouchableOpacity>
+                    {/* <TxtInput
+                        color={color}
+                        language={language}
+                        // value={txtAns}
+                        onChangeText={(value) =>
+                        {
+                            txtAns = value;
+                            console.log(value, '-----', txtAns);
+                            // setChoosedItem(value.toString() ?? '');
+                        }}
+                        onBlur={() => setChoosedItem(txtAns)}
+                    /> */}
+                </View>
+                {typeShow <= 1
+                    ? (
+                            <View style={{ flex: 1 }}>
+                                {dataQuest && dataQuest[step] && (
+                                    <>
+                                        <Text style={[styles.title, { marginTop: SIZES.HEIGHT_STATUSBAR }]}>{language.HOWTOTALK + ' "' + dataQuest[step].rightVi + '"?'} </Text>
+                                        <View style={{ flex: 1, justifyContent: 'center' }}>
+                                            {questRen.map((data, index) => (
+                                                <TouchableOpacity
+                                                    key={index + data}
+                                                    style={[styles.cardBox, choosedItem === data && styles.cardChoosed]}
+                                                    onPress={() =>
+                                                    {
+                                                        setChoosedItem(data);
+                                                    }}
+                                                >
+                                                    <Text style={[styles.content, choosedItem === data && { color: '#59bfff' }]}>{data}</Text>
+                                                </TouchableOpacity>
+                                            ))}
+                                        </View>
+                                    </>
+                                )}
+                            </View>
+                        )
+                    : (
+                            <View style={{ flex: 1, alignItems: 'center' }}>
                                 <TouchableOpacity
-                                    key={index + data}
-                                    style={[styles.cardBox, choosedItem === data && styles.cardChoosed]}
+                                    style={{ marginTop: 10, justifyContent: 'center', alignItems: 'center' }}
                                     onPress={() =>
                                     {
-                                        setChoosedItem(data);
+                                        Tts.setDefaultLanguage('en-IE');
+                                        Tts.speak(dataQuest[step].rightEn);
                                     }}
                                 >
-                                    <Text style={[styles.content, choosedItem === data && { color: '#59bfff' }]}>{data}</Text>
+                                    <Text style={[styles.title]}>{language.TABTOLISTEN}</Text>
+                                    <View style={{ backgroundColor: color.IC, width: 50, height: 50, justifyContent: 'center', alignItems: 'center', borderRadius: 5, ...SHADOW_5 }}>
+                                        <Icon
+                                            type={'MaterialIcons'}
+                                            name={'volume-up'}
+                                            size={moderateScale(40)}
+                                            color={'white'}
+                                        />
+                                    </View>
                                 </TouchableOpacity>
-                            ))}
-                        </View>
-                    </>
-                )}
-            </View>
+                                <Text style={[styles.title]}>{language.CHOOSEWHATYOUHEAR}</Text>
+                                <View style={{ flex: 1 }}>
+                                    {questRen.map((data, index) => (
+                                        <TouchableOpacity
+                                            key={index + data}
+                                            style={[styles.cardBox, choosedItem === data && styles.cardChoosed]}
+                                            onPress={() =>
+                                            {
+                                                setChoosedItem(data);
+                                            }}
+                                        >
+                                            <Text style={[styles.content, choosedItem === data && { color: '#59bfff' }]}>{data}</Text>
+                                        </TouchableOpacity>
+                                    ))}
+                                </View>
+                            </View>
+                        )}
+            </>
         );
     };
     // QUEST TYPE 1 END
@@ -553,6 +644,7 @@ const Quest: FC<Props> = (props) =>
                                     if (step < dataQuest.length - 1)
                                     {
                                         // console.log(step);
+                                        setTypeShow(Math.random() * 2);
                                         setChoosedItem(':::');
                                         setPreStep(step);
                                         setStep((prev) => prev + 1);
@@ -563,6 +655,7 @@ const Quest: FC<Props> = (props) =>
                                     }
                                     else
                                     {
+                                        setTypeShow(Math.random() * 2);
                                         setPreStep(step);
                                         setStep((prev) => prev + 1);
                                         setShowLastResult(true);

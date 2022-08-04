@@ -227,4 +227,7 @@ export default {
     TRANSLATETHIS: 'Translate this sentence',
     WOWYOURESOTALEN: "It's great you don't miss any word",
     LEARN: 'Learn',
+    TABTOLISTEN: 'Tab to listten',
+    CHOOSEWHATYOUHEAR: 'Choose what you hear',
+    ENTERWHATYOUHEAR: 'Enter what you hear',
 };

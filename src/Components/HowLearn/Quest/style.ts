@@ -83,6 +83,20 @@ const styleScaled = (Color: any) =>
             textAlign: 'center',
             textTransform: 'capitalize',
         },
+        textInput: {
+            // with: SIZES.WIDTH_WINDOW * 0.9,
+            marginTop: 10,
+            marginHorizontal: 15,
+            ...SHADOW_3,
+            paddingVertical: 20,
+            paddingHorizontal: 30,
+            color: Color.INFOR_IC_MENU,
+            borderWidth: 2,
+            borderColor: Color.IC_EMPTY,
+            borderRadius: 10,
+            backgroundColor: Color.BG,
+            fontSize: '16@ms0.3',
+        },
         clickGif: {
             // width: SIZES.WIDTH_WINDOW * 0.5,
             // height:

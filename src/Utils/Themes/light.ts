@@ -455,6 +455,7 @@ export const HOWLEARN = {
     IC: '#5C8AEA',
     TXT: '#5C8AEA',
     ON_SURFACE_VARIANT: '#cccccc',
+    ON_SURFACE_VARIANT2: '#ffffff',
     SUB_TXT: '#8c8c8c',
     TITLE_TXT: 'black',
 };
