@@ -121,6 +121,12 @@ const styleScaled = (props) =>
             fontWeight: 'bold',
             fontSize: 18,
         },
+        textYou: {
+            color: 'white',
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: 13,
+        },
         Stt2: {
             fontSize: 20,
             fontWeight: 'bold',
