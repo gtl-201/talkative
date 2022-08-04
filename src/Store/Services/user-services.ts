@@ -504,6 +504,17 @@ export async function getAchievements()
             return querySnapshot.docs.map((item) => item.data());
         });
 }
+// export async function getAchievements()
+// {
+//     return await firestore()
+//         .collection('achievements')
+//         .doc(auth().currentUser?.uid)
+//         .get()
+//         .then((data) =>
+//         {
+//             return data.data();
+//         });
+// }
 export async function getRank()
 {
     return await firestore()

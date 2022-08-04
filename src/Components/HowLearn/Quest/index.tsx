@@ -241,13 +241,13 @@ const Quest: FC<Props> = (props) =>
     }, [dataQuest, step]);
 
     const [typeShow, setTypeShow] = useState<number>(Math.random() * 2);
-    let txtAns: any = '';
+    const txtAns: any = '';
     const Rendetype1 = () =>
     {
         return (
             <>
-                <View style={{ flex: 1, alignItems: 'center' }}>
-                    <TouchableOpacity
+                {/* <View style={{ flex: 1, alignItems: 'center' }}> */}
+                {/* <TouchableOpacity
                         style={{ marginTop: 10, justifyContent: 'center', alignItems: 'center' }}
                         onPress={() =>
                         {
@@ -264,8 +264,8 @@ const Quest: FC<Props> = (props) =>
                                 color={'white'}
                             />
                         </View>
-                    </TouchableOpacity>
-                    {/* <TxtInput
+                    </TouchableOpacity> */}
+                {/* <TxtInput
                         color={color}
                         language={language}
                         // value={txtAns}
@@ -277,7 +277,7 @@ const Quest: FC<Props> = (props) =>
                         }}
                         onBlur={() => setChoosedItem(txtAns)}
                     /> */}
-                </View>
+                {/* </View> */}
                 {typeShow <= 1
                     ? (
                             <View style={{ flex: 1 }}>
@@ -547,7 +547,7 @@ const Quest: FC<Props> = (props) =>
                                     const choosedString = choosedListItem.map((x) => x.data).join(' ');
                                     if (
                                         choosedString.toLowerCase() === dataQuest[step].rightVi.toLowerCase() ||
-                                        choosedString.toLowerCase === dataQuest[step].rightEn.toLowerCase()
+                                        choosedString.toLowerCase() === dataQuest[step].rightEn.toLowerCase()
                                     )
                                     {
                                         // console.log(choosedString);
