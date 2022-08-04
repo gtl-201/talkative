@@ -327,7 +327,12 @@ export async function getUsersById(id: string)
             return x.data();
         });
 }
+export async function createArchive()
+{
+    console.log('-----------------');
 
+    return await firestore().collection('achievements').doc(auth().currentUser?.uid).set({ gate1: {}, gate2: {}, gate3: {} });
+}
 export async function getAllGate()
 {
     return await firestore()
@@ -388,12 +393,12 @@ export async function sendRequestFriends(id: string)
         .collection('Users')
         .doc(auth().currentUser?.uid)
         .update({ requestSent: [id] })
-        .then(async() =>
+        .then(async () =>
         {
             return await firestore()
                 .collection('Users')
                 .doc(id)
-                .update({ request: [{ id: auth().currentUser?.uid,name: auth().currentUser?.displayName }] })
+                .update({ request: [{ id: auth().currentUser?.uid, name: auth().currentUser?.displayName }] })
                 .then(() =>
                 {
                     console.log('sendRequestFriends success!');
@@ -401,48 +406,46 @@ export async function sendRequestFriends(id: string)
                 });
         });
 }
-export async function acceptRequestFriends(id: string,name: string,arrayRequest: any,arrayRequestSent: any)
+export async function acceptRequestFriends(id: string, name: string, arrayRequest: any, arrayRequestSent: any)
 {
     return await firestore()
         .collection('Users')
         .doc(id)
         .update({ requestSent: arrayRequestSent })
-        .then(async() =>
+        .then(async () =>
         {
             return await firestore()
                 .collection('Users')
                 .doc(auth().currentUser?.uid)
                 .update({ request: arrayRequest })
-                .then(async() =>
+                .then(async () =>
                 {
                     return await firestore()
                         .collection('Users')
                         .doc(auth().currentUser?.uid)
-                        .update({ friends: [{ id: id,name: name }] })
-                        .then(async() =>
+                        .update({ friends: [{ id: id, name: name }] })
+                        .then(async () =>
                         {
                             return await firestore()
                                 .collection('Users')
                                 .doc(id)
-                                .update({ friends: [{ id: auth().currentUser?.uid,name: auth().currentUser?.displayName }] })
+                                .update({ friends: [{ id: auth().currentUser?.uid, name: auth().currentUser?.displayName }] })
                                 .then(() =>
                                 {
                                     console.log('acceptRequestFriends success!');
                                     return true;
                                 });
                         });
-                
                 });
         });
-    
 }
-export async function cancelRequestFriends(id: string,arrayRequest: any,arrayRequestSent: any)
+export async function cancelRequestFriends(id: string, arrayRequest: any, arrayRequestSent: any)
 {
     return await firestore()
         .collection('Users')
         .doc(id)
         .update({ request: arrayRequest })
-        .then(async() =>
+        .then(async () =>
         {
             return await firestore()
                 .collection('Users')
@@ -455,13 +458,13 @@ export async function cancelRequestFriends(id: string,arrayRequest: any,arrayReq
                 });
         });
 }
-export async function removeRequestFriends(id: string,arrayRequest: any,arrayRequestSent: any)
+export async function removeRequestFriends(id: string, arrayRequest: any, arrayRequestSent: any)
 {
     return await firestore()
         .collection('Users')
         .doc(id)
         .update({ requestSent: arrayRequestSent })
-        .then(async() =>
+        .then(async () =>
         {
             return await firestore()
                 .collection('Users')
@@ -474,13 +477,13 @@ export async function removeRequestFriends(id: string,arrayRequest: any,arrayReq
                 });
         });
 }
-export async function cancelFriends(id: string,myFriends: any,yourFriends: any)
+export async function cancelFriends(id: string, myFriends: any, yourFriends: any)
 {
     return await firestore()
         .collection('Users')
         .doc(auth().currentUser?.uid)
         .update({ friends: myFriends })
-        .then(async() =>
+        .then(async () =>
         {
             return await firestore()
                 .collection('Users')
@@ -494,27 +497,27 @@ export async function cancelFriends(id: string,myFriends: any,yourFriends: any)
         });
 }
 
-export async function getAchievements()
-{
-    return await firestore()
-        .collection('achievements')
-        .get()
-        .then((querySnapshot) =>
-        {
-            return querySnapshot.docs.map((item) => item.data());
-        });
-}
 // export async function getAchievements()
 // {
 //     return await firestore()
 //         .collection('achievements')
-//         .doc(auth().currentUser?.uid)
 //         .get()
-//         .then((data) =>
+//         .then((querySnapshot) =>
 //         {
-//             return data.data();
+//             return querySnapshot.docs.map((item) => item.data());
 //         });
 // }
+export async function getAchievements()
+{
+    return await firestore()
+        .collection('achievements')
+        .doc(auth().currentUser?.uid)
+        .get()
+        .then((data) =>
+        {
+            return data.exists ? data.data() : createArchive();
+        });
+}
 export async function getRank()
 {
     return await firestore()
@@ -522,14 +525,14 @@ export async function getRank()
         .get()
         .then((querySnapshot) =>
         {
-            return querySnapshot.docs.map((item) =>({ data: item.data(),id: item.id }));
+            return querySnapshot.docs.map((item) => ({ data: item.data(), id: item.id }));
         });
 }
 
 export async function updateArchivement(field?: any)
 {
     // console.log(field, '99999');
-    
+
     return await firestore()
         .collection('achievements')
         .doc(auth().currentUser?.uid)

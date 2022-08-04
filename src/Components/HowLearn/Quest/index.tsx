@@ -475,17 +475,29 @@ const Quest: FC<Props> = (props) =>
     const reSetArchivement = async (percent: number) =>
     {
         const tmpAllArchivements: any = await getAchievements();
-        tmpAllArchivements[0][gate][round][level && parseInt(level) > 0 ? parseInt(level) - 1 : 0] = percent;
-
+        // tmpAllArchivements[gate] && tmpAllArchivements[gate][round]
+        
+        if (tmpAllArchivements[gate] && tmpAllArchivements[gate][round])
+        {
+            tmpAllArchivements[gate][round][level && parseInt(level) > 0 ? parseInt(level) - 1 : 0] = percent;
+        }
+        else
+        {
+            tmpAllArchivements[gate][round] = [percent];
+        }
+        // console.log(tmpAllArchivements, '______');
         // console.log(tmpAllArchivements[0][gate][round][parseInt(level) - 1], '+++++++++++');
         // console.log(tmpAllArchivements[0][gate], '+++++++++++');
-        console.log(tmpAllArchivements[0]);
 
-        await updateArchivement(tmpAllArchivements[0]);
+        await updateArchivement(tmpAllArchivements);
         // console.log(tmpAllArchivements, '+++++++++++');
 
         // console.log(percent);
     };
+    useEffect(() =>
+    {
+        reSetArchivement();
+    }, []);
 
     // UPDATE PROCESS WHEN FINISH ALL END
 

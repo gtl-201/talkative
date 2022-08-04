@@ -2,10 +2,11 @@ import React, { FC, memo, useEffect, useState } from 'react';
 import { ScrollView, Image, Text, View, FlatList, RefreshControl } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import styleScaled from './style';
-import { getAchievements, getAllGate, getAllRound, getLevel, updateArchivement } from '../../../Store/Services/user-services';
+import { getAchievements, getAllGate, createArchive, getAllRound, getLevel, updateArchivement } from '../../../Store/Services/user-services';
 import { SHADOW_1, SIZES } from '../../../Utils/Values';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import Icon from '../../BaseComponents/Icon';
+import auth from '@react-native-firebase/auth';
 
 import { NoFlickerImage } from '../../../Components/NoFlickerImg/no-flicker-image';
 import { moderateScale } from 'react-native-size-matters';
@@ -48,7 +49,7 @@ const Gate: FC<Props> = (props) =>
             {
                 // console.log(key, '!!!');
                 // key.id);
-                tmpId.push(process[0][x.id][key.id]);
+                process[0][x.id][key.id] && tmpId.push(process[0][x.id][key.id]);
             });
 
             // console.log(tmpId, ')))))))))');
@@ -66,13 +67,22 @@ const Gate: FC<Props> = (props) =>
     {
         const tmpAllGate: any[] = await getAllGate();
         const tmpAllArchivements: any = await getAchievements();
-        console.log(tmpAllArchivements, '++++++++++');
-        
-        getRound(tmpAllGate, tmpAllArchivements);
+        console.log([tmpAllArchivements], '++++++++++');
+        // console.log();
+        if (tmpAllArchivements === null)
+        {
+            quearyData();
+        }
+        else
+        {
+            getRound(tmpAllGate, [tmpAllArchivements]);
+        }
     };
     useEffect(() =>
     {
         quearyData();
+
+        console.log(auth().currentUser?.uid);
     }, []);
     const [isRefresh, setIsRefresh] = useState(false);
     const onRefresh = () =>
@@ -109,7 +119,7 @@ const Gate: FC<Props> = (props) =>
                     {item.round &&
                         item.round.map((dataRound: any, index2: number) =>
                         {
-                            console.log('=========================');
+                            // console.log('=========================');
 
                             const tmpTotalProcessNumber: any = [];
                             item.process &&
@@ -127,7 +137,7 @@ const Gate: FC<Props> = (props) =>
                                     );
                                     // console.log(tmpTotalProcessNumber, '+++');
                                 });
-                            console.log('=========================');
+                            // console.log('=========================');
 
                             return (
                                 <View
@@ -203,7 +213,7 @@ const Gate: FC<Props> = (props) =>
                                                 setLevelShow(tmpShowLevel);
                                             }}
                                         >
-                                            {console.log(tmpTotalProcessNumber[index2], ';;;;')}
+                                            {/* {console.log(tmpTotalProcessNumber[index2], ';;;;')} */}
 
                                             <CircularProgress
                                                 value={
