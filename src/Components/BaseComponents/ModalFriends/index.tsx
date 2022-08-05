@@ -28,11 +28,12 @@ import {
     getUsersById,
     removeRequestFriends,
     sendRequestFriends,
+    updateFriend,
 } from '../../../Store/Services/user-services';
 import FastImage from 'react-native-fast-image';
 import { useNavigation } from '@react-navigation/native';
 
-const ModalFriends = forwardRef(({ url, color,count }, ref) =>
+const ModalFriends = forwardRef(({ url, color, count }, ref) =>
 {
     const styles = styleScaled(color);
     const [visible, setVisible] = useState(false);
@@ -41,38 +42,58 @@ const ModalFriends = forwardRef(({ url, color,count }, ref) =>
     const [dataCall, setDataCall] = useState<any>([]);
     const [dataSent, setDataSent] = useState<any>([]);
     const [data, setData] = useState<any>([]);
+    const [dataImage, setDataImage] = useState<any>([]);
 
     async function getAllData()
     {
-        const dataUsers = await getAllUsers();
+        const dataAll = await getAllUsers();
         const dataUser: any = await getUsersById(
             `${firebase.auth().currentUser?.uid}`,
         );
-        setDataCall(
-            dataUser.request[0] === '' && dataUser.request.length === 1
-                ? []
-                : dataUser.request,
-        );
-        setDataListFriends(
-            dataUser.friends[0] === '' && dataUser.friends.length === 1
-                ? []
-                : dataUser.friends,
-        );
-        setDataSent(
-            dataUser.requestSent[0] === '' && dataUser.requestSent.length === 1
-                ? []
-                : dataUser.requestSent,
-        );
+        if (dataUser.request === undefined)
+        {
+            await updateFriend({ request: [] });
+        }
+        if (dataUser.friends === undefined)
+        {
+            await updateFriend({ friends: [] });
+        }
+        if (dataUser.requestSent === undefined)
+        {
+            await updateFriend({ requestSent: [] });
+        }
+        if (
+            dataUser.request !== undefined &&
+      dataUser.friends !== undefined &&
+      dataUser.requestSent !== undefined
+        )
+        {
+            setDataCall(
+                dataUser.request[0] === '' && dataUser.request.length === 1
+                    ? []
+                    : dataUser.request,
+            );
+            setDataListFriends(
+                dataUser.friends[0] === '' && dataUser.friends.length === 1
+                    ? []
+                    : dataUser.friends,
+            );
+            setDataSent(
+                dataUser.requestSent[0] === '' && dataUser.requestSent.length === 1
+                    ? []
+                    : dataUser.requestSent,
+            );
 
-        const userList = [
-            ...dataUsers.filter(
-                (item) =>
-                    item.id !== firebase.auth().currentUser?.uid &&
-          !dataUser.friends.find((x) => x.id === item.id) &&
-          !dataUser.request.find((x) => x.id === item.id),
-            ),
-        ];
-        setData(userList);
+            const userList = [
+                ...dataAll.filter(
+                    (item) =>
+                        item.id !== firebase.auth().currentUser?.uid &&
+            !dataUser.friends.find((x) => x.id === item.id) &&
+            !dataUser.request.find((x) => x.id === item.id),
+                ),
+            ];
+            setData(userList);
+        }
     }
     useEffect(() =>
     {
@@ -81,7 +102,14 @@ const ModalFriends = forwardRef(({ url, color,count }, ref) =>
 
     const handleSendRequest = async (id) =>
     {
-        const res = await sendRequestFriends(id);
+        const sendRequest = dataSent.concat(id);
+        const request = dataCall.concat([
+            {
+                id: firebase.auth().currentUser?.uid,
+                name: firebase.auth().currentUser?.displayName,
+            },
+        ]);
+        const res = await sendRequestFriends(id, sendRequest, request);
         if (res)
         {
             getAllData();
@@ -174,11 +202,25 @@ const ModalFriends = forwardRef(({ url, color,count }, ref) =>
     const close = useCallback(() => setVisible(false), []);
     const navigation = useNavigation();
 
-    const openProfile = (userId,userName) =>
+    const openProfile = (userId, userName) =>
     {
         close();
-        navigation.navigate('ProfileOther', { userId,userName });
+        navigation.navigate('ProfileOther', { userId, userName });
     };
+
+    const getImage = async () =>
+    {
+        const dataAll = await getAllUsers();
+        dataAll.map((item, index) =>
+            getUsersById(item.id).then((data) =>
+                setDataImage((c) => c.concat({ image: data.avatar, id: data.id })),
+            ),
+        );
+    };
+    useEffect(() =>
+    {
+        getImage();
+    }, []);
 
     const listFriends = () =>
     {
@@ -186,11 +228,11 @@ const ModalFriends = forwardRef(({ url, color,count }, ref) =>
             <TouchableOpacity
                 key={index}
                 activeOpacity={0.7}
-                onPress={() =>openProfile(item.id,item.name)}
+                onPress={() => openProfile(item.id, item.name)}
             >
                 <View style={styles.row}>
                     <View style={{ width: '25%' }}>
-                        {item?.thumbnail
+                        {dataImage.find((x) => x.id === item.id)?.image !== ''
                             ? (
                                     <FastImage
                                         style={{
@@ -201,7 +243,7 @@ const ModalFriends = forwardRef(({ url, color,count }, ref) =>
                                             overflow: 'hidden',
                                         }}
                                         source={{
-                                            uri: item?.thumbnail,
+                                            uri: dataImage.find((x) => x.id === item.id)?.image,
                                         }}
                                     />
                                 )
@@ -237,11 +279,11 @@ const ModalFriends = forwardRef(({ url, color,count }, ref) =>
             <TouchableOpacity
                 key={index}
                 activeOpacity={0.7}
-                onPress={() =>openProfile(item.id,item.name)}
+                onPress={() => openProfile(item.id, item.name)}
             >
                 <View style={styles.row}>
                     <View style={{ width: '25%' }}>
-                        {item?.thumbnail
+                        {dataImage.find((x) => x.id === item.id)?.image !== ''
                             ? (
                                     <FastImage
                                         style={{
@@ -252,7 +294,7 @@ const ModalFriends = forwardRef(({ url, color,count }, ref) =>
                                             overflow: 'hidden',
                                         }}
                                         source={{
-                                            uri: item?.thumbnail,
+                                            uri: dataImage.find((x) => x.id === item.id)?.image,
                                         }}
                                     />
                                 )
@@ -294,11 +336,11 @@ const ModalFriends = forwardRef(({ url, color,count }, ref) =>
             <TouchableOpacity
                 key={index}
                 activeOpacity={0.7}
-                onPress={() =>openProfile(item.id,item.name)}
+                onPress={() => openProfile(item.id, item.name)}
             >
                 <View style={styles.row}>
                     <View style={{ width: '25%' }}>
-                        {item?.thumbnail
+                        {item?.avatar
                             ? (
                                     <FastImage
                                         style={{
@@ -309,7 +351,7 @@ const ModalFriends = forwardRef(({ url, color,count }, ref) =>
                                             overflow: 'hidden',
                                         }}
                                         source={{
-                                            uri: item?.thumbnail,
+                                            uri: item?.avatar,
                                         }}
                                     />
                                 )

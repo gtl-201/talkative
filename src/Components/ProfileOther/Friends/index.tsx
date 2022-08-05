@@ -110,7 +110,9 @@ const Friends: FC<Props> = (props) =>
     };
     const handleSendRequest = async () =>
     {
-        const res = await sendRequestFriends(userId);
+        const sendRequest = dataSent.concat(userId);
+        const request = dataCall.concat([{ id: firebase.auth().currentUser?.uid, name: firebase.auth().currentUser?.displayName }]);
+        const res = await sendRequestFriends(userId,sendRequest,request);
         if (res)
         {
             getAllData();

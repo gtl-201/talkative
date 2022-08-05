@@ -113,12 +113,12 @@ const Rank: FC<Props> = (props) =>
             setDataListWorld(array.sort((a, b) => total[b.id] - total[a.id]));
             setDataListFriends(
                 array
-                    .filter((a) => !dataF.find((b) => a.id === b.id))
+                    .filter((a) => dataF.find((b) => a.id === b.id) || a.id === firebase.auth().currentUser?.uid)
                     .sort((a, b) => total[b.id] - total[a.id]),
             );
             setData(
                 array
-                    .filter((a) => !dataF.find((b) => a.id === b.id))
+                    .filter((a) => dataF.find((b) => a.id === b.id) || a.id === firebase.auth().currentUser?.uid)
                     .sort((a, b) => total[b.id] - total[a.id]),
             );
         });
@@ -273,7 +273,7 @@ const Rank: FC<Props> = (props) =>
                         <View style={styles.viewRank}>
                             {data.map(
                                 (item, index) =>
-                                    index >= 2 && (
+                                    index >= 3 && (
                                         <View key={index}>
                                             <View style={styles.row}>
                                                 <View style={styles.viewLeft}>

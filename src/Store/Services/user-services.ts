@@ -387,18 +387,18 @@ export async function getQuest(gate: string, round: string, level: string)
             return querySnapshot.docs.map((item) => item.data());
         });
 }
-export async function sendRequestFriends(id: string)
+export async function sendRequestFriends(id: string,requestSent,request)
 {
     return await firestore()
         .collection('Users')
         .doc(auth().currentUser?.uid)
-        .update({ requestSent: [id] })
+        .update({ requestSent: requestSent })
         .then(async () =>
         {
             return await firestore()
                 .collection('Users')
                 .doc(id)
-                .update({ request: [{ id: auth().currentUser?.uid, name: auth().currentUser?.displayName }] })
+                .update({ request: request })
                 .then(() =>
                 {
                     console.log('sendRequestFriends success!');
@@ -540,6 +540,18 @@ export async function updateArchivement(field?: any)
         .then(() =>
         {
             console.log('Archivments updated!');
+        });
+}
+
+export async function updateFriend(info)
+{
+    return await firestore()
+        .collection('Users')
+        .doc(auth().currentUser?.uid)
+        .update(info)
+        .then(() =>
+        {
+            console.log('User updated!');
         });
 }
 
