@@ -225,4 +225,5 @@ export default {
     CHOOSEWHATYOUHEAR: 'Chọn từ bạn nghe được',
     ENTERWHATYOUHEAR: 'Nhập từ bạn nghe được',
     DASHBOARD: 'Thống kê',
+    THUTHACH: 'Hoàn thành thử thách này để mở khóa',
 };

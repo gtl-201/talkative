@@ -49,8 +49,11 @@ const DashboardC: FC<any> = ({
                 title={language.DASHBOARD}
                 iconSize={35}
                 shadow={false}
-                iconRightType="FontAwesome"
+                // iconRightType="FontAwesome"
+                iconRightType="MaterialIcons"
+                iconRight={'military-tech'}
                 onPressLeft={() => navigation.goBack()}
+                onPressRight={()=>navigation.navigate('Rank', {})}
             />
             <Rank
                 color={color}

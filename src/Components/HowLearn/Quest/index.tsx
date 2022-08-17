@@ -1,10 +1,24 @@
 import React, { FC, memo, useEffect, useRef, useState } from 'react';
-import { FlatList, Text, View, Animated, Image, ImageBackground, Pressable, TextInput } from 'react-native';
+import {
+    FlatList,
+    Text,
+    View,
+    Animated,
+    Image,
+    ImageBackground,
+    Pressable,
+    TextInput,
+    Keyboard,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { moderateScale, scale } from 'react-native-size-matters';
 import Icon from '../../BaseComponents/Icon';
 import styleScaled from './style';
-import { getAchievements, getQuest, updateArchivement } from '../../../Store/Services/user-services';
+import {
+    getAchievements,
+    getQuest,
+    updateArchivement,
+} from '../../../Store/Services/user-services';
 import { SHADOW_3, SHADOW_5, SIZES } from '../../../Utils/Values';
 // import { useNavigation } from '@react-navigation/native';
 import Tts from 'react-native-tts';
@@ -13,12 +27,12 @@ import SoundPlayer from 'react-native-sound-player';
 import TxtInput from './txtInput';
 
 interface Props {
-    color: any;
-    language: any;
-    navigation: any;
-    gate: string;
-    round: string;
-    level: string;
+  color: any;
+  language: any;
+  navigation: any;
+  gate: string;
+  round: string;
+  level: string;
 }
 
 const Quest: FC<Props> = (props) =>
@@ -35,14 +49,53 @@ const Quest: FC<Props> = (props) =>
     const [listRightEn, setListRightEn] = useState<string[]>([]);
     const [choosedItem, setChoosedItem] = useState(':::');
     const [questRen, setQuestRen] = useState<string[]>([]);
+    const [questRen2, setQuestRen2] = useState<any[]>([]);
     const [showBottomResult, setShowBottomResult] = useState(false);
     const [resultTrue, setResultTrue] = useState(true);
     const [rightAndWrong, setRightAndWrong] = useState<any[]>([]);
     // For type 2
     const [choosedListItem, setChoosedListItem] = useState<any[]>([]);
+    const [textValue, setTextValue] = useState<any[]>([]);
     // For show last screen
     const [showLastResult, setShowLastResult] = useState(false);
+    // console.log("===============",choosedListItem);
 
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+    useEffect(() =>
+    {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () =>
+            {
+                setKeyboardVisible(false); // or some other action
+            },
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () =>
+            {
+                setKeyboardVisible(true); // or some other action
+            },
+        );
+
+        return () =>
+        {
+            keyboardDidHideListener.remove();
+            keyboardDidShowListener.remove();
+        };
+    }, []);
+
+    useEffect(() =>
+    {
+        if (isKeyboardVisible)
+        {
+            setChoosedListItem(textValue.flat());
+            console.log('--a-sa',textValue);
+            setKeyboardVisible(false);
+        }
+    }, [isKeyboardVisible]);
+    
     useEffect(() =>
     {
         Tts.setDefaultVoice('com.apple.ttsbundle.siri_male_en-US_compact');
@@ -187,21 +240,21 @@ const Quest: FC<Props> = (props) =>
     // RING START
     const ring = (right: boolean) =>
     {
-        // SoundPlayer.stop();
-        // try
-        // {
-        //     right === true
-        //         ? SoundPlayer.playUrl(
-        //             'https://firebasestorage.googleapis.com/v0/b/spearker-d3cc4.appspot.com/o/audio%2Fquest%2Fcorrect.mp3?alt=media&token=cc755513-a417-4bf9-b975-3e5f2b1bdf33',
-        //         )
-        //         : SoundPlayer.playUrl(
-        //             'https://firebasestorage.googleapis.com/v0/b/spearker-d3cc4.appspot.com/o/audio%2Fquest%2Fwrong.mp3?alt=media&token=d79e75a4-b702-4875-809d-36a38743e09a',
-        //         );
-        // }
-        // catch (error)
-        // {
-        //     console.log(error);
-        // }
+    // SoundPlayer.stop();
+    // try
+    // {
+    //     right === true
+    //         ? SoundPlayer.playUrl(
+    //             'https://firebasestorage.googleapis.com/v0/b/spearker-d3cc4.appspot.com/o/audio%2Fquest%2Fcorrect.mp3?alt=media&token=cc755513-a417-4bf9-b975-3e5f2b1bdf33',
+    //         )
+    //         : SoundPlayer.playUrl(
+    //             'https://firebasestorage.googleapis.com/v0/b/spearker-d3cc4.appspot.com/o/audio%2Fquest%2Fwrong.mp3?alt=media&token=d79e75a4-b702-4875-809d-36a38743e09a',
+    //         );
+    // }
+    // catch (error)
+    // {
+    //     console.log(error);
+    // }
     };
 
     // RING END
@@ -214,9 +267,37 @@ const Quest: FC<Props> = (props) =>
             return x !== (dataQuest.length > 0 ? dataQuest[step].rightEn : '');
         });
 
-        const questRen = allWrongEn.sort(() => Math.random() - Math.random()).slice(0, 4);
-        questRen[Math.floor(Math.random() * 4)] = dataQuest.length > 0 ? dataQuest[step].rightEn : '';
+        const questRen = allWrongEn
+            .sort(() => Math.random() - Math.random())
+            .slice(0, 4);
+        questRen[Math.floor(Math.random() * 4)] =
+      dataQuest.length > 0 ? dataQuest[step].rightEn : '';
         setQuestRen(questRen);
+
+        const filterType = dataQuest.filter((x: any) => x.type === 1);
+        const getObj = filterType.map((x: any) => ({
+            pic: x.pic,
+            rightEn: x.rightEn,
+        }));
+
+        const allWrongEn2 = getObj.filter((x: any) =>
+        {
+            return (
+                x.rightEn !== (dataQuest.length > 0 ? dataQuest[step].rightEn : '')
+            );
+        });
+
+        const questRen2 = allWrongEn2
+            .sort(() => Math.random() - Math.random())
+            .slice(0, 4);
+        questRen2[Math.floor(Math.random() * 4)] =
+      dataQuest.length > 0
+          ? {
+                  pic: dataQuest[step]?.pic,
+                  rightEn: dataQuest[step]?.rightEn,
+              }
+          : '';
+        setQuestRen2(questRen2);
 
         // const allWrongEn: any = [];
         // dataQuest.map((x: any, index) =>
@@ -230,17 +311,18 @@ const Quest: FC<Props> = (props) =>
         //     }
         // });
 
-        // const questRen: any = allWrongEn.sort(() => Math.random() - Math.random()).slice(0, 4);
-        // questRen[Math.floor(Math.random() * 4)] = dataQuest.length > 0 ? { en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi } : '';
-        // setQuestRen(questRen);
+    // const questRen: any = allWrongEn.sort(() => Math.random() - Math.random()).slice(0, 4);
+    // questRen[Math.floor(Math.random() * 4)] = dataQuest.length > 0 ? { en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi } : '';
+    // setQuestRen(questRen);
     };
 
     useEffect(() =>
     {
-        dataQuest && dataQuest[step] && dataQuest[step].type === 1 && renAnsType1();
+        dataQuest && dataQuest[step] && dataQuest[step].type === '1' && renAnsType1();
     }, [dataQuest, step]);
 
-    const [typeShow, setTypeShow] = useState<number>(Math.random() * 2);
+    const [typeShow, setTypeShow] = useState<number>(Math.random() * 3);
+    const [typeShow2, setTypeShow2] = useState<number>(Math.random() * 2);
     const txtAns: any = '';
     const Rendetype1 = () =>
     {
@@ -278,23 +360,63 @@ const Quest: FC<Props> = (props) =>
                         onBlur={() => setChoosedItem(txtAns)}
                     /> */}
                 {/* </View> */}
-                {typeShow <= 1
+                {typeShow <= 1 && questRen2.length >= 4
                     ? (
                             <View style={{ flex: 1 }}>
                                 {dataQuest && dataQuest[step] && (
                                     <>
-                                        <Text style={[styles.title, { marginTop: SIZES.HEIGHT_STATUSBAR }]}>{language.HOWTOTALK + ' "' + dataQuest[step].rightVi + '"?'} </Text>
-                                        <View style={{ flex: 1, justifyContent: 'center' }}>
-                                            {questRen.map((data, index) => (
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                marginTop: SIZES.HEIGHT_STATUSBAR,
+                                            }}
+                                        >
+                                            <Image
+                                                source={require('../../../Assets/Images/ask.png')}
+                                                // resizeMode={'cover'}
+                                                style={{ width: '40%', height: 130 }}
+                                            />
+                                            <Text style={styles.title2}>
+                                                {language.HOWTOTALK + ' "' + dataQuest[step].rightVi + '"?'}{' '}
+                                            </Text>
+                                        </View>
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                flexWrap: 'wrap',
+                                                justifyContent: 'space-between',
+                                                marginTop: SIZES.HEIGHT_STATUSBAR,
+                                            }}
+                                        >
+                                            {questRen2.map((data, index) => (
                                                 <TouchableOpacity
-                                                    key={index + data}
-                                                    style={[styles.cardBox, choosedItem === data && styles.cardChoosed]}
+                                                    key={index + data.rightEn}
+                                                    style={[
+                                                        styles.cardBoxImg,
+                                                        choosedItem === data.rightEn && styles.cardChoosed,
+                                                    ]}
                                                     onPress={() =>
                                                     {
-                                                        setChoosedItem(data);
+                                                        setChoosedItem(data.rightEn);
                                                     }}
                                                 >
-                                                    <Text style={[styles.content, choosedItem === data && { color: '#59bfff' }]}>{data}</Text>
+                                                    <Image
+                                                        source={{ uri: data.pic }}
+                                                        resizeMode={'contain'}
+                                                        style={{ width: '100%', height: 100 }}
+                                                    />
+                                                    <View>
+                                                        <Text
+                                                            style={[
+                                                                styles.content,
+                                                                choosedItem === data.rightEn && {
+                                                                    color: '#59bfff',
+                                                                },
+                                                            ]}
+                                                        >
+                                                            {data.rightEn}
+                                                        </Text>
+                                                    </View>
                                                 </TouchableOpacity>
                                             ))}
                                         </View>
@@ -302,43 +424,115 @@ const Quest: FC<Props> = (props) =>
                                 )}
                             </View>
                         )
-                    : (
-                            <View style={{ flex: 1, alignItems: 'center' }}>
-                                <TouchableOpacity
-                                    style={{ marginTop: 10, justifyContent: 'center', alignItems: 'center' }}
-                                    onPress={() =>
-                                    {
-                                        Tts.setDefaultLanguage('en-IE');
-                                        Tts.speak(dataQuest[step].rightEn);
-                                    }}
-                                >
-                                    <Text style={[styles.title]}>{language.TABTOLISTEN}</Text>
-                                    <View style={{ backgroundColor: color.IC, width: 50, height: 50, justifyContent: 'center', alignItems: 'center', borderRadius: 5, ...SHADOW_5 }}>
-                                        <Icon
-                                            type={'MaterialIcons'}
-                                            name={'volume-up'}
-                                            size={moderateScale(40)}
-                                            color={'white'}
-                                        />
-                                    </View>
-                                </TouchableOpacity>
-                                <Text style={[styles.title]}>{language.CHOOSEWHATYOUHEAR}</Text>
+                    : typeShow <= 2
+                        ? (
                                 <View style={{ flex: 1 }}>
-                                    {questRen.map((data, index) => (
-                                        <TouchableOpacity
-                                            key={index + data}
-                                            style={[styles.cardBox, choosedItem === data && styles.cardChoosed]}
-                                            onPress={() =>
-                                            {
-                                                setChoosedItem(data);
+                                    {dataQuest && dataQuest[step] && (
+                                        <>
+                                            <View
+                                                style={{
+                                                    flexDirection: 'row',
+                                                    marginTop: SIZES.HEIGHT_STATUSBAR,
+                                                }}
+                                            >
+                                                <Image
+                                                    source={require('../../../Assets/Images/ask.png')}
+                                                    // resizeMode={'cover'}
+                                                    style={{ width: '40%', height: 130 }}
+                                                />
+                                                <Text style={styles.title2}>
+                                                    {language.HOWTOTALK + ' "' + dataQuest[step].rightVi + '"?'}{' '}
+                                                </Text>
+                                            </View>
+                                            <View style={{ flex: 1, justifyContent: 'center',marginBottom: 50 }}>
+                                                {questRen.map((data, index) => (
+                                                    <TouchableOpacity
+                                                        key={index + data}
+                                                        style={[
+                                                            styles.cardBox,
+                                                            choosedItem === data && styles.cardChoosed,
+                                                        ]}
+                                                        onPress={() =>
+                                                        {
+                                                            setChoosedItem(data);
+                                                        }}
+                                                    >
+                                                        <Text
+                                                            style={[
+                                                                styles.content,
+                                                                choosedItem === data && { color: '#59bfff' },
+                                                            ]}
+                                                        >
+                                                            {data}
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                ))}
+                                            </View>
+                                        </>
+                                    )}
+                                </View>
+                            )
+                        : (
+                                <View style={{ flex: 1, alignItems: 'center' }}>
+                                    <TouchableOpacity
+                                        style={{
+                                            marginTop: 10,
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                        }}
+                                        onPress={() =>
+                                        {
+                                            Tts.setDefaultLanguage('en-IE');
+                                            Tts.speak(dataQuest[step].rightEn);
+                                        }}
+                                    >
+                                        <Text style={[styles.title]}>{language.TABTOLISTEN}</Text>
+                                        <View
+                                            style={{
+                                                backgroundColor: color.IC,
+                                                width: 50,
+                                                height: 50,
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                borderRadius: 5,
+                                                ...SHADOW_5,
                                             }}
                                         >
-                                            <Text style={[styles.content, choosedItem === data && { color: '#59bfff' }]}>{data}</Text>
-                                        </TouchableOpacity>
-                                    ))}
+                                            <Icon
+                                                type={'MaterialIcons'}
+                                                name={'volume-up'}
+                                                size={moderateScale(40)}
+                                                color={'white'}
+                                            />
+                                        </View>
+                                    </TouchableOpacity>
+                                    <Text style={[styles.title]}>{language.CHOOSEWHATYOUHEAR}</Text>
+                                    <View style={{ flex: 1 }}>
+                                        {questRen.map((data, index) => (
+                                            <TouchableOpacity
+                                                key={index + data}
+                                                style={[
+                                                    styles.cardBox,
+                                                    choosedItem === data && styles.cardChoosed,
+                                                ]}
+                                                onPress={() =>
+                                                {
+                                                    setChoosedItem(data);
+                                                }}
+                                            >
+                                                <Text
+                                                    style={[
+                                                        styles.content,
+                                                        choosedItem === data && { color: '#59bfff' },
+                                                    ]}
+                                                >
+                                                    {data}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        ))}
+                                    </View>
                                 </View>
-                            </View>
-                        )}
+                            )}
             </>
         );
     };
@@ -358,7 +552,10 @@ const Quest: FC<Props> = (props) =>
             currentIndex--;
 
             // And swap it with the current element.
-            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex],
+                array[currentIndex],
+            ];
         }
 
         return array;
@@ -372,22 +569,23 @@ const Quest: FC<Props> = (props) =>
         });
         // console.log(allWrongEn, '?');
 
-        const questRen = allWrongEn.sort(() => Math.random() - Math.random()).slice(0, 8);
+        const questRen = allWrongEn
+            .sort(() => Math.random() - Math.random())
+            .slice(0, 8);
 
         questRen[Math.floor(Math.random() * 8)] =
-            dataQuest.length > 0
-                ? dataQuest[step].rightVi.split(/(\s+)/).filter((e: any) =>
-                {
-                    return e.trim().length > 0;
-                })
-                : '';
-        // console.log(questRen.flat(), '?');
+      dataQuest.length > 0
+          ? dataQuest[step].rightVi.split(/(\s+)/).filter((e: any) =>
+          {
+              return e.trim().length > 0;
+          })
+          : '';
         setQuestRen(shuffle(questRen.flat()));
     };
 
     useEffect(() =>
     {
-        dataQuest && dataQuest[step] && dataQuest[step].type === 2 && renAnsType2();
+        dataQuest && dataQuest[step] && dataQuest[step].type === '2' && renAnsType2();
     }, [dataQuest, step]);
 
     const Rendetype2 = () =>
@@ -396,7 +594,9 @@ const Quest: FC<Props> = (props) =>
             <View style={{ flex: 1 }}>
                 {dataQuest && dataQuest[step] && (
                     <>
-                        <Text style={[styles.title, { marginTop: SIZES.HEIGHT_STATUSBAR }]}>{language.TRANSLATETHIS} </Text>
+                        <Text style={[styles.title, { marginTop: SIZES.HEIGHT_STATUSBAR }]}>
+                            {language.TRANSLATETHIS}{' '}
+                        </Text>
                         {/* Speak */}
                         <TouchableOpacity
                             style={{ flexDirection: 'row', alignItems: 'center' }}
@@ -414,61 +614,135 @@ const Quest: FC<Props> = (props) =>
                                     color={'white'}
                                 />
                             </View>
-                            <Text style={[styles.content, { marginLeft: 5, fontSize: 15 }]}>{dataQuest[step].rightEn}</Text>
+                            <Text style={[styles.content, { marginLeft: 5, fontSize: 15 }]}>
+                                {dataQuest[step].rightEn}
+                            </Text>
                         </TouchableOpacity>
-
-                        {/* Txt Choosed */}
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', minHeight: 20, width: SIZES.WIDTH_WINDOW - 20, borderBottomWidth: 1, borderColor: 'black' }}>
-                            {choosedListItem &&
-                                choosedListItem.length > 0 &&
-                                choosedListItem.map((dataChoosed, indexChoosedList) =>
-                                {
-                                    return (
-                                        <TouchableOpacity
-                                            key={indexChoosedList + dataChoosed.data}
-                                            style={[styles.cardBox2, styles.cardChoosed, { marginVertical: 2 }]}
-                                            onPress={() =>
-                                            {
-                                                const tmpData: any[] = [...choosedListItem.filter((x) => x.data !== dataChoosed.data)];
-                                                setChoosedListItem(tmpData);
-                                                // console.log(tmpData);
+                        {typeShow2 <= 1
+                            ? (
+                                    <TxtInput
+                                        color={color}
+                                        language={language}
+                                        values={choosedListItem.map((x) => x.data).join(' ')}
+                                        onChangeText={(value) =>
+                                        {
+                                            const tmp = value
+                                                .split(' ')
+                                                .map((x, index) => ({ data: x, index: index }));
+                                            console.log(
+                                                textValue
+                                                    .flat()
+                                                    .map((x) => x.data)
+                                                    .join(' '),
+                                            );
+                                            textValue[0] = tmp;
+                                        }}
+                                        onBlur={() => setChoosedListItem(textValue.flat())}
+                                    />
+                                )
+                            : (
+                                    <>
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                flexWrap: 'wrap',
+                                                minHeight: 20,
+                                                width: SIZES.WIDTH_WINDOW - 20,
+                                                borderBottomWidth: 1,
+                                                borderColor: 'black',
                                             }}
                                         >
-                                            <Text style={[styles.content]}>{dataChoosed.data}</Text>
-                                        </TouchableOpacity>
-                                    );
-                                })}
-                        </View>
-
-                        <View style={{ flex: 1, justifyContent: 'center', flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
-                            {questRen.map((data, index) =>
+                                            {choosedListItem &&
+                choosedListItem.length > 0 &&
+                choosedListItem.map((dataChoosed, indexChoosedList) =>
+                {
+                    return (
+                        <TouchableOpacity
+                            key={indexChoosedList + dataChoosed.data}
+                            style={[
+                                styles.cardBox2,
+                                styles.cardChoosed,
+                                { marginVertical: 2 },
+                            ]}
+                            onPress={() =>
                             {
-                                const tmpData: any = choosedListItem && choosedListItem.length > 0 && [...choosedListItem.filter((x) => x.index === index)];
-                                return (
-                                    <TouchableOpacity
-                                        key={index + data}
-                                        style={[styles.cardBox2, tmpData && tmpData.length > 0 && tmpData[0].data === data && styles.cardChoosed2]}
-                                        disabled={tmpData && tmpData.length > 0 && tmpData[0].data === data ? true : false}
-                                        onPress={() =>
-                                        {
-                                            const tmp: any[] = [...choosedListItem];
-                                            tmp.push({ data: data, index: index });
-                                            setChoosedListItem(tmp);
-                                            // console.log(choosedListItem);
+                                const tmpData: any[] = [
+                                    ...choosedListItem.filter(
+                                        (x) => x.data !== dataChoosed.data,
+                                    ),
+                                ];
+                                setChoosedListItem(tmpData);
+                                // console.log(tmpData);
+                            }}
+                        >
+                            <Text style={[styles.content]}>{dataChoosed.data}</Text>
+                        </TouchableOpacity>
+                    );
+                })}
+                                        </View>
 
-                                            // console.log(tmp);
-                                        }}
-                                    >
-                                        <Text style={[styles.content, tmpData && tmpData.length > 0 && tmpData[0].data === data && { opacity: 0 }]}>{data}</Text>
-                                    </TouchableOpacity>
-                                );
-                            })}
-                        </View>
+                                        <View
+                                            style={{
+                                                flex: 1,
+                                                justifyContent: 'center',
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                                flexWrap: 'wrap',
+                                            }}
+                                        >
+                                            {questRen.map((data, index) =>
+                                            {
+                                                const tmpData: any = choosedListItem &&
+                  choosedListItem.length > 0 && [
+                                                    ...choosedListItem.filter((x) => x.index === index),
+                                                ];
+                                                return (
+                                                    <TouchableOpacity
+                                                        key={index + data}
+                                                        style={[
+                                                            styles.cardBox2,
+                                                            tmpData &&
+                        tmpData.length > 0 &&
+                        tmpData[0].data === data &&
+                        styles.cardChoosed2,
+                                                        ]}
+                                                        disabled={
+                                                            tmpData && tmpData.length > 0 && tmpData[0].data === data
+                                                                ? true
+                                                                : false
+                                                        }
+                                                        onPress={() =>
+                                                        {
+                                                            const tmp: any[] = [...choosedListItem];
+                                                            tmp.push({ data: data, index: index });
+                                                            setChoosedListItem(tmp);
+                                                            // console.log(choosedListItem);
+
+                                                        // console.log(tmp);
+                                                        }}
+                                                    >
+                                                        <Text
+                                                            style={[
+                                                                styles.content,
+                                                                tmpData &&
+                          tmpData.length > 0 &&
+                          tmpData[0].data === data && { opacity: 0 },
+                                                            ]}
+                                                        >
+                                                            {data}
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                );
+                                            })}
+                                        </View>
+                                    </>
+                                )}
                     </>
                 )}
             </View>
         );
     };
+    
     // QUEST TYPE 2 END
 
     // UPDATE PROCESS WHEN FINISH ALL START
@@ -476,10 +750,12 @@ const Quest: FC<Props> = (props) =>
     {
         const tmpAllArchivements: any = await getAchievements();
         // tmpAllArchivements[gate] && tmpAllArchivements[gate][round]
-        
+
         if (tmpAllArchivements[gate] && tmpAllArchivements[gate][round])
         {
-            tmpAllArchivements[gate][round][level && parseInt(level) > 0 ? parseInt(level) - 1 : 0] = percent;
+            tmpAllArchivements[gate][round][
+                level && parseInt(level) > 0 ? parseInt(level) - 1 : 0
+            ] = percent;
         }
         else
         {
@@ -492,7 +768,7 @@ const Quest: FC<Props> = (props) =>
         await updateArchivement(tmpAllArchivements);
         // console.log(tmpAllArchivements, '+++++++++++');
 
-        // console.log(percent);
+    // console.log(percent);
     };
     useEffect(() =>
     {
@@ -536,8 +812,22 @@ const Quest: FC<Props> = (props) =>
                         <Animated.View style={[styles.subPercent, subAnimationProcess]} />
                     </Animated.View>
                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                        <Animated.View style={[shootAnimationSize, { marginLeft: -20, borderRadius: 30, backgroundColor: '#45f248' }]}>
-                            <Animated.View style={[shootAnimationSize2, { borderRadius: 30, backgroundColor: '#45f248' }]} />
+                        <Animated.View
+                            style={[
+                                shootAnimationSize,
+                                {
+                                    marginLeft: -20,
+                                    borderRadius: 30,
+                                    backgroundColor: '#45f248',
+                                },
+                            ]}
+                        >
+                            <Animated.View
+                                style={[
+                                    shootAnimationSize2,
+                                    { borderRadius: 30, backgroundColor: '#45f248' },
+                                ]}
+                            />
                         </Animated.View>
                     </View>
                 </View>
@@ -545,53 +835,108 @@ const Quest: FC<Props> = (props) =>
             {/* END PROCESSBAR */}
             {!showLastResult ? (
                 <>
-                    {dataQuest && dataQuest[step] && dataQuest[step].rightVi && dataQuest[step].rightEn && dataQuest[step].type === 1 ? <Rendetype1 /> : <Rendetype2 />}
+                    {dataQuest &&
+          dataQuest[step] &&
+          dataQuest[step].rightVi &&
+          dataQuest[step].rightEn &&
+          dataQuest[step].type === 1
+                        ? (
+                                <Rendetype1 />
+                            )
+                        : (
+                                <Rendetype2 />
+                            )}
 
                     {/* START BUTTON CHECK */}
                     <View style={styles.containerBtnNext}>
                         <TouchableOpacity
-                            style={[styles.btnNext, choosedItem === ':::' && choosedListItem.length === 0 && styles.disabled, !resultTrue && { backgroundColor: '#ff3333' }]}
-                            disabled={choosedItem === ':::' && choosedListItem.length === 0 ? true : false}
+                            style={[
+                                styles.btnNext,
+                                choosedItem === ':::' &&
+                  choosedListItem.length === 0 &&
+                  styles.disabled,
+                                !resultTrue && { backgroundColor: '#ff3333' },
+                            ]}
+                            disabled={
+                                choosedItem === ':::' && choosedListItem.length === 0
+                                    ? true
+                                    : false
+                            }
                             onPress={() =>
                             {
                                 if (step < dataQuest.length && choosedListItem.length > 0)
                                 {
-                                    const choosedString = choosedListItem.map((x) => x.data).join(' ');
+                                    const choosedString = choosedListItem
+                                        .map((x) => x.data)
+                                        .join(' ');
                                     if (
-                                        choosedString.toLowerCase() === dataQuest[step].rightVi.toLowerCase() ||
-                                        choosedString.toLowerCase() === dataQuest[step].rightEn.toLowerCase()
+                                        choosedString.toLowerCase() ===
+                      dataQuest[step].rightVi.toLowerCase() ||
+                    choosedString.toLowerCase() ===
+                      dataQuest[step].rightEn.toLowerCase()
                                     )
                                     {
                                         // console.log(choosedString);
                                         setResultTrue(true);
                                         setShowBottomResult(true);
-                                        rightAndWrong.push({ status: true, noun: dataQuest[step].noun ?? null, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
+                                        rightAndWrong.push({
+                                            status: true,
+                                            noun: dataQuest[step].noun ?? null,
+                                            en: dataQuest[step].rightEn,
+                                            vi: dataQuest[step].rightVi,
+                                        });
                                     }
                                     else
                                     {
                                         setResultTrue(false);
                                         setShowBottomResult(true);
-                                        rightAndWrong.push({ status: false, noun: dataQuest[step].noun ?? null, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
+                                        rightAndWrong.push({
+                                            status: false,
+                                            noun: dataQuest[step].noun ?? null,
+                                            en: dataQuest[step].rightEn,
+                                            vi: dataQuest[step].rightVi,
+                                        });
                                     }
                                 }
                                 else if (
                                     step < dataQuest.length &&
-                                    (choosedItem.toLowerCase() === dataQuest[step].rightEn.toLowerCase() || choosedItem.toLowerCase() === dataQuest[step].rightVi.toLowerCase())
+                  (choosedItem.toLowerCase() ===
+                    dataQuest[step].rightEn.toLowerCase() ||
+                    choosedItem.toLowerCase() ===
+                      dataQuest[step].rightVi.toLowerCase())
                                 )
                                 {
                                     setResultTrue(true);
                                     setShowBottomResult(true);
-                                    rightAndWrong.push({ status: true, noun: dataQuest[step].noun ?? null, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
+                                    rightAndWrong.push({
+                                        status: true,
+                                        noun: dataQuest[step].noun ?? null,
+                                        en: dataQuest[step].rightEn,
+                                        vi: dataQuest[step].rightVi,
+                                    });
                                 }
                                 else
                                 {
                                     setResultTrue(false);
                                     setShowBottomResult(true);
-                                    rightAndWrong.push({ status: false, noun: dataQuest[step].noun ?? null, en: dataQuest[step].rightEn, vi: dataQuest[step].rightVi });
+                                    rightAndWrong.push({
+                                        status: false,
+                                        noun: dataQuest[step].noun ?? null,
+                                        en: dataQuest[step].rightEn,
+                                        vi: dataQuest[step].rightVi,
+                                    });
                                 }
                             }}
                         >
-                            <Text style={[styles.btnTxt, choosedItem === ':::' && choosedListItem.length === 0 && { color: '#676767' }]}>{language.CONTINUE}</Text>
+                            <Text
+                                style={[
+                                    styles.btnTxt,
+                                    choosedItem === ':::' &&
+                    choosedListItem.length === 0 && { color: '#676767' },
+                                ]}
+                            >
+                                {language.CONTINUE}
+                            </Text>
                         </TouchableOpacity>
                     </View>
                     {/* END BUTTON CHECK */}
@@ -603,14 +948,36 @@ const Quest: FC<Props> = (props) =>
                                 styles.containerBtnNext2,
                                 bottomResultAnimation,
                                 { borderTopWidth: 0 },
-                                !resultTrue ? { backgroundColor: '#ffcdd2' } : { backgroundColor: '#abf7b1' },
+                                !resultTrue
+                                    ? { backgroundColor: '#ffcdd2' }
+                                    : { backgroundColor: '#abf7b1' },
                             ]}
                         >
-                            <View style={{ paddingHorizontal: 10, paddingTop: 0, paddingBottom: 20 }}>
-                                <Text style={[styles.title, !resultTrue ? { color: '#d60000' } : { color: '#008631' }]}>
+                            <View
+                                style={{
+                                    paddingHorizontal: 10,
+                                    paddingTop: 0,
+                                    paddingBottom: 20,
+                                }}
+                            >
+                                <Text
+                                    style={[
+                                        styles.title,
+                                        !resultTrue ? { color: '#d60000' } : { color: '#008631' },
+                                    ]}
+                                >
                                     {!resultTrue ? language.WRONG_ANSWER : language.RIGHT_ANSWER}
                                 </Text>
-                                {!resultTrue && <Text style={[styles.subTitle, !resultTrue ? { color: '#d60000' } : { color: '#008631' }]}>{language.ANSWR_IS}</Text>}
+                                {!resultTrue && (
+                                    <Text
+                                        style={[
+                                            styles.subTitle,
+                                            !resultTrue ? { color: '#d60000' } : { color: '#008631' },
+                                        ]}
+                                    >
+                                        {language.ANSWR_IS}
+                                    </Text>
+                                )}
                                 <TouchableOpacity
                                     style={{ flexDirection: 'row' }}
                                     onPress={() =>
@@ -625,7 +992,13 @@ const Quest: FC<Props> = (props) =>
                                         size={moderateScale(23, 0.3)}
                                         color={!resultTrue ? '#d60000' : '#008631'}
                                     />
-                                    <Text style={[styles.content, { marginLeft: 4, fontSize: 15 }, !resultTrue ? { color: '#d60000' } : { color: '#008631' }]}>
+                                    <Text
+                                        style={[
+                                            styles.content,
+                                            { marginLeft: 4, fontSize: 15 },
+                                            !resultTrue ? { color: '#d60000' } : { color: '#008631' },
+                                        ]}
+                                    >
                                         {'En: ' + dataQuest[step].rightEn}
                                     </Text>
                                 </TouchableOpacity>
@@ -643,20 +1016,34 @@ const Quest: FC<Props> = (props) =>
                                         size={moderateScale(23, 0.3)}
                                         color={!resultTrue ? '#d60000' : '#008631'}
                                     />
-                                    <Text style={[styles.content, { marginLeft: 4, fontSize: 15 }, !resultTrue ? { color: '#d60000' } : { color: '#008631' }]}>
+                                    <Text
+                                        style={[
+                                            styles.content,
+                                            { marginLeft: 4, fontSize: 15 },
+                                            !resultTrue ? { color: '#d60000' } : { color: '#008631' },
+                                        ]}
+                                    >
                                         {'Vi: ' + dataQuest[step].rightVi}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
                             <TouchableOpacity
-                                style={[styles.btnNext, !resultTrue && { backgroundColor: '#ff3333' }]}
-                                disabled={choosedItem === ':::' && choosedListItem.length === 0 ? true : false}
+                                style={[
+                                    styles.btnNext,
+                                    !resultTrue && { backgroundColor: '#ff3333' },
+                                ]}
+                                disabled={
+                                    choosedItem === ':::' && choosedListItem.length === 0
+                                        ? true
+                                        : false
+                                }
                                 onPress={() =>
                                 {
                                     if (step < dataQuest.length - 1)
                                     {
                                         // console.log(step);
-                                        setTypeShow(Math.random() * 2);
+                                        setTypeShow(Math.random() * 3);
+                                        setTypeShow2(Math.random() * 2);
                                         setChoosedItem(':::');
                                         setPreStep(step);
                                         setStep((prev) => prev + 1);
@@ -667,11 +1054,19 @@ const Quest: FC<Props> = (props) =>
                                     }
                                     else
                                     {
-                                        setTypeShow(Math.random() * 2);
+                                        setTypeShow(Math.random() * 3);
+                                        setTypeShow2(Math.random() * 2);
                                         setPreStep(step);
                                         setStep((prev) => prev + 1);
                                         setShowLastResult(true);
-                                        reSetArchivement(Math.round((rightAndWrong.filter((x) => x.status !== false).length / rightAndWrong.length) * 100));
+                                        reSetArchivement(
+                                            Math.round(
+                                                (rightAndWrong.filter((x) => x.status !== false)
+                                                    .length /
+                          rightAndWrong.length) *
+                          100,
+                                            ),
+                                        );
                                         // console.log(rightAndWrong);
                                         // console.log(level, round, gate, '::::::::::::::::');
                                     }
@@ -684,18 +1079,59 @@ const Quest: FC<Props> = (props) =>
                     {/* END BUTTON RESULT */}
                 </>
             ) : (
-                // START FINAL RESULT
+            // START FINAL RESULT
                 <ImageBackground
                     source={require('../../../Assets/gif/giphy.gif')}
-                    style={{ width: SIZES.WIDTH_WINDOW, flex: 1, alignItems: 'center', marginTop: -50, paddingTop: 50, marginBottom: -10 }}
+                    style={{
+                        width: SIZES.WIDTH_WINDOW,
+                        flex: 1,
+                        alignItems: 'center',
+                        marginTop: -50,
+                        paddingTop: 50,
+                        marginBottom: -10,
+                    }}
                 >
                     {/* <View style={{ flex: 1 }}> */}
-                    <Text style={[styles.title, { textAlign: 'center', color: '#47b881', marginBottom: 0 }]}>{language.END_GAME}</Text>
-                    <Text style={[styles.title, { textAlign: 'center', color: '#f01d2c', marginTop: 0, marginBottom: 0 }]}>
-                        {Math.round((rightAndWrong.filter((x) => x.status !== false).length / rightAndWrong.length) * 100)}%
+                    <Text
+                        style={[
+                            styles.title,
+                            { textAlign: 'center', color: '#47b881', marginBottom: 0 },
+                        ]}
+                    >
+                        {language.END_GAME}
                     </Text>
-                    <Text style={[styles.subTitle2, { color: 'white', textAlign: 'center', marginTop: 0, marginBottom: 0 }]}>
-                        {language.RIGHT}: {rightAndWrong.filter((x) => x.status !== false).length}/{rightAndWrong.length}
+                    <Text
+                        style={[
+                            styles.title,
+                            {
+                                textAlign: 'center',
+                                color: '#f01d2c',
+                                marginTop: 0,
+                                marginBottom: 0,
+                            },
+                        ]}
+                    >
+                        {Math.round(
+                            (rightAndWrong.filter((x) => x.status !== false).length /
+                rightAndWrong.length) *
+                100,
+                        )}
+            %
+                    </Text>
+                    <Text
+                        style={[
+                            styles.subTitle2,
+                            {
+                                color: 'white',
+                                textAlign: 'center',
+                                marginTop: 0,
+                                marginBottom: 0,
+                            },
+                        ]}
+                    >
+                        {language.RIGHT}:{' '}
+                        {rightAndWrong.filter((x) => x.status !== false).length}/
+                        {rightAndWrong.length}
                     </Text>
                     {/* </View> */}
                     <Pressable
@@ -714,7 +1150,12 @@ const Quest: FC<Props> = (props) =>
                             {/* <View style={{ flex: 1, position: 'relative', width: SIZES.WIDTH_WINDOW * 0.9, justifyContent: 'center', alignItems: 'center' }}> */}
                             <Text style={styles.titleUpper}>{language.WOWYOURESOTALEN}</Text>
                             <Image
-                                style={{ marginLeft: -SIZES.WIDTH_WINDOW * 0.1, position: 'absolute', left: 0, bottom: -10 }}
+                                style={{
+                                    marginLeft: -SIZES.WIDTH_WINDOW * 0.1,
+                                    position: 'absolute',
+                                    left: 0,
+                                    bottom: -10,
+                                }}
                                 source={require('../../../Assets/gif/click.gif')}
                                 // resizeMode={'cover'}
                                 width={200}
@@ -733,7 +1174,13 @@ const Quest: FC<Props> = (props) =>
                             return (
                                 <>
                                     {item.status === false && (
-                                        <View style={{ width: SIZES.WIDTH_WINDOW, justifyContent: 'center', alignItems: 'center' }}>
+                                        <View
+                                            style={{
+                                                width: SIZES.WIDTH_WINDOW,
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                            }}
+                                        >
                                             <View style={[styles.cardBoxResult]}>
                                                 <TouchableOpacity
                                                     onPress={() =>
@@ -742,9 +1189,22 @@ const Quest: FC<Props> = (props) =>
                                                         Tts.speak(item.en);
                                                     }}
                                                 >
-                                                    <Text style={[styles.subTitle2, { color: '#f01d2c' }]}>{item.en}</Text>
+                                                    <Text
+                                                        style={[styles.subTitle2, { color: '#f01d2c' }]}
+                                                    >
+                                                        {item.en}
+                                                    </Text>
                                                 </TouchableOpacity>
-                                                {item.noun && <Text style={[styles.subTitle2, { textTransform: 'lowercase' }]}>😭{item.noun}😭</Text>}
+                                                {item.noun && (
+                                                    <Text
+                                                        style={[
+                                                            styles.subTitle2,
+                                                            { textTransform: 'lowercase' },
+                                                        ]}
+                                                    >
+                            😭{item.noun}😭
+                                                    </Text>
+                                                )}
 
                                                 <TouchableOpacity
                                                     onPress={() =>
@@ -753,7 +1213,14 @@ const Quest: FC<Props> = (props) =>
                                                         Tts.speak(item.vi);
                                                     }}
                                                 >
-                                                    <Text style={[styles.subTitle2, { color: '#47b881', textTransform: 'lowercase' }]}>{item.vi}</Text>
+                                                    <Text
+                                                        style={[
+                                                            styles.subTitle2,
+                                                            { color: '#47b881', textTransform: 'lowercase' },
+                                                        ]}
+                                                    >
+                                                        {item.vi}
+                                                    </Text>
                                                 </TouchableOpacity>
                                             </View>
                                         </View>
@@ -764,7 +1231,7 @@ const Quest: FC<Props> = (props) =>
                         // contentContainerStyle={{ flex: 1, marginHorizontal: 5 }}
                     />
                 </ImageBackground>
-                // END FINAL RESULT
+            // END FINAL RESULT
             )}
         </View>
     );

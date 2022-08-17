@@ -1,12 +1,15 @@
+import { firebase } from '@react-native-firebase/auth';
 import React, { FC, memo, useEffect, useState } from 'react';
 import { Image, ImageBackground, ScrollView, Text, View } from 'react-native';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import FastImage from 'react-native-fast-image';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { UserInfor } from '../../Models';
 import {
     getAchievements,
     getRank,
     getUsersById,
+    UserServices,
 } from '../../Store/Services/user-services';
 import { SIZES } from '../../Utils/Values';
 import styleScaled from './style';
@@ -22,6 +25,19 @@ const Rank: FC<Props> = (props) =>
     const styles = styleScaled(color);
     const [dataTopic, setDataTopic] = useState<any>([]);
     const [dataGate, setDataGate] = useState<any>([]);
+    const [userInfor, setUserInfor] = useState<UserInfor>();
+    const [dataPoint,setDataPoint] = useState(0);
+    useEffect(() =>
+    {
+        async function fetchUserInfor()
+        {
+            const userData = await UserServices.getUidUserInfor(`${firebase.auth().currentUser?.uid}`);
+            setUserInfor(userData);
+        }
+
+        fetchUserInfor();
+    }, []);
+    // console.log('----------',dataTopic);
 
     const quearyData = async () =>
     {
@@ -48,6 +64,9 @@ const Rank: FC<Props> = (props) =>
         ),
         setDataTopic(array);
         const totalGate: any = {};
+        console.log(array,"-=-=-=-=-=");
+        
+        let totalPoint = 0;
         array.forEach((x, i) =>
         {
             if (totalGate[x.gate])
@@ -59,6 +78,12 @@ const Rank: FC<Props> = (props) =>
                 totalGate[x.gate] = x.point;
             }
         });
+        
+        array.forEach((x, i) =>
+        {
+            totalPoint += x.point;
+        });
+        setDataPoint(totalPoint);
         const result: any = Object.keys(totalGate).map((x) => ({
             gate: x,
             point: totalGate[x],
@@ -85,16 +110,18 @@ const Rank: FC<Props> = (props) =>
         return (
             <CircularProgress
                 value={per}
-                radius={(SIZES.WIDTH_WINDOW * 0.25) / 2}
+                radius={(SIZES.WIDTH_WINDOW * 0.25) / 1.3}
                 progressValueColor={color}
                 duration={500}
                 activeStrokeColor={color}
                 // inActiveStrokeColor={'#5C8AEA'}
-                titleColor={'#fff0'}
-                subtitleColor={'#fff0'}
+                // subtitleColor={'#fff0'}
                 inActiveStrokeOpacity={0.5}
-                inActiveStrokeWidth={18}
-                activeStrokeWidth={18}
+                inActiveStrokeWidth={20}
+                activeStrokeWidth={20}
+                valueSuffix={'%'}
+                valueSuffixStyle={{fontSize: 40,fontWeight: '500',lineHeight: 75}}
+                progressValueStyle={{fontWeight: '500'}}
             />
         );
     };
@@ -122,6 +149,9 @@ const Rank: FC<Props> = (props) =>
                 inActiveStrokeOpacity={0.5}
                 inActiveStrokeWidth={18}
                 activeStrokeWidth={18}
+                valueSuffix={'%'}
+                valueSuffixStyle={{fontSize: 22,fontWeight: '500',lineHeight: 50}}
+                progressValueStyle={{fontWeight: '500',fontSize: 22}}
             />
         );
     };
@@ -129,6 +159,51 @@ const Rank: FC<Props> = (props) =>
         <View style={{ flex: 1, backgroundColor: 'white' }}>
             <ScrollView>
                 <View style={{ flex: 1, paddingHorizontal: 20 }}>
+                    <View>
+                        <View style={styles.row}>
+                            <View style={styles.viewLeft}>
+                                <Text style={styles.Stt}>#</Text>
+                            </View>
+                            <View style={styles.viewMid}>
+                                <View style={styles.avatar}>
+                                    {userInfor?.avatar !== '' && userInfor?.avatar !== undefined && (
+                                        <FastImage
+                                            style={{
+                                                height: 30,
+                                                width: 30,
+                                                borderRadius: 99,
+                                                borderWidth: 0.1,
+                                                overflow: 'hidden',
+                                            }}
+                                            source={{
+                                                uri: userInfor?.avatar,
+                                            }}
+                                        />
+                                    )}
+                                </View>
+                                <Text style={styles.nameRow}>{userInfor?.name}</Text>
+                                {userInfor?.id === firebase.auth().currentUser?.uid && (
+                                    <View
+                                        style={{
+                                            backgroundColor: '#42f54b',
+                                            paddingHorizontal: 10,
+                                            paddingVertical: 1,
+                                            borderRadius: 30,
+                                            marginLeft: 5,
+                                        }}
+                                    >
+                                        <Text style={styles.textYou}>You</Text>
+                                    </View>
+                                )}
+                            </View>
+                            <View style={styles.viewRight}>
+                                <Text style={styles.Point}>{dataPoint}</Text>
+                            </View>
+                        </View>
+                        <View style={styles.viewHr}>
+                            <View style={styles.hr} />
+                        </View>
+                    </View>
                     {dataGate.map((item,index)=>(
                         <View
                             key={index}

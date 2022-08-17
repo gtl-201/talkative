@@ -16,6 +16,7 @@ interface Props extends TextInputProps {
     language: any;
     onChangeText:(value: string)=>void;
     onBlur:(x: string)=>void;
+    values: string;
 }
 
 const TxtInput: FC<Props> = (props) =>
@@ -23,6 +24,13 @@ const TxtInput: FC<Props> = (props) =>
     const { color, language } = props;
     const [txtAns, setTxtAns] = useState('');
     const [focusInput, setFocusInput] = useState(false);
+    
+    useEffect(() =>
+    {
+        setTxtAns(props.values);
+    }, [props.values]);
+    
+    
     return (
         <TextInput
             {...props}
@@ -38,18 +46,22 @@ const TxtInput: FC<Props> = (props) =>
                     paddingVertical: 10,
                     marginTop: 15,
                     borderColor: color.ON_SURFACE_VARIANT,
+                    textAlignVertical: 'top',
                 },
                 focusInput ? { borderColor: color.IC } : { borderColor: color.ON_SURFACE_VARIANT },
             ]}
             placeholder={language.ENTERWHATYOUHEAR}
             value={txtAns}
+            numberOfLines={10}
+            multiline
             onChangeText={(value) =>
             {
                 props.onChangeText(value);
                 setTxtAns(value);
             }}
             onFocus={() => setFocusInput(true)}
-            onBlur={(x) => {
+            onBlur={(x) =>
+            {
                 props.onBlur(x);
                 setFocusInput(false);
             }}

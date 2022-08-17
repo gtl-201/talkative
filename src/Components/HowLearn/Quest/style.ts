@@ -50,6 +50,14 @@ const styleScaled = (Color: any) =>
             width: '100%',
             // textAlign: 'center',
         },
+        title2: {
+            fontSize: '20@ms0.5',
+            fontWeight: 'bold',
+            color: Color.TITLE_TXT,
+            letterSpacing: 1,
+            width: '50%',
+            // textAlign: 'center',
+        },
         titleUpper: {
             fontSize: '20@ms0.5',
             fontWeight: 'bold',
@@ -176,6 +184,18 @@ const styleScaled = (Color: any) =>
         },
         cardBox: {
             width: SIZES.WIDTH_WINDOW - 25,
+            borderWidth: 2,
+            borderColor: Color.ON_SURFACE_VARIANT,
+            marginVertical: 10,
+            paddingVertical: 12,
+            paddingHorizontal: 10,
+            borderRadius: 10,
+            backgroundColor: Color.BG,
+            ...SHADOW_1,
+            alignItems: 'center',
+        },
+        cardBoxImg: {
+            width: SIZES.WIDTH_WINDOW * 0.45,
             borderWidth: 2,
             borderColor: Color.ON_SURFACE_VARIANT,
             marginVertical: 10,

@@ -92,6 +92,12 @@ const styleScaled = (props) =>
             paddingHorizontal: 5,
             ...SHADOW_3,
         },
+        textYou: {
+            color: 'white',
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: 13,
+        },
         third: {
             width: 95,
             height: 95,

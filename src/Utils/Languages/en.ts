@@ -231,4 +231,5 @@ export default {
     CHOOSEWHATYOUHEAR: 'Choose what you hear',
     ENTERWHATYOUHEAR: 'Enter what you hear',
     DASHBOARD: 'Dashboard',
+    THUTHACH: 'Complete this challenge to unlock',
 };
