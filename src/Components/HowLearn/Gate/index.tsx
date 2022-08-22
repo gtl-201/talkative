@@ -90,15 +90,7 @@ const Gate: FC<Props> = (props) =>
             setAllGate(x.reverse());
         });
     };
-    const reSetArchivement = async (gate, round) =>
-    {
-        const tmpAllArchivements: any = await getAchievements();
-        tmpAllArchivements[gate][round] = [];
-        await updateArchivement(tmpAllArchivements);
-        quearyData();
-        setOpenNew(-1);
-
-    };
+   
     const quearyData = async () =>
     {
         const tmpAllGate: any[] = await getAllGate();
@@ -111,6 +103,8 @@ const Gate: FC<Props> = (props) =>
         {
             getRound(tmpAllGate, [tmpAllArchivements]);
         }
+        console.log(tmpAllArchivements);
+        
         const gate: any = Object.keys(tmpAllArchivements);
         const topic: any = [];
         const array: any = [];
@@ -154,7 +148,31 @@ const Gate: FC<Props> = (props) =>
             onRefresh();
         }, []),
     );
-
+    const renderPer = (tmpTotalProcessNumber,index2) =>
+    {
+        const per = tmpTotalProcessNumber.length !== 0 &&
+tmpTotalProcessNumber[index2] &&
+tmpTotalProcessNumber[index2].length !== 0
+            ? tmpTotalProcessNumber[index2][
+                tmpTotalProcessNumber[index2].length - 1
+            ] / 4
+            : 0;
+        return (
+            <CircularProgress
+                value={per}
+                radius={(SIZES.WIDTH_WINDOW * 0.25) / 2}
+                progressValueColor={'#fff0'}
+                duration={500}
+                // activeStrokeColor={'#'}
+                // inActiveStrokeColor={'#5C8AEA'}
+                titleColor={'#fff0'}
+                subtitleColor={'#fff0'}
+                inActiveStrokeOpacity={0.5}
+                inActiveStrokeWidth={18}
+                activeStrokeWidth={18}
+            />
+        );
+    };
     const RenderGate = (item: any, index: number) =>
     {
         return (
@@ -193,7 +211,7 @@ const Gate: FC<Props> = (props) =>
                     // console.log(tmpTotalProcessNumber, '+++');
                 });
                 // console.log('=========================',tmpTotalProcessNumber);
-
+                
                 return (
                     <View
                         key={dataRound.url}
@@ -359,7 +377,14 @@ const Gate: FC<Props> = (props) =>
                                             alignItems: 'center',
                                             marginTop: 15,
                                         }}
-                                        onPress={() =>reSetArchivement(item.gate,dataRound.id)}
+                                        onPress={() =>
+                                        {
+                                            navigation.navigate('PassLock', {
+                                                gate: item.gate,
+                                                round: item.round.filter((x,i)=>i === index - 1)[0].id,
+                                            });
+                                            setOpenNew(-1);
+                                        }}
                                     >
                                         <Text
                                             style={{
@@ -408,28 +433,7 @@ const Gate: FC<Props> = (props) =>
                                     );
                                 }}
                             >
-
-                                <CircularProgress
-                                    value={
-                                        tmpTotalProcessNumber &&
-                          tmpTotalProcessNumber[index2] &&
-                          tmpTotalProcessNumber[index2].length !== 0
-                                            ? tmpTotalProcessNumber[index2][
-                                                tmpTotalProcessNumber[index2].length - 1
-                                            ] / 4
-                                            : 0
-                                    }
-                                    radius={(SIZES.WIDTH_WINDOW * 0.25) / 2}
-                                    progressValueColor={'#fff0'}
-                                    duration={500}
-                                    // activeStrokeColor={'#'}
-                                    // inActiveStrokeColor={'#5C8AEA'}
-                                    titleColor={'#fff0'}
-                                    subtitleColor={'#fff0'}
-                                    inActiveStrokeOpacity={0.5}
-                                    inActiveStrokeWidth={18}
-                                    activeStrokeWidth={18}
-                                />
+                                {renderPer(tmpTotalProcessNumber,index2)}
                                 <Text style={styles.txtRound}>{dataRound.id}</Text>
                             </TouchableOpacity>
                             <View style={{ position: 'absolute', top: 25, zIndex: 0 }}>

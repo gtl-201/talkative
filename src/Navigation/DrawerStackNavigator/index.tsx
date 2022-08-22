@@ -22,6 +22,7 @@ import Rank from '../../Containers/Rank';
 import Quest from '../../Containers/HowLearn/Quest';
 import Learn from '../../Containers/HowLearn/Learn';
 import Dashboard from '../../Containers/Dashboard';
+import PassLock from '../../Containers/HowLearn/PassLock';
 
 const Stack = createStackNavigator();
 
@@ -149,6 +150,10 @@ const AppStackNavigator: FC<any> = (props) =>
                     <Stack.Screen
                         name="Dashboard"
                         component={Dashboard}
+                    />
+                    <Stack.Screen
+                        name="PassLock"
+                        component={PassLock}
                     />
                 </Stack.Navigator>
             </Animated.View>

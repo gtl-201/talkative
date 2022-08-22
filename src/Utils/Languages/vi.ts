@@ -226,4 +226,6 @@ export default {
     ENTERWHATYOUHEAR: 'Nhập từ bạn nghe được',
     DASHBOARD: 'Thống kê',
     THUTHACH: 'Hoàn thành thử thách này để mở khóa',
+    YOULOSS: 'Bạn phải hoàn thành 80% thử thách mới có thể mở khóa',
+    PLAYAGAIN: 'Chơi lại',
 };

@@ -554,7 +554,20 @@ export async function updateFriend(info)
             console.log('User updated!');
         });
 }
-
+export async function getQuestPassRound(gate: string, round: string, level: string)
+{
+    return await firestore()
+        .collection('Quest')
+        .doc(gate)
+        .collection(round)
+        .doc(level)
+        .collection('listQuest')
+        .get()
+        .then((querySnapshot) =>
+        {
+            return querySnapshot.docs.map((item) => item.data());
+        });
+}
 export const UserServices = {
     uploadAvatar,
     uploadThumbnail,

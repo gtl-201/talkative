@@ -232,4 +232,7 @@ export default {
     ENTERWHATYOUHEAR: 'Enter what you hear',
     DASHBOARD: 'Dashboard',
     THUTHACH: 'Complete this challenge to unlock',
+    YOULOSS: 'You have to complete 80% of the challenge to unlock it',
+    PLAYAGAIN: 'Play again',
+    
 };
