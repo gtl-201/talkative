@@ -568,6 +568,17 @@ export async function getQuestPassRound(gate: string, round: string, level: stri
             return querySnapshot.docs.map((item) => item.data());
         });
 }
+export async function getRound(gate: string)
+{
+    return await firestore()
+        .collection('Quest')
+        .doc(gate)
+        .get()
+        .then((querySnapshot) =>
+        {
+            return querySnapshot.data();
+        });
+}
 export const UserServices = {
     uploadAvatar,
     uploadThumbnail,

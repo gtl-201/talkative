@@ -18,6 +18,7 @@ import {
     getAchievements,
     getQuest,
     getQuestPassRound,
+    getRound,
     updateArchivement,
 } from '../../../Store/Services/user-services';
 import { SHADOW_3, SHADOW_5, SIZES } from '../../../Utils/Values';
@@ -32,14 +33,13 @@ interface Props {
   language: any;
   navigation: any;
   gate: string;
-  round: string;
-  level: string;
+  preGate: string;
 }
 
 const PassLock: FC<Props> = (props) =>
 {
     // const navigation = useNavigation();
-    const { color, language, navigation, gate, round } = props;
+    const { color, language, navigation, gate,preGate } = props;
     const styles = styleScaled(color);
     const [step, setStep] = useState(0);
     const [preStep, setPreStep] = useState(0);
@@ -110,17 +110,25 @@ const PassLock: FC<Props> = (props) =>
             
         // const allQuest = await getQuest(gate, round, level);
         const allQuests = [];
-        for (let index = 0; index < 4; index++)
+        const getColelection: any = await getRound(preGate);
+        const round = getColelection.collection.map((x)=>x.name);
+
+        for (let index = 0; index < 3; index++)
         {
-            const array = await getQuestPassRound(gate, round, index.toString());
-            allQuests.push(array);
+            for (let index2 = 1; index2 <= 4; index2++)
+            {
+                const array = await getQuestPassRound(preGate, round[index], index2.toString());
+                allQuests.push(array);
+            }
+            
         }
+
         const random = shuffle(allQuests.flat());
         const dataType1 = random.filter((x,i)=>x.type === 1);
         const numberRandom = (Math.random() * 3);
         const number = numberRandom <= 1 ? 3 : numberRandom <= 2 ? 4 : 5;
         const dataType1Filter = dataType1.filter((x,i)=>i < number);
-        const allQuest = random.filter((x,i)=> i < 13);
+        const allQuest = random.filter((x,i)=> i < 15);
             
         const allRightEn: any[] = allQuest.map((data) =>
         {
@@ -1029,13 +1037,13 @@ const PassLock: FC<Props> = (props) =>
 rightAndWrong.length) *
 100,
     );
-    const reSetArchivement = async (gate, round) =>
+    const reSetArchivement = async (gate) =>
     {
         
         if (per >= 80)
         {
             const tmpAllArchivements: any = await getAchievements();
-            tmpAllArchivements[gate][round] = [];
+            tmpAllArchivements[gate].family = [];
             await updateArchivement(tmpAllArchivements);
         }
     };
@@ -1417,7 +1425,7 @@ rightAndWrong.length) *
                                                 setPreStep(step);
                                                 setStep((prev) => prev + 1);
                                                 setShowLastResult(true);
-                                                reSetArchivement(gate,round);
+                                                reSetArchivement(gate);
                                                 // console.log(level, round, gate, '::::::::::::::::');
                                                 setItemCorrect([]);
                                                 setItemWrong([]);

@@ -596,6 +596,14 @@ tmpTotalProcessNumber[index2].length !== 0
                                     alignItems: 'center',
                                     marginTop: 15,
                                 }}
+                                onPress={() =>
+                                {
+                                    navigation.navigate('PassGate', {
+                                        gate: item.gate,
+                                        preGate: 'gate' + index,
+                                    });
+                                    setOpenNewGate(-1);
+                                }}
                             >
                                 <Text
                                     style={{

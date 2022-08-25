@@ -234,5 +234,6 @@ export default {
     THUTHACH: 'Complete this challenge to unlock',
     YOULOSS: 'You have to complete 80% of the challenge to unlock it',
     PLAYAGAIN: 'Play again',
+    CHOOSE: 'Choose the corresponding pairs',
     
 };

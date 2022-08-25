@@ -138,12 +138,12 @@ export const MENU = [
         icon_size: 26,
         name: 'Message',
     },
-    {
-        icon_type: 'MaterialIcons',
-        icon: 'record-voice-over',
-        icon_size: 26,
-        name: 'Practise',
-    },
+    // {
+    //     icon_type: 'MaterialIcons',
+    //     icon: 'record-voice-over',
+    //     icon_size: 26,
+    //     name: 'Practise',
+    // },
     {
         icon_type: 'MaterialIcons',
         icon: 'military-tech',
