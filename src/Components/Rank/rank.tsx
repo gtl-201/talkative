@@ -17,7 +17,7 @@ interface Props {
 }
 const Rank: FC<Props> = (props) =>
 {
-    const { color } = props;
+    const { color,language } = props;
     const styles = styleScaled(color);
     const [data, setData] = useState<any>([]);
     const [dataPoint, setDataPoint] = useState<any>([]);
@@ -151,7 +151,7 @@ const Rank: FC<Props> = (props) =>
                                 source={require('../../Assets/Images/rank/friendship-64.png')}
                             />
                             <Text style={!handle ? styles.textBtn2 : styles.textBtn}>
-                Bạn bè
+                {language.FRIEND}
                             </Text>
                         </TouchableOpacity>
                         <View style={{ marginHorizontal: 10 }} />
@@ -164,7 +164,7 @@ const Rank: FC<Props> = (props) =>
                                 source={require('../../Assets/Images/rank/world-64.png')}
                             />
                             <Text style={handle ? styles.textBtn2 : styles.textBtn}>
-                Thế giới
+                            {language.WORLD}
                             </Text>
                         </TouchableOpacity>
                     </View>

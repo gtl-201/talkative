@@ -381,7 +381,8 @@ tmpTotalProcessNumber[index2].length !== 0
                                         {
                                             navigation.navigate('PassLock', {
                                                 gate: item.gate,
-                                                round: item.round.filter((x,i)=>i === index - 1)[0].id,
+                                                preRound: item.round.filter((x,i)=>i === index - 1)[0].id,
+                                                round: dataRound.id,
                                             });
                                             setOpenNew(-1);
                                         }}
@@ -394,7 +395,7 @@ tmpTotalProcessNumber[index2].length !== 0
                                                 textAlign: 'center',
                                             }}
                                         >
-                            Bắt đầu
+                            {language.START}
                                         </Text>
                                     </TouchableOpacity>
                                 </View>
@@ -613,7 +614,7 @@ tmpTotalProcessNumber[index2].length !== 0
                                         textAlign: 'center',
                                     }}
                                 >
-                            Bắt đầu
+                            {language.START}
                                 </Text>
                             </TouchableOpacity>
                         </View>

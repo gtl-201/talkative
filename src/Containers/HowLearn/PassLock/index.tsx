@@ -28,6 +28,7 @@ const PassLockC: FC<any> = (props) =>
                 navigation={navigation}
                 gate={route.params.gate}
                 round={route.params.round}
+                preRound={route.params.preRound}
                 level={route.params.level}
             />
         </ViewShot>

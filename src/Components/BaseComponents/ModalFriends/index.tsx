@@ -33,7 +33,7 @@ import {
 import FastImage from 'react-native-fast-image';
 import { useNavigation } from '@react-navigation/native';
 
-const ModalFriends = forwardRef(({ url, color, count }, ref) =>
+const ModalFriends = forwardRef(({ url, color, count,language }, ref) =>
 {
     const styles = styleScaled(color);
     const [visible, setVisible] = useState(false);
@@ -265,7 +265,7 @@ const ModalFriends = forwardRef(({ url, color, count }, ref) =>
                                 style={styles.btn5}
                                 onPress={() => handleCancelFriends(item)}
                             >
-                                <Text style={styles.textBtn3}>Hủy kết bạn</Text>
+                                <Text style={styles.textBtn3}>{language.UNFRIEND}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -316,13 +316,13 @@ const ModalFriends = forwardRef(({ url, color, count }, ref) =>
                                 style={styles.btn4}
                                 onPress={() => handleAcceptRequest(item)}
                             >
-                                <Text style={styles.textBtn2}>Chấp nhận</Text>
+                                <Text style={styles.textBtn2}>{language.ACCEPT}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={styles.btn3}
                                 onPress={() => handleRemoveRequest(item)}
                             >
-                                <Text style={styles.textBtn3}>Xóa</Text>
+                                <Text style={styles.textBtn3}>{language.DELETE2}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -375,7 +375,7 @@ const ModalFriends = forwardRef(({ url, color, count }, ref) =>
                                 onPress={() => handleSendRequest(item.id)}
                             >
                                 <Text style={styles.textBtn2}>
-                                    {dataSent.find((x) => x === item.id) ? 'Đã gửi' : 'Thêm bạn'}
+                                    {dataSent.find((x) => x === item.id) ? language.SENT : language.ADDFRIEND}
                                 </Text>
                             </TouchableOpacity>
                             <TouchableOpacity
@@ -388,7 +388,7 @@ const ModalFriends = forwardRef(({ url, color, count }, ref) =>
                                 }
                             >
                                 <Text style={styles.textBtn3}>
-                                    {dataSent.find((x) => x === item.id) ? 'Hủy bỏ' : 'Gỡ'}
+                                    {dataSent.find((x) => x === item.id) ? language.CANCEL2 : language.REMOVE}
                                 </Text>
                             </TouchableOpacity>
                         </View>
@@ -430,7 +430,7 @@ const ModalFriends = forwardRef(({ url, color, count }, ref) =>
                             onPress={() => setHandle('all')}
                         >
                             <Text style={handle === 'all' ? styles.textBtn2 : styles.textBtn}>
-                Tất cả
+                {language.ALL}
                             </Text>
                         </TouchableOpacity>
                         <View style={{ marginHorizontal: 10 }} />
@@ -441,7 +441,7 @@ const ModalFriends = forwardRef(({ url, color, count }, ref) =>
                             <Text
                                 style={handle === 'call' ? styles.textBtn2 : styles.textBtn}
                             >
-                Lời mời
+                {language.INVITATION}
                             </Text>
                         </TouchableOpacity>
                         <View style={{ marginHorizontal: 10 }} />
@@ -450,7 +450,7 @@ const ModalFriends = forwardRef(({ url, color, count }, ref) =>
                             onPress={() => setHandle('add')}
                         >
                             <Text style={handle === 'add' ? styles.textBtn2 : styles.textBtn}>
-                Thêm bạn
+                            {language.ADDFRIEND}
                             </Text>
                         </TouchableOpacity>
                     </View>

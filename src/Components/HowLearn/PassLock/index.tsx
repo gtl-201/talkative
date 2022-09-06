@@ -33,13 +33,14 @@ interface Props {
   navigation: any;
   gate: string;
   round: string;
+  preRound: string;
   level: string;
 }
 
 const PassLock: FC<Props> = (props) =>
 {
     // const navigation = useNavigation();
-    const { color, language, navigation, gate, round } = props;
+    const { color, language, navigation, gate, round,preRound } = props;
     const styles = styleScaled(color);
     const [step, setStep] = useState(0);
     const [preStep, setPreStep] = useState(0);
@@ -112,7 +113,7 @@ const PassLock: FC<Props> = (props) =>
         const allQuests = [];
         for (let index = 0; index < 4; index++)
         {
-            const array = await getQuestPassRound(gate, round, index.toString());
+            const array = await getQuestPassRound(gate, preRound, index.toString());
             allQuests.push(array);
         }
         const random = shuffle(allQuests.flat());
@@ -120,7 +121,7 @@ const PassLock: FC<Props> = (props) =>
         const numberRandom = (Math.random() * 3);
         const number = numberRandom <= 1 ? 3 : numberRandom <= 2 ? 4 : 5;
         const dataType1Filter = dataType1.filter((x,i)=>i < number);
-        const allQuest = random.filter((x,i)=> i < 13);
+        const allQuest = random.filter((x,i)=> i < 15);
             
         const allRightEn: any[] = allQuest.map((data) =>
         {

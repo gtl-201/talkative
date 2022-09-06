@@ -235,5 +235,17 @@ export default {
     YOULOSS: 'You have to complete 80% of the challenge to unlock it',
     PLAYAGAIN: 'Play again',
     CHOOSE: 'Choose the corresponding pairs',
-    
+    PERINTOPIC: 'Percentage in topics',
+    FRIEND: 'Friend',
+    WORLD: 'World',
+    ALL: 'All',
+    INVITATION: 'Invitation',
+    ADDFRIEND: 'Add friend',
+    UNFRIEND: 'Unfriend',
+    DELETE2: 'Delete',
+    ACCEPT: 'Accept',
+    SENT: 'Sent',
+    REMOVE: 'Remove',
+    CANCEL2: 'Cancel',
+    START: 'Start',
 };

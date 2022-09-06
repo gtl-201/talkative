@@ -21,7 +21,7 @@ interface Props {
 }
 const Rank: FC<Props> = (props) =>
 {
-    const { color } = props;
+    const { color,language } = props;
     const styles = styleScaled(color);
     const [dataTopic, setDataTopic] = useState<any>([]);
     const [dataGate, setDataGate] = useState<any>([]);
@@ -156,7 +156,7 @@ const Rank: FC<Props> = (props) =>
         );
     };
     return (
-        <View style={{ flex: 1, backgroundColor: 'white' }}>
+        <View style={{ flex: 1, backgroundColor: color.BG }}>
             <ScrollView>
                 <View style={{ flex: 1, paddingHorizontal: 20 }}>
                     <View>
@@ -216,6 +216,7 @@ const Rank: FC<Props> = (props) =>
                                     textAlign: 'center',
                                     marginBottom: 10,
                                     textTransform: 'uppercase',
+                                    color: color.TXT_COUNT,
                                 }}
                             >
                                 {item.gate}
@@ -229,9 +230,10 @@ const Rank: FC<Props> = (props) =>
                                     textAlign: 'center',
                                     marginBottom: 10,
                                     marginTop: 25,
+                                    color: color.TXT_COUNT,
                                 }}
                             >
-            Percentage in topics
+                                {language.PERINTOPIC}
                             </Text>
                         
                             <View
@@ -250,6 +252,7 @@ const Rank: FC<Props> = (props) =>
                                                 fontSize: 18,
                                                 textAlign: 'center',
                                                 marginTop: 5,
+                                                color: color.TXT_COUNT,
                                             }}
                                         >
                                             {x.topic}

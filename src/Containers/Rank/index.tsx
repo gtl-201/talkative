@@ -54,7 +54,7 @@ const RankContainer: FC<any> = ({
             />
             <Rank
                 color={color}
-                language={language.PRACTISE}
+                language={language}
             />
         </ViewShot>
     );

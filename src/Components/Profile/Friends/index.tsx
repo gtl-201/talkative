@@ -32,13 +32,14 @@ const Friends: FC<Props> = (props) =>
                 onPress={showAvatar}
             >
                 <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>
-          Friends
+          {language.FRIEND}
                 </Text>
             </TouchableOpacity>
             <ModalFriends
                 ref={refModalImage}
                 color={color}
                 count={count}
+                language={language}
             />
         </View>
     );
